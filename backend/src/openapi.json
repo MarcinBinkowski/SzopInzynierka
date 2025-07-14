@@ -1,0 +1,3141 @@
+openapi: 3.0.3
+info:
+  title: ShopDjango API
+  version: 1.0.0
+  description: API for ShopDjango project
+paths:
+  /api/catalog/categories/:
+    get:
+      operationId: catalog_categories_list
+      description: ViewSet for Category model with CRUD operations.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCategoryList'
+          description: ''
+    post:
+      operationId: catalog_categories_create
+      description: ViewSet for Category model with CRUD operations.
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/catalog/categories/{id}/:
+    get:
+      operationId: catalog_categories_retrieve
+      description: ViewSet for Category model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    put:
+      operationId: catalog_categories_update
+      description: ViewSet for Category model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    patch:
+      operationId: catalog_categories_partial_update
+      description: ViewSet for Category model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    delete:
+      operationId: catalog_categories_destroy
+      description: ViewSet for Category model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/catalog/categories/{id}/products/:
+    get:
+      operationId: catalog_categories_products_retrieve
+      description: Get all products in this category.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/catalog/images/:
+    get:
+      operationId: catalog_images_list
+      description: ViewSet for ProductImage model with CRUD operations.
+      parameters:
+      - in: query
+        name: is_primary
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: product
+        schema:
+          type: integer
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductImageList'
+          description: ''
+    post:
+      operationId: catalog_images_create
+      description: ViewSet for ProductImage model with CRUD operations.
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductImage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductImage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductImage'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+          description: ''
+  /api/catalog/images/{id}/:
+    get:
+      operationId: catalog_images_retrieve
+      description: ViewSet for ProductImage model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product image.
+        required: true
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+          description: ''
+    put:
+      operationId: catalog_images_update
+      description: ViewSet for ProductImage model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product image.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductImage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductImage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductImage'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+          description: ''
+    patch:
+      operationId: catalog_images_partial_update
+      description: ViewSet for ProductImage model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product image.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProductImage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProductImage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProductImage'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+          description: ''
+    delete:
+      operationId: catalog_images_destroy
+      description: ViewSet for ProductImage model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product image.
+        required: true
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/catalog/images/{id}/set_primary/:
+    post:
+      operationId: catalog_images_set_primary_create
+      description: Set this image as primary for its product.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product image.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductImage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductImage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductImage'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+          description: ''
+  /api/catalog/products/:
+    get:
+      operationId: catalog_products_list
+      description: ViewSet for Product model with advanced CRUD operations.
+      parameters:
+      - in: query
+        name: category
+        schema:
+          type: integer
+      - in: query
+        name: category__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: created_at__date__gte
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: created_at__date__lte
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: date_range
+        schema:
+          type: string
+      - in: query
+        name: in_stock
+        schema:
+          type: boolean
+      - in: query
+        name: is_visible
+        schema:
+          type: boolean
+      - in: query
+        name: max_price
+        schema:
+          type: number
+      - in: query
+        name: min_price
+        schema:
+          type: number
+      - in: query
+        name: name__icontains
+        schema:
+          type: string
+      - in: query
+        name: on_sale
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: price
+        schema:
+          type: number
+      - in: query
+        name: price__gte
+        schema:
+          type: number
+      - in: query
+        name: price__lte
+        schema:
+          type: number
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: sku
+        schema:
+          type: string
+      - in: query
+        name: sku__icontains
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - active
+            - draft
+            - inactive
+            - out_of_stock
+        description: |-
+          Product status
+
+          * `draft` - Draft
+          * `active` - Active
+          * `inactive` - Inactive
+          * `out_of_stock` - Out of Stock
+        explode: true
+        style: form
+      - in: query
+        name: stock_quantity
+        schema:
+          type: integer
+      - in: query
+        name: stock_quantity__gte
+        schema:
+          type: integer
+      - in: query
+        name: stock_quantity__lte
+        schema:
+          type: integer
+      - in: query
+        name: tags
+        schema:
+          type: string
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductListList'
+          description: ''
+    post:
+      operationId: catalog_products_create
+      description: ViewSet for Product model with advanced CRUD operations.
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductCreate'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCreate'
+          description: ''
+  /api/catalog/products/{id}/:
+    get:
+      operationId: catalog_products_retrieve
+      description: ViewSet for Product model with advanced CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDetail'
+          description: ''
+    put:
+      operationId: catalog_products_update
+      description: ViewSet for Product model with advanced CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductDetail'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDetail'
+          description: ''
+    patch:
+      operationId: catalog_products_partial_update
+      description: ViewSet for Product model with advanced CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProductDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProductDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProductDetail'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDetail'
+          description: ''
+    delete:
+      operationId: catalog_products_destroy
+      description: ViewSet for Product model with advanced CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/catalog/products/{id}/add_to_wishlist/:
+    post:
+      operationId: catalog_products_add_to_wishlist_create
+      description: Add product to user's wishlist.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductDetail'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDetail'
+          description: ''
+  /api/catalog/products/{id}/related/:
+    get:
+      operationId: catalog_products_related_retrieve
+      description: Get related products based on category and tags.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDetail'
+          description: ''
+  /api/catalog/products/on_sale/:
+    get:
+      operationId: catalog_products_on_sale_retrieve
+      description: Get products currently on sale.
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDetail'
+          description: ''
+  /api/catalog/tags/:
+    get:
+      operationId: catalog_tags_list
+      description: ViewSet for Tag model with CRUD operations.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTagList'
+          description: ''
+    post:
+      operationId: catalog_tags_create
+      description: ViewSet for Tag model with CRUD operations.
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tag'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Tag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tag'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: ''
+  /api/catalog/tags/{id}/:
+    get:
+      operationId: catalog_tags_retrieve
+      description: ViewSet for Tag model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: ''
+    put:
+      operationId: catalog_tags_update
+      description: ViewSet for Tag model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tag'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Tag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tag'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: ''
+    patch:
+      operationId: catalog_tags_partial_update
+      description: ViewSet for Tag model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTag'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTag'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: ''
+    delete:
+      operationId: catalog_tags_destroy
+      description: ViewSet for Tag model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/catalog/tags/{id}/products/:
+    get:
+      operationId: catalog_tags_products_retrieve
+      description: Get all products with this tag.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - catalog
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: ''
+  /api/geographic/countries/:
+    get:
+      operationId: geographic_countries_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - geographic
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCountryListList'
+          description: ''
+  /api/geographic/countries/{id}/:
+    get:
+      operationId: geographic_countries_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - geographic
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Country'
+          description: ''
+  /api/profile/addresses/:
+    get:
+      operationId: profile_addresses_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAddressListList'
+          description: ''
+    post:
+      operationId: profile_addresses_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddressCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AddressCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddressCreate'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressCreate'
+          description: ''
+  /api/profile/addresses/{id}/:
+    get:
+      operationId: profile_addresses_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+          description: ''
+    put:
+      operationId: profile_addresses_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddressUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AddressUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddressUpdate'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressUpdate'
+          description: ''
+    patch:
+      operationId: profile_addresses_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAddressUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAddressUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAddressUpdate'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressUpdate'
+          description: ''
+    delete:
+      operationId: profile_addresses_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/profile/addresses/{id}/set_default/:
+    patch:
+      operationId: profile_addresses_set_default_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAddress'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAddress'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAddress'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+          description: ''
+  /api/profile/addresses/billing/:
+    get:
+      operationId: profile_addresses_billing_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+          description: ''
+  /api/profile/addresses/default_billing/:
+    get:
+      operationId: profile_addresses_default_billing_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+          description: ''
+  /api/profile/addresses/default_shipping/:
+    get:
+      operationId: profile_addresses_default_shipping_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+          description: ''
+  /api/profile/addresses/shipping/:
+    get:
+      operationId: profile_addresses_shipping_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+          description: ''
+  /api/profile/addresses/summary/:
+    get:
+      operationId: profile_addresses_summary_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+          description: ''
+  /api/profile/addresses/unset_default/:
+    patch:
+      operationId: profile_addresses_unset_default_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAddress'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAddress'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAddress'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+          description: ''
+  /api/profile/profiles/:
+    get:
+      operationId: profile_profiles_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProfileListList'
+          description: ''
+    post:
+      operationId: profile_profiles_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProfileCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProfileCreate'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileCreate'
+          description: ''
+  /api/profile/profiles/{id}/:
+    get:
+      operationId: profile_profiles_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+    put:
+      operationId: profile_profiles_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdate'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileUpdate'
+          description: ''
+    patch:
+      operationId: profile_profiles_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProfileUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProfileUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProfileUpdate'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileUpdate'
+          description: ''
+    delete:
+      operationId: profile_profiles_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/profile/profiles/{id}/update_completion_status/:
+    post:
+      operationId: profile_profiles_update_completion_status_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Profile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Profile'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+  /api/profile/profiles/addresses_summary/:
+    get:
+      operationId: profile_profiles_addresses_summary_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+  /api/profile/profiles/checkout_status/:
+    get:
+      operationId: profile_profiles_checkout_status_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+  /api/profile/profiles/completion_requirements/:
+    get:
+      operationId: profile_profiles_completion_requirements_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+  /api/profile/profiles/mark_completed/:
+    patch:
+      operationId: profile_profiles_mark_completed_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+  /api/profile/profiles/me/:
+    get:
+      operationId: profile_profiles_me_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+    patch:
+      operationId: profile_profiles_me_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        profile:
+          allOf:
+          - $ref: '#/components/schemas/ProfileMinimal'
+          readOnly: true
+        address:
+          type: string
+          description: Street address, apartment, unit, etc.
+          maxLength: 255
+        city:
+          type: string
+          description: City name
+          maxLength: 100
+        postal_code:
+          type: string
+          description: ZIP code or postal code
+          maxLength: 20
+        country:
+          type: integer
+          description: Country for this address
+        address_type:
+          allOf:
+          - $ref: '#/components/schemas/AddressTypeEnum'
+          description: |-
+            Type of address (shipping or billing)
+
+            * `shipping` - Shipping
+            * `billing` - Billing
+        address_type_display:
+          type: string
+          readOnly: true
+        is_default:
+          type: boolean
+          description: Whether this is the default address for this type
+        label:
+          type: string
+          description: Optional label like 'Home', 'Office', etc.
+          maxLength: 50
+        full_address:
+          type: string
+          readOnly: true
+        address_dict:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        is_complete:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - address
+      - address_dict
+      - address_type
+      - address_type_display
+      - city
+      - country
+      - created_at
+      - full_address
+      - id
+      - is_complete
+      - postal_code
+      - profile
+      - updated_at
+    AddressCreate:
+      type: object
+      properties:
+        address:
+          type: string
+          description: Street address, apartment, unit, etc.
+          maxLength: 255
+        city:
+          type: string
+          description: City name
+          maxLength: 100
+        postal_code:
+          type: string
+          description: ZIP code or postal code
+          maxLength: 20
+        country:
+          type: integer
+          description: Country for this address
+        address_type:
+          allOf:
+          - $ref: '#/components/schemas/AddressTypeEnum'
+          description: |-
+            Type of address (shipping or billing)
+
+            * `shipping` - Shipping
+            * `billing` - Billing
+        is_default:
+          type: boolean
+          description: Whether this is the default address for this type
+        label:
+          type: string
+          description: Optional label like 'Home', 'Office', etc.
+          maxLength: 50
+      required:
+      - address
+      - address_type
+      - city
+      - country
+      - postal_code
+    AddressList:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        profile:
+          allOf:
+          - $ref: '#/components/schemas/ProfileMinimal'
+          readOnly: true
+        address_type:
+          allOf:
+          - $ref: '#/components/schemas/AddressTypeEnum'
+          description: |-
+            Type of address (shipping or billing)
+
+            * `shipping` - Shipping
+            * `billing` - Billing
+        address_type_display:
+          type: string
+          readOnly: true
+        full_address:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          description: Optional label like 'Home', 'Office', etc.
+          maxLength: 50
+        is_default:
+          type: boolean
+          description: Whether this is the default address for this type
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+      required:
+      - address_type
+      - address_type_display
+      - created_at
+      - full_address
+      - id
+      - profile
+    AddressTypeEnum:
+      enum:
+      - shipping
+      - billing
+      type: string
+      description: |-
+        * `shipping` - Shipping
+        * `billing` - Billing
+    AddressUpdate:
+      type: object
+      properties:
+        address:
+          type: string
+          description: Street address, apartment, unit, etc.
+          maxLength: 255
+        city:
+          type: string
+          description: City name
+          maxLength: 100
+        postal_code:
+          type: string
+          description: ZIP code or postal code
+          maxLength: 20
+        country:
+          type: integer
+          description: Country for this address
+        is_default:
+          type: boolean
+          description: Whether this is the default address for this type
+        label:
+          type: string
+          description: Optional label like 'Home', 'Office', etc.
+          maxLength: 50
+      required:
+      - address
+      - city
+      - country
+      - postal_code
+    Category:
+      type: object
+      description: Serializer for Category model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Category name
+          maxLength: 100
+        slug:
+          type: string
+          description: URL-friendly version of the name
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+          description: Category description
+        is_active:
+          type: boolean
+          description: Whether this category is visible
+        active_product_count:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - active_product_count
+      - created_at
+      - id
+      - name
+      - slug
+      - updated_at
+    Country:
+      type: object
+      description: Full country serializer with all fields.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          description: alpha-2 country code (e.g., PL, US, GB)
+          maxLength: 2
+        name:
+          type: string
+          description: Official country name in English
+          maxLength: 100
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - code
+      - created_at
+      - id
+      - name
+      - updated_at
+    CountryList:
+      type: object
+      description: Simplified country serializer for list views.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          description: alpha-2 country code (e.g., PL, US, GB)
+          maxLength: 2
+        name:
+          type: string
+          description: Official country name in English
+          maxLength: 100
+      required:
+      - code
+      - id
+      - name
+    PaginatedAddressListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressList'
+    PaginatedCategoryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    PaginatedCountryListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryList'
+    PaginatedProductImageList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductImage'
+    PaginatedProductListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductList'
+    PaginatedProfileListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileList'
+    PaginatedTagList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+    PatchedAddress:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        profile:
+          allOf:
+          - $ref: '#/components/schemas/ProfileMinimal'
+          readOnly: true
+        address:
+          type: string
+          description: Street address, apartment, unit, etc.
+          maxLength: 255
+        city:
+          type: string
+          description: City name
+          maxLength: 100
+        postal_code:
+          type: string
+          description: ZIP code or postal code
+          maxLength: 20
+        country:
+          type: integer
+          description: Country for this address
+        address_type:
+          allOf:
+          - $ref: '#/components/schemas/AddressTypeEnum'
+          description: |-
+            Type of address (shipping or billing)
+
+            * `shipping` - Shipping
+            * `billing` - Billing
+        address_type_display:
+          type: string
+          readOnly: true
+        is_default:
+          type: boolean
+          description: Whether this is the default address for this type
+        label:
+          type: string
+          description: Optional label like 'Home', 'Office', etc.
+          maxLength: 50
+        full_address:
+          type: string
+          readOnly: true
+        address_dict:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        is_complete:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+    PatchedAddressUpdate:
+      type: object
+      properties:
+        address:
+          type: string
+          description: Street address, apartment, unit, etc.
+          maxLength: 255
+        city:
+          type: string
+          description: City name
+          maxLength: 100
+        postal_code:
+          type: string
+          description: ZIP code or postal code
+          maxLength: 20
+        country:
+          type: integer
+          description: Country for this address
+        is_default:
+          type: boolean
+          description: Whether this is the default address for this type
+        label:
+          type: string
+          description: Optional label like 'Home', 'Office', etc.
+          maxLength: 50
+    PatchedCategory:
+      type: object
+      description: Serializer for Category model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Category name
+          maxLength: 100
+        slug:
+          type: string
+          description: URL-friendly version of the name
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+          description: Category description
+        is_active:
+          type: boolean
+          description: Whether this category is visible
+        active_product_count:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+    PatchedProductDetail:
+      type: object
+      description: Detailed serializer for product detail views.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Product name
+          maxLength: 200
+        slug:
+          type: string
+          description: URL-friendly version of the name
+          maxLength: 200
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+          description: Detailed product description
+        short_description:
+          type: string
+          description: Short description for listings
+          maxLength: 500
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Product price
+        original_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Original price for showing discounts
+        current_price:
+          type: number
+          format: double
+          readOnly: true
+        discount_percentage:
+          type: integer
+          description: Calculate discount percentage.
+          readOnly: true
+        sku:
+          type: string
+          description: Unique product identifier
+          maxLength: 100
+        stock_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Available quantity in stock
+        category:
+          allOf:
+          - $ref: '#/components/schemas/Category'
+          readOnly: true
+        category_id:
+          type: integer
+          writeOnly: true
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          readOnly: true
+        tag_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: |-
+            Product status
+
+            * `draft` - Draft
+            * `active` - Active
+            * `inactive` - Inactive
+            * `out_of_stock` - Out of Stock
+        is_visible:
+          type: boolean
+          description: Is product visible to the users
+        sale_start:
+          type: string
+          format: date-time
+          nullable: true
+        sale_end:
+          type: string
+          format: date-time
+          nullable: true
+        is_on_sale:
+          type: boolean
+          readOnly: true
+        is_in_stock:
+          type: boolean
+          description: Check if product is in stock.
+          readOnly: true
+        is_available:
+          type: boolean
+          description: Check if product is available for purchase.
+          readOnly: true
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductImage'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+    PatchedProductImage:
+      type: object
+      description: Serializer for ProductImage model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        image:
+          type: string
+          format: uri
+          description: Product image
+        alt_text:
+          type: string
+          description: Alternative text for the image
+          maxLength: 255
+        is_primary:
+          type: boolean
+          description: Whether this is the primary product image
+        sort_order:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Display order of images
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+    PatchedProfile:
+      type: object
+      description: Serializer for user profile management.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          description: User's first name
+          maxLength: 150
+        last_name:
+          type: string
+          description: User's last name
+          maxLength: 150
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+          description: User's date of birth (optional)
+        phone_number:
+          type: string
+          description: Primary phone number with country code
+          maxLength: 20
+        profile_completed:
+          type: boolean
+          readOnly: true
+          description: Whether profile has all required information for checkout
+        display_name:
+          type: string
+          readOnly: true
+        full_name:
+          type: string
+          readOnly: true
+        age:
+          type: integer
+          readOnly: true
+        is_checkout_ready:
+          type: boolean
+          readOnly: true
+        missing_checkout_fields:
+          type: array
+          items: {}
+          readOnly: true
+        shipping_address:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        billing_address:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+    PatchedProfileUpdate:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: User's first name
+          maxLength: 150
+        last_name:
+          type: string
+          description: User's last name
+          maxLength: 150
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+          description: User's date of birth (optional)
+        phone_number:
+          type: string
+          description: Primary phone number with country code
+          maxLength: 20
+    PatchedTag:
+      type: object
+      description: Serializer for Tag model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Tag name
+          maxLength: 50
+        slug:
+          type: string
+          description: URL-friendly version of the name
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+    ProductCreate:
+      type: object
+      description: Serializer for creating products.
+      properties:
+        name:
+          type: string
+          description: Product name
+          maxLength: 200
+        slug:
+          type: string
+          description: URL-friendly version of the name
+          maxLength: 200
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+          description: Detailed product description
+        short_description:
+          type: string
+          description: Short description for listings
+          maxLength: 500
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Product price
+        original_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Original price for showing discounts
+        sku:
+          type: string
+          description: Unique product identifier
+          maxLength: 100
+        stock_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Available quantity in stock
+        category_id:
+          type: integer
+        tag_ids:
+          type: array
+          items:
+            type: integer
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: |-
+            Product status
+
+            * `draft` - Draft
+            * `active` - Active
+            * `inactive` - Inactive
+            * `out_of_stock` - Out of Stock
+        is_visible:
+          type: boolean
+          description: Is product visible to the users
+        sale_start:
+          type: string
+          format: date-time
+          nullable: true
+        sale_end:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - category_id
+      - description
+      - name
+      - original_price
+      - price
+      - sku
+      - slug
+    ProductDetail:
+      type: object
+      description: Detailed serializer for product detail views.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Product name
+          maxLength: 200
+        slug:
+          type: string
+          description: URL-friendly version of the name
+          maxLength: 200
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+          description: Detailed product description
+        short_description:
+          type: string
+          description: Short description for listings
+          maxLength: 500
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Product price
+        original_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Original price for showing discounts
+        current_price:
+          type: number
+          format: double
+          readOnly: true
+        discount_percentage:
+          type: integer
+          description: Calculate discount percentage.
+          readOnly: true
+        sku:
+          type: string
+          description: Unique product identifier
+          maxLength: 100
+        stock_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Available quantity in stock
+        category:
+          allOf:
+          - $ref: '#/components/schemas/Category'
+          readOnly: true
+        category_id:
+          type: integer
+          writeOnly: true
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          readOnly: true
+        tag_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: |-
+            Product status
+
+            * `draft` - Draft
+            * `active` - Active
+            * `inactive` - Inactive
+            * `out_of_stock` - Out of Stock
+        is_visible:
+          type: boolean
+          description: Is product visible to the users
+        sale_start:
+          type: string
+          format: date-time
+          nullable: true
+        sale_end:
+          type: string
+          format: date-time
+          nullable: true
+        is_on_sale:
+          type: boolean
+          readOnly: true
+        is_in_stock:
+          type: boolean
+          description: Check if product is in stock.
+          readOnly: true
+        is_available:
+          type: boolean
+          description: Check if product is available for purchase.
+          readOnly: true
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductImage'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - category
+      - category_id
+      - created_at
+      - current_price
+      - description
+      - discount_percentage
+      - id
+      - images
+      - is_available
+      - is_in_stock
+      - is_on_sale
+      - name
+      - original_price
+      - price
+      - sku
+      - slug
+      - tags
+      - updated_at
+    ProductImage:
+      type: object
+      description: Serializer for ProductImage model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        image:
+          type: string
+          format: uri
+          description: Product image
+        alt_text:
+          type: string
+          description: Alternative text for the image
+          maxLength: 255
+        is_primary:
+          type: boolean
+          description: Whether this is the primary product image
+        sort_order:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Display order of images
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - created_at
+      - id
+      - image
+      - updated_at
+    ProductList:
+      type: object
+      description: Simplified serializer for product listings.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Product name
+          maxLength: 200
+        slug:
+          type: string
+          description: URL-friendly version of the name
+          maxLength: 200
+          pattern: ^[-a-zA-Z0-9_]+$
+        short_description:
+          type: string
+          description: Short description for listings
+          maxLength: 500
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Product price
+        original_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Original price for showing discounts
+        current_price:
+          type: number
+          format: double
+          readOnly: true
+        discount_percentage:
+          type: integer
+          description: Calculate discount percentage.
+          readOnly: true
+        sku:
+          type: string
+          description: Unique product identifier
+          maxLength: 100
+        stock_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Available quantity in stock
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: |-
+            Product status
+
+            * `draft` - Draft
+            * `active` - Active
+            * `inactive` - Inactive
+            * `out_of_stock` - Out of Stock
+        is_visible:
+          type: boolean
+          description: Is product visible to the users
+        is_on_sale:
+          type: boolean
+          readOnly: true
+        is_in_stock:
+          type: boolean
+          description: Check if product is in stock.
+          readOnly: true
+        is_available:
+          type: boolean
+          description: Check if product is available for purchase.
+          readOnly: true
+        category:
+          allOf:
+          - $ref: '#/components/schemas/Category'
+          readOnly: true
+        primary_image:
+          type: string
+          nullable: true
+          description: Get URL of primary product image.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+      required:
+      - category
+      - created_at
+      - current_price
+      - discount_percentage
+      - id
+      - is_available
+      - is_in_stock
+      - is_on_sale
+      - name
+      - original_price
+      - price
+      - primary_image
+      - sku
+      - slug
+    Profile:
+      type: object
+      description: Serializer for user profile management.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          description: User's first name
+          maxLength: 150
+        last_name:
+          type: string
+          description: User's last name
+          maxLength: 150
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+          description: User's date of birth (optional)
+        phone_number:
+          type: string
+          description: Primary phone number with country code
+          maxLength: 20
+        profile_completed:
+          type: boolean
+          readOnly: true
+          description: Whether profile has all required information for checkout
+        display_name:
+          type: string
+          readOnly: true
+        full_name:
+          type: string
+          readOnly: true
+        age:
+          type: integer
+          readOnly: true
+        is_checkout_ready:
+          type: boolean
+          readOnly: true
+        missing_checkout_fields:
+          type: array
+          items: {}
+          readOnly: true
+        shipping_address:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        billing_address:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - age
+      - billing_address
+      - created_at
+      - display_name
+      - full_name
+      - id
+      - is_checkout_ready
+      - missing_checkout_fields
+      - profile_completed
+      - shipping_address
+      - updated_at
+    ProfileCreate:
+      type: object
+      description: Serializer for creating new profiles (admin only).
+      properties:
+        user:
+          type: integer
+          description: Associated user account
+        first_name:
+          type: string
+          description: User's first name
+          maxLength: 150
+        last_name:
+          type: string
+          description: User's last name
+          maxLength: 150
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+          description: User's date of birth
+        phone_number:
+          type: string
+          description: Primary phone number with country code
+          maxLength: 20
+      required:
+      - user
+    ProfileList:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        display_name:
+          type: string
+          readOnly: true
+        profile_completed:
+          type: boolean
+          description: Whether profile has all required information for checkout
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+      required:
+      - created_at
+      - display_name
+      - id
+    ProfileMinimal:
+      type: object
+      description: Minimal profile serializer for address responses.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_email:
+          type: string
+          readOnly: true
+        display_name:
+          type: string
+          readOnly: true
+        first_name:
+          type: string
+          description: User's first name
+          maxLength: 150
+        last_name:
+          type: string
+          description: User's last name
+          maxLength: 150
+      required:
+      - display_name
+      - id
+      - user_email
+    ProfileUpdate:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: User's first name
+          maxLength: 150
+        last_name:
+          type: string
+          description: User's last name
+          maxLength: 150
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+          description: User's date of birth
+        phone_number:
+          type: string
+          description: Primary phone number with country code
+          maxLength: 20
+    StatusEnum:
+      enum:
+      - draft
+      - active
+      - inactive
+      - out_of_stock
+      type: string
+      description: |-
+        * `draft` - Draft
+        * `active` - Active
+        * `inactive` - Inactive
+        * `out_of_stock` - Out of Stock
+    Tag:
+      type: object
+      description: Serializer for Tag model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Tag name
+          maxLength: 50
+        slug:
+          type: string
+          description: URL-friendly version of the name
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - created_at
+      - id
+      - name
+      - slug
+      - updated_at
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+externalDocs:
+  description: AllAuth API specification
+  url: /_allauth/openapi.html
