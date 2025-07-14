@@ -25,8 +25,8 @@ const getCSRFToken = (): string | null => {
   return null;
 };
 
-// Request interceptor - add CSRF token from cookie
-authClient.interceptors.request.use((config) => {
+authClient.interceptors.request.use(
+  async (config) => {
   const csrfToken = getCSRFToken();
   if (csrfToken) {
     config.headers['X-CSRFToken'] = csrfToken;
@@ -34,18 +34,20 @@ authClient.interceptors.request.use((config) => {
   return config;
 });
 
-// Response interceptor - handle errors
 authClient.interceptors.response.use(
-  (response) => response,
-  (error: AxiosError) => {
-    if (error.response?.status === 401) {
+  async (response) => response,
+  async (error: AxiosError) => {
+    const status = error.response?.status;
+
+    if (status === 401) {
       toast.error('Authentication required');
-      // Optionally redirect to login
-    } else if (error.response?.status === 403) {
+      window.location.href = '/login';
+    } else if (status === 403) {
       toast.error('CSRF token missing or invalid');
-    } else if (error.response?.status === 422) {
+    } else if (status === 422) {
       toast.error('Please check your input');
-    } else {
+    }
+    else {
       toast.error('Something went wrong');
     }
     return Promise.reject(error);

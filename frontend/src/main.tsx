@@ -42,7 +42,6 @@ const initializeAuth = async () => {
     console.log('✅ Auth configuration initialized')
   } catch (error) {
     console.error('❌ Failed to initialize auth config:', error)
-    // Don't block the app if auth init fails
   }
 }
 

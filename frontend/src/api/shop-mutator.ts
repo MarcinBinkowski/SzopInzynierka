@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { useAuthStore } from '@/stores/authStore'
 
 
-export const shopApiClient = axios.create({
+export const shopClient = axios.create({
 //   baseURL: import.meta.env.VITE_SHOP_API_BASE_URL || 'http://localhost:8000/api',
   baseURL: 'http://localhost:8000',
   withCredentials: true, 
@@ -24,7 +24,7 @@ const getCSRFToken = (): string | null => {
   return null;
 };
 
-shopApiClient.interceptors.request.use((config) => {
+shopClient.interceptors.request.use((config) => {
   const csrfToken = getCSRFToken();
   if (csrfToken) {
     config.headers['X-CSRFToken'] = csrfToken;
@@ -33,9 +33,8 @@ shopApiClient.interceptors.request.use((config) => {
 });
 
 
-shopApiClient.interceptors.response.use(
-//   (response: AxiosResponse) => response,
-  (response: AxiosResponse) => {
+shopClient.interceptors.response.use(
+  async (response: AxiosResponse) => {
     console.log('✅ Shop API Response:', {
       status: response.status,
       statusText: response.statusText,
@@ -55,7 +54,7 @@ shopApiClient.interceptors.response.use(
     
     return response
   },
-  (error) => {
+  async (error) => {
     const status = error.response?.status
 
     if (status === 401) {
@@ -79,9 +78,11 @@ shopApiClient.interceptors.response.use(
     else if (status >= 500) {
       toast.error('Server error. Please try again later.')
     } else if (status >= 400 && status < 500) {
-      const message = error.response?.data?.detail || 
-                     error.response?.data?.message || 
-                     'An error occurred'
+      const message = (
+        error.response?.data?.detail || 
+        error.response?.data?.message || 
+        'An error occurred'
+      )
       toast.error(message)
     }
 
@@ -93,9 +94,8 @@ shopApiClient.interceptors.response.use(
 
 
 export const shopInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
-  return shopApiClient({
-    ...config,
-  }).then(({ data }) => data)
+  return shopClient(config).then(({ data }) => data)
 }
 
-export default shopInstance
+export type ErrorType<Error> = AxiosResponse<Error>;
+export type BodyType<BodyData> = BodyData;

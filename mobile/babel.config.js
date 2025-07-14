@@ -9,11 +9,12 @@ module.exports = function(api) {
         {
           root: ['./'],
           alias: {
-            '@': './app',
-            '#': './src',
+            '#': './app',
+            '@': './src',
           },
         },
       ],
+      'react-native-paper/babel',
     ],
   };
 };

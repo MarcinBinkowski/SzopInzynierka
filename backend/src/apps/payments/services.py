@@ -7,7 +7,6 @@ from stripe import PaymentIntent, StripeError
 
 logger = logging.getLogger(__name__)
 
-# Configure Stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class StripeService:
@@ -44,7 +43,7 @@ class StripeService:
             raise ValidationError(f"Payment processing error: {str(e)}")
     
     @staticmethod
-    def confirm_payment_intent(payment_intent_id, payment_method_id)->PaymentIntent:
+    def confirm_payment_intent(payment_intent_id: str, payment_method_id: int)->PaymentIntent:
         """
         Confirm a PaymentIntent
         
