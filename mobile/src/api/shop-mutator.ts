@@ -14,9 +14,9 @@ const shopClient = axios.create({
 
 shopClient.interceptors.request.use(
   async (config) => {
-    const token = await SecureStore.getItemAsync('access_token');
+    const token = await SecureStore.getItemAsync('session_token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers["X-Session-Token"] = token;
     }
     return config;
   }
@@ -25,8 +25,8 @@ shopClient.interceptors.request.use(
 shopClient.interceptors.response.use( 
   async (response) => {
     const data = response.data as any;
-    if (data?.meta?.access_token) {
-      await SecureStore.setItemAsync('access_token', data.meta.access_token);
+    if (data?.meta?.session_token) {
+      await SecureStore.setItemAsync('session_token', data.meta.session_token);
     }
     return response;
   }
@@ -57,7 +57,7 @@ shopClient.interceptors.response.use(
     const status = error.response?.status;
 
     if (status === 401) {
-      await SecureStore.deleteItemAsync('access_token');
+      await SecureStore.deleteItemAsync('session_token');
       router.replace('/login');
       Alert.alert('Please re-authenticate to continue');
     } else if (status === 404) {
@@ -65,7 +65,7 @@ shopClient.interceptors.response.use(
     } else if (status === 403) {
       Alert.alert('You do not have permission to access this resource.');
     } else if (status === 410) {
-      await SecureStore.deleteItemAsync('access_token');
+      await SecureStore.deleteItemAsync('session_token');
       Alert.alert('Session expired');
     } else if (status === 409) {
       Alert.alert('Conflict - please try again');

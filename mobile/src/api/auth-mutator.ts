@@ -14,36 +14,31 @@ const authClient = axios.create({
 
 authClient.interceptors.request.use(
   async (config) => {
-    const token = await SecureStore.getItemAsync('access_token');
+    const token = await SecureStore.getItemAsync('session_token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers["X-Session-Token"] = token;
     }
     return config;
   }
 );
 
-authClient.interceptors.response.use(
-  async (response) => {
-    const data = response.data as any;
-    if (data?.meta?.access_token) {
-      await SecureStore.setItemAsync('access_token', data.meta.access_token);
-    }
-    return response;
-  }
-);
+// authClient.interceptors.response.use(
+//   async (response) => {
+//     console.log("data", data);
 
+//     return response;
+//   }
+// );
 authClient.interceptors.response.use(
   async (response) => response,
   async (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      await SecureStore.deleteItemAsync('access_token');
+    if (error.response?.status === 401 || error.response?.status === 410) {
+      await SecureStore.deleteItemAsync('session_token');
+      await SecureStore.deleteItemAsync('user');
       router.replace('/login');
-    } else if (error.response?.status === 410) {
-      await SecureStore.deleteItemAsync('access_token');
     } else if (error.response?.status === 409) {
       Alert.alert('Conflict - please try again');
     } else {
-      Alert.alert('Something went wrong');
     }
     return Promise.reject(error);
   }

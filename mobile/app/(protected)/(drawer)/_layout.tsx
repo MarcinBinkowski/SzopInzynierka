@@ -10,10 +10,7 @@ import { useColorScheme } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 export default function DrawerLayout() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
   const theme = useTheme();
-  console.log('drawer layout');
   return (
     <Drawer
       screenOptions={{
@@ -32,6 +29,16 @@ export default function DrawerLayout() {
       }}
     >
       <Drawer.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          drawerLabel: 'Profile',
+          drawerIcon: ({ size, color }) => (
+            <MaterialCommunityIcons name="account" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
         name="cart"
         options={{
           title: 'Cart',
@@ -41,16 +48,7 @@ export default function DrawerLayout() {
           ),
         }}
       />
-      <Drawer.Screen
-        name="debug"
-        options={{
-          title: 'Debug',
-          drawerLabel: 'Debug',
-          drawerIcon: ({ size, color }) => (
-            <MaterialCommunityIcons name="bug" size={size} color={color} />
-          ),
-        }}
-      />
+
     </Drawer>
   );
 }
