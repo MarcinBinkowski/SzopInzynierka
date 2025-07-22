@@ -28,8 +28,8 @@ export const catalogCategoriesListResponseResultsItemSlugRegExp = new RegExp('^[
 
 export const catalogCategoriesListResponse = zod.object({
   "count": zod.number(),
-  "next": zod.string().url().nullish(),
-  "previous": zod.string().url().nullish(),
+  "next": zod.url().nullish(),
+  "previous": zod.url().nullish(),
   "results": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogCategoriesListResponseResultsItemNameMax).describe('Category name'),
@@ -37,8 +37,8 @@ export const catalogCategoriesListResponse = zod.object({
   "description": zod.string().optional().describe('Category description'),
   "is_active": zod.boolean().optional().describe('Whether this category is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Category model.'))
 })
 
@@ -78,8 +78,8 @@ export const catalogCategoriesRetrieveResponse = zod.object({
   "description": zod.string().optional().describe('Category description'),
   "is_active": zod.boolean().optional().describe('Whether this category is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Category model.')
 
 /**
@@ -115,8 +115,8 @@ export const catalogCategoriesUpdateResponse = zod.object({
   "description": zod.string().optional().describe('Category description'),
   "is_active": zod.boolean().optional().describe('Whether this category is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Category model.')
 
 /**
@@ -152,8 +152,8 @@ export const catalogCategoriesPartialUpdateResponse = zod.object({
   "description": zod.string().optional().describe('Category description'),
   "is_active": zod.boolean().optional().describe('Whether this category is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Category model.')
 
 /**
@@ -183,8 +183,8 @@ export const catalogCategoriesProductsRetrieveResponse = zod.object({
   "description": zod.string().optional().describe('Category description'),
   "is_active": zod.boolean().optional().describe('Whether this category is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Category model.')
 
 /**
@@ -206,16 +206,17 @@ export const catalogImagesListResponseResultsItemSortOrderMax = 2147483647;
 
 export const catalogImagesListResponse = zod.object({
   "count": zod.number(),
-  "next": zod.string().url().nullish(),
-  "previous": zod.string().url().nullish(),
+  "next": zod.url().nullish(),
+  "previous": zod.url().nullish(),
   "results": zod.array(zod.object({
   "id": zod.number(),
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogImagesListResponseResultsItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesListResponseResultsItemSortOrderMin).max(catalogImagesListResponseResultsItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for ProductImage model.'))
 })
 
@@ -229,7 +230,7 @@ export const catalogImagesCreateBodySortOrderMax = 2147483647;
 
 
 export const catalogImagesCreateBody = zod.object({
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
   "alt_text": zod.string().max(catalogImagesCreateBodyAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesCreateBodySortOrderMin).max(catalogImagesCreateBodySortOrderMax).optional().describe('Display order of images')
@@ -250,12 +251,13 @@ export const catalogImagesRetrieveResponseSortOrderMax = 2147483647;
 
 export const catalogImagesRetrieveResponse = zod.object({
   "id": zod.number(),
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogImagesRetrieveResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesRetrieveResponseSortOrderMin).max(catalogImagesRetrieveResponseSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for ProductImage model.')
 
 /**
@@ -272,7 +274,7 @@ export const catalogImagesUpdateBodySortOrderMax = 2147483647;
 
 
 export const catalogImagesUpdateBody = zod.object({
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
   "alt_text": zod.string().max(catalogImagesUpdateBodyAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesUpdateBodySortOrderMin).max(catalogImagesUpdateBodySortOrderMax).optional().describe('Display order of images')
@@ -286,12 +288,13 @@ export const catalogImagesUpdateResponseSortOrderMax = 2147483647;
 
 export const catalogImagesUpdateResponse = zod.object({
   "id": zod.number(),
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogImagesUpdateResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesUpdateResponseSortOrderMin).max(catalogImagesUpdateResponseSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for ProductImage model.')
 
 /**
@@ -308,7 +311,7 @@ export const catalogImagesPartialUpdateBodySortOrderMax = 2147483647;
 
 
 export const catalogImagesPartialUpdateBody = zod.object({
-  "image": zod.string().url().optional().describe('Product image'),
+  "image": zod.url().optional().describe('Product image'),
   "alt_text": zod.string().max(catalogImagesPartialUpdateBodyAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesPartialUpdateBodySortOrderMin).max(catalogImagesPartialUpdateBodySortOrderMax).optional().describe('Display order of images')
@@ -322,12 +325,13 @@ export const catalogImagesPartialUpdateResponseSortOrderMax = 2147483647;
 
 export const catalogImagesPartialUpdateResponse = zod.object({
   "id": zod.number(),
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogImagesPartialUpdateResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesPartialUpdateResponseSortOrderMin).max(catalogImagesPartialUpdateResponseSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for ProductImage model.')
 
 /**
@@ -351,7 +355,7 @@ export const catalogImagesSetPrimaryCreateBodySortOrderMax = 2147483647;
 
 
 export const catalogImagesSetPrimaryCreateBody = zod.object({
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
   "alt_text": zod.string().max(catalogImagesSetPrimaryCreateBodyAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesSetPrimaryCreateBodySortOrderMin).max(catalogImagesSetPrimaryCreateBodySortOrderMax).optional().describe('Display order of images')
@@ -365,12 +369,13 @@ export const catalogImagesSetPrimaryCreateResponseSortOrderMax = 2147483647;
 
 export const catalogImagesSetPrimaryCreateResponse = zod.object({
   "id": zod.number(),
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogImagesSetPrimaryCreateResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesSetPrimaryCreateResponseSortOrderMin).max(catalogImagesSetPrimaryCreateResponseSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for ProductImage model.')
 
 export const catalogManufacturersListParams = zod.object({
@@ -392,8 +397,8 @@ export const catalogManufacturersListResponseResultsItemSlugRegExp = new RegExp(
 
 export const catalogManufacturersListResponse = zod.object({
   "count": zod.number(),
-  "next": zod.string().url().nullish(),
-  "previous": zod.string().url().nullish(),
+  "next": zod.url().nullish(),
+  "previous": zod.url().nullish(),
   "results": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogManufacturersListResponseResultsItemNameMax).describe('Manufacturer name'),
@@ -413,7 +418,7 @@ export const catalogManufacturersCreateBodyWebsiteMax = 200;
 export const catalogManufacturersCreateBody = zod.object({
   "name": zod.string().max(catalogManufacturersCreateBodyNameMax).describe('Manufacturer name'),
   "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogManufacturersCreateBodyWebsiteMax).optional().describe('Manufacturer website URL'),
+  "website": zod.url().max(catalogManufacturersCreateBodyWebsiteMax).optional().describe('Manufacturer website URL'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible')
 }).describe('Serializer for creating new manufacturers (admin only).')
 
@@ -433,11 +438,11 @@ export const catalogManufacturersRetrieveResponse = zod.object({
   "name": zod.string().max(catalogManufacturersRetrieveResponseNameMax).describe('Manufacturer name'),
   "slug": zod.string().max(catalogManufacturersRetrieveResponseSlugMax).regex(catalogManufacturersRetrieveResponseSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogManufacturersRetrieveResponseWebsiteMax).optional().describe('Manufacturer website URL'),
+  "website": zod.url().max(catalogManufacturersRetrieveResponseWebsiteMax).optional().describe('Manufacturer website URL'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.')
 
 export const catalogManufacturersUpdateParams = zod.object({
@@ -451,7 +456,7 @@ export const catalogManufacturersUpdateBodyWebsiteMax = 200;
 export const catalogManufacturersUpdateBody = zod.object({
   "name": zod.string().max(catalogManufacturersUpdateBodyNameMax).describe('Manufacturer name'),
   "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogManufacturersUpdateBodyWebsiteMax).optional().describe('Manufacturer website URL'),
+  "website": zod.url().max(catalogManufacturersUpdateBodyWebsiteMax).optional().describe('Manufacturer website URL'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible')
 }).describe('Serializer for updating manufacturers (admin only).')
 
@@ -462,7 +467,7 @@ export const catalogManufacturersUpdateResponseWebsiteMax = 200;
 export const catalogManufacturersUpdateResponse = zod.object({
   "name": zod.string().max(catalogManufacturersUpdateResponseNameMax).describe('Manufacturer name'),
   "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogManufacturersUpdateResponseWebsiteMax).optional().describe('Manufacturer website URL'),
+  "website": zod.url().max(catalogManufacturersUpdateResponseWebsiteMax).optional().describe('Manufacturer website URL'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible')
 }).describe('Serializer for updating manufacturers (admin only).')
 
@@ -481,7 +486,7 @@ export const catalogManufacturersPartialUpdateBody = zod.object({
   "name": zod.string().max(catalogManufacturersPartialUpdateBodyNameMax).optional().describe('Manufacturer name'),
   "slug": zod.string().max(catalogManufacturersPartialUpdateBodySlugMax).regex(catalogManufacturersPartialUpdateBodySlugRegExp).optional().describe('URL-friendly version of the name'),
   "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogManufacturersPartialUpdateBodyWebsiteMax).optional().describe('Manufacturer website URL'),
+  "website": zod.url().max(catalogManufacturersPartialUpdateBodyWebsiteMax).optional().describe('Manufacturer website URL'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible')
 }).describe('Serializer for Manufacturer model.')
 
@@ -497,11 +502,11 @@ export const catalogManufacturersPartialUpdateResponse = zod.object({
   "name": zod.string().max(catalogManufacturersPartialUpdateResponseNameMax).describe('Manufacturer name'),
   "slug": zod.string().max(catalogManufacturersPartialUpdateResponseSlugMax).regex(catalogManufacturersPartialUpdateResponseSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogManufacturersPartialUpdateResponseWebsiteMax).optional().describe('Manufacturer website URL'),
+  "website": zod.url().max(catalogManufacturersPartialUpdateResponseWebsiteMax).optional().describe('Manufacturer website URL'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.')
 
 export const catalogManufacturersDestroyParams = zod.object({
@@ -514,8 +519,8 @@ export const catalogManufacturersDestroyParams = zod.object({
 export const catalogProductsListQueryParams = zod.object({
   "category": zod.coerce.number().optional(),
   "category__in": zod.array(zod.coerce.number()).optional().describe('Multiple values may be separated by commas.'),
-  "created_at__date__gte": zod.coerce.string().date().optional(),
-  "created_at__date__lte": zod.coerce.string().date().optional(),
+  "created_at__date__gte": zod.iso.date().optional(),
+  "created_at__date__lte": zod.iso.date().optional(),
   "date_range": zod.coerce.string().optional(),
   "in_stock": zod.coerce.boolean().optional(),
   "is_visible": zod.coerce.boolean().optional(),
@@ -559,19 +564,23 @@ export const catalogProductsListResponseResultsItemManufacturerSlugMax = 100;
 
 export const catalogProductsListResponseResultsItemManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const catalogProductsListResponseResultsItemManufacturerWebsiteMax = 200;
+export const catalogProductsListResponseResultsItemImagesItemAltTextMax = 255;
+export const catalogProductsListResponseResultsItemImagesItemSortOrderMin = 0;
+
+export const catalogProductsListResponseResultsItemImagesItemSortOrderMax = 2147483647;
 
 
 export const catalogProductsListResponse = zod.object({
   "count": zod.number(),
-  "next": zod.string().url().nullish(),
-  "previous": zod.string().url().nullish(),
+  "next": zod.url().nullish(),
+  "previous": zod.url().nullish(),
   "results": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogProductsListResponseResultsItemNameMax).describe('Product name'),
   "slug": zod.string().max(catalogProductsListResponseResultsItemSlugMax).regex(catalogProductsListResponseResultsItemSlugRegExp).describe('URL-friendly version of the name'),
   "short_description": zod.string().max(catalogProductsListResponseResultsItemShortDescriptionMax).optional().describe('Short description for listings'),
-  "price": zod.string().regex(catalogProductsListResponseResultsItemPriceRegExp).describe('Product price'),
-  "original_price": zod.string().regex(catalogProductsListResponseResultsItemOriginalPriceRegExp).describe('Original price for showing discounts'),
+  "price": zod.regex(catalogProductsListResponseResultsItemPriceRegExp).describe('Product price'),
+  "original_price": zod.regex(catalogProductsListResponseResultsItemOriginalPriceRegExp).describe('Original price for showing discounts'),
   "current_price": zod.number(),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsListResponseResultsItemSkuMax).describe('Unique product identifier'),
@@ -588,22 +597,32 @@ export const catalogProductsListResponse = zod.object({
   "description": zod.string().optional().describe('Category description'),
   "is_active": zod.boolean().optional().describe('Whether this category is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Category model.'),
   "manufacturer": zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogProductsListResponseResultsItemManufacturerNameMax).describe('Manufacturer name'),
   "slug": zod.string().max(catalogProductsListResponseResultsItemManufacturerSlugMax).regex(catalogProductsListResponseResultsItemManufacturerSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogProductsListResponseResultsItemManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
+  "website": zod.url().max(catalogProductsListResponseResultsItemManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created')
+  "images": zod.array(zod.object({
+  "id": zod.number(),
+  "image": zod.url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
+  "alt_text": zod.string().max(catalogProductsListResponseResultsItemImagesItemAltTextMax).optional().describe('Alternative text for the image'),
+  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
+  "sort_order": zod.number().min(catalogProductsListResponseResultsItemImagesItemSortOrderMin).max(catalogProductsListResponseResultsItemImagesItemSortOrderMax).optional().describe('Display order of images'),
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
+}).describe('Serializer for ProductImage model.')),
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'))
 })
 
@@ -628,8 +647,8 @@ export const catalogProductsCreateBody = zod.object({
   "slug": zod.string().max(catalogProductsCreateBodySlugMax).regex(catalogProductsCreateBodySlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().describe('Detailed product description'),
   "short_description": zod.string().max(catalogProductsCreateBodyShortDescriptionMax).optional().describe('Short description for listings'),
-  "price": zod.string().regex(catalogProductsCreateBodyPriceRegExp).describe('Product price'),
-  "original_price": zod.string().regex(catalogProductsCreateBodyOriginalPriceRegExp).describe('Original price for showing discounts'),
+  "price": zod.regex(catalogProductsCreateBodyPriceRegExp).describe('Product price'),
+  "original_price": zod.regex(catalogProductsCreateBodyOriginalPriceRegExp).describe('Original price for showing discounts'),
   "sku": zod.string().max(catalogProductsCreateBodySkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsCreateBodyStockQuantityMin).max(catalogProductsCreateBodyStockQuantityMax).optional().describe('Available quantity in stock'),
   "category_id": zod.number(),
@@ -637,8 +656,8 @@ export const catalogProductsCreateBody = zod.object({
   "tag_ids": zod.array(zod.number()).optional(),
   "status": zod.enum(['draft', 'active', 'inactive', 'out_of_stock']).describe('* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock').optional().describe('Product status\n\n* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock'),
   "is_visible": zod.boolean().optional().describe('Is product visible to the users'),
-  "sale_start": zod.string().datetime({}).nullish(),
-  "sale_end": zod.string().datetime({}).nullish()
+  "sale_start": zod.iso.datetime({}).nullish(),
+  "sale_end": zod.iso.datetime({}).nullish()
 }).describe('Serializer for creating products.')
 
 /**
@@ -684,8 +703,8 @@ export const catalogProductsRetrieveResponse = zod.object({
   "slug": zod.string().max(catalogProductsRetrieveResponseSlugMax).regex(catalogProductsRetrieveResponseSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().describe('Detailed product description'),
   "short_description": zod.string().max(catalogProductsRetrieveResponseShortDescriptionMax).optional().describe('Short description for listings'),
-  "price": zod.string().regex(catalogProductsRetrieveResponsePriceRegExp).describe('Product price'),
-  "original_price": zod.string().regex(catalogProductsRetrieveResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
+  "price": zod.regex(catalogProductsRetrieveResponsePriceRegExp).describe('Product price'),
+  "original_price": zod.regex(catalogProductsRetrieveResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
   "current_price": zod.number(),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsRetrieveResponseSkuMax).describe('Unique product identifier'),
@@ -697,8 +716,8 @@ export const catalogProductsRetrieveResponse = zod.object({
   "description": zod.string().optional().describe('Category description'),
   "is_active": zod.boolean().optional().describe('Whether this category is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Category model.'),
   "category_id": zod.number(),
   "manufacturer": zod.object({
@@ -706,39 +725,40 @@ export const catalogProductsRetrieveResponse = zod.object({
   "name": zod.string().max(catalogProductsRetrieveResponseManufacturerNameMax).describe('Manufacturer name'),
   "slug": zod.string().max(catalogProductsRetrieveResponseManufacturerSlugMax).regex(catalogProductsRetrieveResponseManufacturerSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogProductsRetrieveResponseManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
+  "website": zod.url().max(catalogProductsRetrieveResponseManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "manufacturer_id": zod.number().nullish(),
   "tags": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogProductsRetrieveResponseTagsItemNameMax).describe('Tag name'),
   "slug": zod.string().max(catalogProductsRetrieveResponseTagsItemSlugMax).regex(catalogProductsRetrieveResponseTagsItemSlugRegExp).describe('URL-friendly version of the name'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Tag model.')),
   "tag_ids": zod.array(zod.number()).optional(),
   "status": zod.enum(['draft', 'active', 'inactive', 'out_of_stock']).describe('* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock').optional().describe('Product status\n\n* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock'),
   "is_visible": zod.boolean().optional().describe('Is product visible to the users'),
-  "sale_start": zod.string().datetime({}).nullish(),
-  "sale_end": zod.string().datetime({}).nullish(),
+  "sale_start": zod.iso.datetime({}).nullish(),
+  "sale_end": zod.iso.datetime({}).nullish(),
   "is_on_sale": zod.boolean(),
   "is_in_stock": zod.boolean().describe('Check if product is in stock.'),
   "is_available": zod.boolean().describe('Check if product is available for purchase.'),
   "images": zod.array(zod.object({
   "id": zod.number(),
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogProductsRetrieveResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsRetrieveResponseImagesItemSortOrderMin).max(catalogProductsRetrieveResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for ProductImage model.')),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Detailed serializer for product detail views.')
 
 /**
@@ -766,8 +786,8 @@ export const catalogProductsUpdateBody = zod.object({
   "slug": zod.string().max(catalogProductsUpdateBodySlugMax).regex(catalogProductsUpdateBodySlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().describe('Detailed product description'),
   "short_description": zod.string().max(catalogProductsUpdateBodyShortDescriptionMax).optional().describe('Short description for listings'),
-  "price": zod.string().regex(catalogProductsUpdateBodyPriceRegExp).describe('Product price'),
-  "original_price": zod.string().regex(catalogProductsUpdateBodyOriginalPriceRegExp).describe('Original price for showing discounts'),
+  "price": zod.regex(catalogProductsUpdateBodyPriceRegExp).describe('Product price'),
+  "original_price": zod.regex(catalogProductsUpdateBodyOriginalPriceRegExp).describe('Original price for showing discounts'),
   "sku": zod.string().max(catalogProductsUpdateBodySkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsUpdateBodyStockQuantityMin).max(catalogProductsUpdateBodyStockQuantityMax).optional().describe('Available quantity in stock'),
   "category_id": zod.number(),
@@ -775,8 +795,8 @@ export const catalogProductsUpdateBody = zod.object({
   "tag_ids": zod.array(zod.number()).optional(),
   "status": zod.enum(['draft', 'active', 'inactive', 'out_of_stock']).describe('* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock').optional().describe('Product status\n\n* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock'),
   "is_visible": zod.boolean().optional().describe('Is product visible to the users'),
-  "sale_start": zod.string().datetime({}).nullish(),
-  "sale_end": zod.string().datetime({}).nullish()
+  "sale_start": zod.iso.datetime({}).nullish(),
+  "sale_end": zod.iso.datetime({}).nullish()
 }).describe('Detailed serializer for product detail views.')
 
 export const catalogProductsUpdateResponseNameMax = 200;
@@ -815,8 +835,8 @@ export const catalogProductsUpdateResponse = zod.object({
   "slug": zod.string().max(catalogProductsUpdateResponseSlugMax).regex(catalogProductsUpdateResponseSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().describe('Detailed product description'),
   "short_description": zod.string().max(catalogProductsUpdateResponseShortDescriptionMax).optional().describe('Short description for listings'),
-  "price": zod.string().regex(catalogProductsUpdateResponsePriceRegExp).describe('Product price'),
-  "original_price": zod.string().regex(catalogProductsUpdateResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
+  "price": zod.regex(catalogProductsUpdateResponsePriceRegExp).describe('Product price'),
+  "original_price": zod.regex(catalogProductsUpdateResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
   "current_price": zod.number(),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsUpdateResponseSkuMax).describe('Unique product identifier'),
@@ -828,8 +848,8 @@ export const catalogProductsUpdateResponse = zod.object({
   "description": zod.string().optional().describe('Category description'),
   "is_active": zod.boolean().optional().describe('Whether this category is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Category model.'),
   "category_id": zod.number(),
   "manufacturer": zod.object({
@@ -837,39 +857,40 @@ export const catalogProductsUpdateResponse = zod.object({
   "name": zod.string().max(catalogProductsUpdateResponseManufacturerNameMax).describe('Manufacturer name'),
   "slug": zod.string().max(catalogProductsUpdateResponseManufacturerSlugMax).regex(catalogProductsUpdateResponseManufacturerSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogProductsUpdateResponseManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
+  "website": zod.url().max(catalogProductsUpdateResponseManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "manufacturer_id": zod.number().nullish(),
   "tags": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogProductsUpdateResponseTagsItemNameMax).describe('Tag name'),
   "slug": zod.string().max(catalogProductsUpdateResponseTagsItemSlugMax).regex(catalogProductsUpdateResponseTagsItemSlugRegExp).describe('URL-friendly version of the name'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Tag model.')),
   "tag_ids": zod.array(zod.number()).optional(),
   "status": zod.enum(['draft', 'active', 'inactive', 'out_of_stock']).describe('* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock').optional().describe('Product status\n\n* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock'),
   "is_visible": zod.boolean().optional().describe('Is product visible to the users'),
-  "sale_start": zod.string().datetime({}).nullish(),
-  "sale_end": zod.string().datetime({}).nullish(),
+  "sale_start": zod.iso.datetime({}).nullish(),
+  "sale_end": zod.iso.datetime({}).nullish(),
   "is_on_sale": zod.boolean(),
   "is_in_stock": zod.boolean().describe('Check if product is in stock.'),
   "is_available": zod.boolean().describe('Check if product is available for purchase.'),
   "images": zod.array(zod.object({
   "id": zod.number(),
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogProductsUpdateResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsUpdateResponseImagesItemSortOrderMin).max(catalogProductsUpdateResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for ProductImage model.')),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Detailed serializer for product detail views.')
 
 /**
@@ -897,8 +918,8 @@ export const catalogProductsPartialUpdateBody = zod.object({
   "slug": zod.string().max(catalogProductsPartialUpdateBodySlugMax).regex(catalogProductsPartialUpdateBodySlugRegExp).optional().describe('URL-friendly version of the name'),
   "description": zod.string().optional().describe('Detailed product description'),
   "short_description": zod.string().max(catalogProductsPartialUpdateBodyShortDescriptionMax).optional().describe('Short description for listings'),
-  "price": zod.string().regex(catalogProductsPartialUpdateBodyPriceRegExp).optional().describe('Product price'),
-  "original_price": zod.string().regex(catalogProductsPartialUpdateBodyOriginalPriceRegExp).optional().describe('Original price for showing discounts'),
+  "price": zod.regex(catalogProductsPartialUpdateBodyPriceRegExp).optional().describe('Product price'),
+  "original_price": zod.regex(catalogProductsPartialUpdateBodyOriginalPriceRegExp).optional().describe('Original price for showing discounts'),
   "sku": zod.string().max(catalogProductsPartialUpdateBodySkuMax).optional().describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsPartialUpdateBodyStockQuantityMin).max(catalogProductsPartialUpdateBodyStockQuantityMax).optional().describe('Available quantity in stock'),
   "category_id": zod.number().optional(),
@@ -906,8 +927,8 @@ export const catalogProductsPartialUpdateBody = zod.object({
   "tag_ids": zod.array(zod.number()).optional(),
   "status": zod.enum(['draft', 'active', 'inactive', 'out_of_stock']).describe('* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock').optional().describe('Product status\n\n* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock'),
   "is_visible": zod.boolean().optional().describe('Is product visible to the users'),
-  "sale_start": zod.string().datetime({}).nullish(),
-  "sale_end": zod.string().datetime({}).nullish()
+  "sale_start": zod.iso.datetime({}).nullish(),
+  "sale_end": zod.iso.datetime({}).nullish()
 }).describe('Detailed serializer for product detail views.')
 
 export const catalogProductsPartialUpdateResponseNameMax = 200;
@@ -946,8 +967,8 @@ export const catalogProductsPartialUpdateResponse = zod.object({
   "slug": zod.string().max(catalogProductsPartialUpdateResponseSlugMax).regex(catalogProductsPartialUpdateResponseSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().describe('Detailed product description'),
   "short_description": zod.string().max(catalogProductsPartialUpdateResponseShortDescriptionMax).optional().describe('Short description for listings'),
-  "price": zod.string().regex(catalogProductsPartialUpdateResponsePriceRegExp).describe('Product price'),
-  "original_price": zod.string().regex(catalogProductsPartialUpdateResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
+  "price": zod.regex(catalogProductsPartialUpdateResponsePriceRegExp).describe('Product price'),
+  "original_price": zod.regex(catalogProductsPartialUpdateResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
   "current_price": zod.number(),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsPartialUpdateResponseSkuMax).describe('Unique product identifier'),
@@ -959,8 +980,8 @@ export const catalogProductsPartialUpdateResponse = zod.object({
   "description": zod.string().optional().describe('Category description'),
   "is_active": zod.boolean().optional().describe('Whether this category is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Category model.'),
   "category_id": zod.number(),
   "manufacturer": zod.object({
@@ -968,39 +989,40 @@ export const catalogProductsPartialUpdateResponse = zod.object({
   "name": zod.string().max(catalogProductsPartialUpdateResponseManufacturerNameMax).describe('Manufacturer name'),
   "slug": zod.string().max(catalogProductsPartialUpdateResponseManufacturerSlugMax).regex(catalogProductsPartialUpdateResponseManufacturerSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogProductsPartialUpdateResponseManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
+  "website": zod.url().max(catalogProductsPartialUpdateResponseManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "manufacturer_id": zod.number().nullish(),
   "tags": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogProductsPartialUpdateResponseTagsItemNameMax).describe('Tag name'),
   "slug": zod.string().max(catalogProductsPartialUpdateResponseTagsItemSlugMax).regex(catalogProductsPartialUpdateResponseTagsItemSlugRegExp).describe('URL-friendly version of the name'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Tag model.')),
   "tag_ids": zod.array(zod.number()).optional(),
   "status": zod.enum(['draft', 'active', 'inactive', 'out_of_stock']).describe('* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock').optional().describe('Product status\n\n* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock'),
   "is_visible": zod.boolean().optional().describe('Is product visible to the users'),
-  "sale_start": zod.string().datetime({}).nullish(),
-  "sale_end": zod.string().datetime({}).nullish(),
+  "sale_start": zod.iso.datetime({}).nullish(),
+  "sale_end": zod.iso.datetime({}).nullish(),
   "is_on_sale": zod.boolean(),
   "is_in_stock": zod.boolean().describe('Check if product is in stock.'),
   "is_available": zod.boolean().describe('Check if product is available for purchase.'),
   "images": zod.array(zod.object({
   "id": zod.number(),
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogProductsPartialUpdateResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsPartialUpdateResponseImagesItemSortOrderMin).max(catalogProductsPartialUpdateResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for ProductImage model.')),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Detailed serializer for product detail views.')
 
 /**
@@ -1035,8 +1057,8 @@ export const catalogProductsAddToWishlistCreateBody = zod.object({
   "slug": zod.string().max(catalogProductsAddToWishlistCreateBodySlugMax).regex(catalogProductsAddToWishlistCreateBodySlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().describe('Detailed product description'),
   "short_description": zod.string().max(catalogProductsAddToWishlistCreateBodyShortDescriptionMax).optional().describe('Short description for listings'),
-  "price": zod.string().regex(catalogProductsAddToWishlistCreateBodyPriceRegExp).describe('Product price'),
-  "original_price": zod.string().regex(catalogProductsAddToWishlistCreateBodyOriginalPriceRegExp).describe('Original price for showing discounts'),
+  "price": zod.regex(catalogProductsAddToWishlistCreateBodyPriceRegExp).describe('Product price'),
+  "original_price": zod.regex(catalogProductsAddToWishlistCreateBodyOriginalPriceRegExp).describe('Original price for showing discounts'),
   "sku": zod.string().max(catalogProductsAddToWishlistCreateBodySkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsAddToWishlistCreateBodyStockQuantityMin).max(catalogProductsAddToWishlistCreateBodyStockQuantityMax).optional().describe('Available quantity in stock'),
   "category_id": zod.number(),
@@ -1044,8 +1066,8 @@ export const catalogProductsAddToWishlistCreateBody = zod.object({
   "tag_ids": zod.array(zod.number()).optional(),
   "status": zod.enum(['draft', 'active', 'inactive', 'out_of_stock']).describe('* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock').optional().describe('Product status\n\n* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock'),
   "is_visible": zod.boolean().optional().describe('Is product visible to the users'),
-  "sale_start": zod.string().datetime({}).nullish(),
-  "sale_end": zod.string().datetime({}).nullish()
+  "sale_start": zod.iso.datetime({}).nullish(),
+  "sale_end": zod.iso.datetime({}).nullish()
 }).describe('Detailed serializer for product detail views.')
 
 export const catalogProductsAddToWishlistCreateResponseNameMax = 200;
@@ -1084,8 +1106,8 @@ export const catalogProductsAddToWishlistCreateResponse = zod.object({
   "slug": zod.string().max(catalogProductsAddToWishlistCreateResponseSlugMax).regex(catalogProductsAddToWishlistCreateResponseSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().describe('Detailed product description'),
   "short_description": zod.string().max(catalogProductsAddToWishlistCreateResponseShortDescriptionMax).optional().describe('Short description for listings'),
-  "price": zod.string().regex(catalogProductsAddToWishlistCreateResponsePriceRegExp).describe('Product price'),
-  "original_price": zod.string().regex(catalogProductsAddToWishlistCreateResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
+  "price": zod.regex(catalogProductsAddToWishlistCreateResponsePriceRegExp).describe('Product price'),
+  "original_price": zod.regex(catalogProductsAddToWishlistCreateResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
   "current_price": zod.number(),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsAddToWishlistCreateResponseSkuMax).describe('Unique product identifier'),
@@ -1097,8 +1119,8 @@ export const catalogProductsAddToWishlistCreateResponse = zod.object({
   "description": zod.string().optional().describe('Category description'),
   "is_active": zod.boolean().optional().describe('Whether this category is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Category model.'),
   "category_id": zod.number(),
   "manufacturer": zod.object({
@@ -1106,39 +1128,40 @@ export const catalogProductsAddToWishlistCreateResponse = zod.object({
   "name": zod.string().max(catalogProductsAddToWishlistCreateResponseManufacturerNameMax).describe('Manufacturer name'),
   "slug": zod.string().max(catalogProductsAddToWishlistCreateResponseManufacturerSlugMax).regex(catalogProductsAddToWishlistCreateResponseManufacturerSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogProductsAddToWishlistCreateResponseManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
+  "website": zod.url().max(catalogProductsAddToWishlistCreateResponseManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "manufacturer_id": zod.number().nullish(),
   "tags": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogProductsAddToWishlistCreateResponseTagsItemNameMax).describe('Tag name'),
   "slug": zod.string().max(catalogProductsAddToWishlistCreateResponseTagsItemSlugMax).regex(catalogProductsAddToWishlistCreateResponseTagsItemSlugRegExp).describe('URL-friendly version of the name'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Tag model.')),
   "tag_ids": zod.array(zod.number()).optional(),
   "status": zod.enum(['draft', 'active', 'inactive', 'out_of_stock']).describe('* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock').optional().describe('Product status\n\n* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock'),
   "is_visible": zod.boolean().optional().describe('Is product visible to the users'),
-  "sale_start": zod.string().datetime({}).nullish(),
-  "sale_end": zod.string().datetime({}).nullish(),
+  "sale_start": zod.iso.datetime({}).nullish(),
+  "sale_end": zod.iso.datetime({}).nullish(),
   "is_on_sale": zod.boolean(),
   "is_in_stock": zod.boolean().describe('Check if product is in stock.'),
   "is_available": zod.boolean().describe('Check if product is available for purchase.'),
   "images": zod.array(zod.object({
   "id": zod.number(),
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogProductsAddToWishlistCreateResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsAddToWishlistCreateResponseImagesItemSortOrderMin).max(catalogProductsAddToWishlistCreateResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for ProductImage model.')),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Detailed serializer for product detail views.')
 
 /**
@@ -1184,8 +1207,8 @@ export const catalogProductsRelatedRetrieveResponse = zod.object({
   "slug": zod.string().max(catalogProductsRelatedRetrieveResponseSlugMax).regex(catalogProductsRelatedRetrieveResponseSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().describe('Detailed product description'),
   "short_description": zod.string().max(catalogProductsRelatedRetrieveResponseShortDescriptionMax).optional().describe('Short description for listings'),
-  "price": zod.string().regex(catalogProductsRelatedRetrieveResponsePriceRegExp).describe('Product price'),
-  "original_price": zod.string().regex(catalogProductsRelatedRetrieveResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
+  "price": zod.regex(catalogProductsRelatedRetrieveResponsePriceRegExp).describe('Product price'),
+  "original_price": zod.regex(catalogProductsRelatedRetrieveResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
   "current_price": zod.number(),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsRelatedRetrieveResponseSkuMax).describe('Unique product identifier'),
@@ -1197,8 +1220,8 @@ export const catalogProductsRelatedRetrieveResponse = zod.object({
   "description": zod.string().optional().describe('Category description'),
   "is_active": zod.boolean().optional().describe('Whether this category is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Category model.'),
   "category_id": zod.number(),
   "manufacturer": zod.object({
@@ -1206,39 +1229,40 @@ export const catalogProductsRelatedRetrieveResponse = zod.object({
   "name": zod.string().max(catalogProductsRelatedRetrieveResponseManufacturerNameMax).describe('Manufacturer name'),
   "slug": zod.string().max(catalogProductsRelatedRetrieveResponseManufacturerSlugMax).regex(catalogProductsRelatedRetrieveResponseManufacturerSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogProductsRelatedRetrieveResponseManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
+  "website": zod.url().max(catalogProductsRelatedRetrieveResponseManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "manufacturer_id": zod.number().nullish(),
   "tags": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogProductsRelatedRetrieveResponseTagsItemNameMax).describe('Tag name'),
   "slug": zod.string().max(catalogProductsRelatedRetrieveResponseTagsItemSlugMax).regex(catalogProductsRelatedRetrieveResponseTagsItemSlugRegExp).describe('URL-friendly version of the name'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Tag model.')),
   "tag_ids": zod.array(zod.number()).optional(),
   "status": zod.enum(['draft', 'active', 'inactive', 'out_of_stock']).describe('* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock').optional().describe('Product status\n\n* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock'),
   "is_visible": zod.boolean().optional().describe('Is product visible to the users'),
-  "sale_start": zod.string().datetime({}).nullish(),
-  "sale_end": zod.string().datetime({}).nullish(),
+  "sale_start": zod.iso.datetime({}).nullish(),
+  "sale_end": zod.iso.datetime({}).nullish(),
   "is_on_sale": zod.boolean(),
   "is_in_stock": zod.boolean().describe('Check if product is in stock.'),
   "is_available": zod.boolean().describe('Check if product is available for purchase.'),
   "images": zod.array(zod.object({
   "id": zod.number(),
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogProductsRelatedRetrieveResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsRelatedRetrieveResponseImagesItemSortOrderMin).max(catalogProductsRelatedRetrieveResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for ProductImage model.')),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Detailed serializer for product detail views.')
 
 /**
@@ -1280,8 +1304,8 @@ export const catalogProductsOnSaleRetrieveResponse = zod.object({
   "slug": zod.string().max(catalogProductsOnSaleRetrieveResponseSlugMax).regex(catalogProductsOnSaleRetrieveResponseSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().describe('Detailed product description'),
   "short_description": zod.string().max(catalogProductsOnSaleRetrieveResponseShortDescriptionMax).optional().describe('Short description for listings'),
-  "price": zod.string().regex(catalogProductsOnSaleRetrieveResponsePriceRegExp).describe('Product price'),
-  "original_price": zod.string().regex(catalogProductsOnSaleRetrieveResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
+  "price": zod.regex(catalogProductsOnSaleRetrieveResponsePriceRegExp).describe('Product price'),
+  "original_price": zod.regex(catalogProductsOnSaleRetrieveResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
   "current_price": zod.number(),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsOnSaleRetrieveResponseSkuMax).describe('Unique product identifier'),
@@ -1293,8 +1317,8 @@ export const catalogProductsOnSaleRetrieveResponse = zod.object({
   "description": zod.string().optional().describe('Category description'),
   "is_active": zod.boolean().optional().describe('Whether this category is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Category model.'),
   "category_id": zod.number(),
   "manufacturer": zod.object({
@@ -1302,39 +1326,40 @@ export const catalogProductsOnSaleRetrieveResponse = zod.object({
   "name": zod.string().max(catalogProductsOnSaleRetrieveResponseManufacturerNameMax).describe('Manufacturer name'),
   "slug": zod.string().max(catalogProductsOnSaleRetrieveResponseManufacturerSlugMax).regex(catalogProductsOnSaleRetrieveResponseManufacturerSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogProductsOnSaleRetrieveResponseManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
+  "website": zod.url().max(catalogProductsOnSaleRetrieveResponseManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible'),
   "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "manufacturer_id": zod.number().nullish(),
   "tags": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogProductsOnSaleRetrieveResponseTagsItemNameMax).describe('Tag name'),
   "slug": zod.string().max(catalogProductsOnSaleRetrieveResponseTagsItemSlugMax).regex(catalogProductsOnSaleRetrieveResponseTagsItemSlugRegExp).describe('URL-friendly version of the name'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Tag model.')),
   "tag_ids": zod.array(zod.number()).optional(),
   "status": zod.enum(['draft', 'active', 'inactive', 'out_of_stock']).describe('* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock').optional().describe('Product status\n\n* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock'),
   "is_visible": zod.boolean().optional().describe('Is product visible to the users'),
-  "sale_start": zod.string().datetime({}).nullish(),
-  "sale_end": zod.string().datetime({}).nullish(),
+  "sale_start": zod.iso.datetime({}).nullish(),
+  "sale_end": zod.iso.datetime({}).nullish(),
   "is_on_sale": zod.boolean(),
   "is_in_stock": zod.boolean().describe('Check if product is in stock.'),
   "is_available": zod.boolean().describe('Check if product is available for purchase.'),
   "images": zod.array(zod.object({
   "id": zod.number(),
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogProductsOnSaleRetrieveResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsOnSaleRetrieveResponseImagesItemSortOrderMin).max(catalogProductsOnSaleRetrieveResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for ProductImage model.')),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Detailed serializer for product detail views.')
 
 /**
@@ -1355,14 +1380,14 @@ export const catalogTagsListResponseResultsItemSlugRegExp = new RegExp('^[-a-zA-
 
 export const catalogTagsListResponse = zod.object({
   "count": zod.number(),
-  "next": zod.string().url().nullish(),
-  "previous": zod.string().url().nullish(),
+  "next": zod.url().nullish(),
+  "previous": zod.url().nullish(),
   "results": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogTagsListResponseResultsItemNameMax).describe('Tag name'),
   "slug": zod.string().max(catalogTagsListResponseResultsItemSlugMax).regex(catalogTagsListResponseResultsItemSlugRegExp).describe('URL-friendly version of the name'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Tag model.'))
 })
 
@@ -1397,8 +1422,8 @@ export const catalogTagsRetrieveResponse = zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogTagsRetrieveResponseNameMax).describe('Tag name'),
   "slug": zod.string().max(catalogTagsRetrieveResponseSlugMax).regex(catalogTagsRetrieveResponseSlugRegExp).describe('URL-friendly version of the name'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Tag model.')
 
 /**
@@ -1429,8 +1454,8 @@ export const catalogTagsUpdateResponse = zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogTagsUpdateResponseNameMax).describe('Tag name'),
   "slug": zod.string().max(catalogTagsUpdateResponseSlugMax).regex(catalogTagsUpdateResponseSlugRegExp).describe('URL-friendly version of the name'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Tag model.')
 
 /**
@@ -1461,8 +1486,8 @@ export const catalogTagsPartialUpdateResponse = zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogTagsPartialUpdateResponseNameMax).describe('Tag name'),
   "slug": zod.string().max(catalogTagsPartialUpdateResponseSlugMax).regex(catalogTagsPartialUpdateResponseSlugRegExp).describe('URL-friendly version of the name'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Tag model.')
 
 /**
@@ -1489,7 +1514,7 @@ export const catalogTagsProductsRetrieveResponse = zod.object({
   "id": zod.number(),
   "name": zod.string().max(catalogTagsProductsRetrieveResponseNameMax).describe('Tag name'),
   "slug": zod.string().max(catalogTagsProductsRetrieveResponseSlugMax).regex(catalogTagsProductsRetrieveResponseSlugRegExp).describe('URL-friendly version of the name'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Tag model.')
 

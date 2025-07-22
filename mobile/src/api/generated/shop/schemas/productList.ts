@@ -5,9 +5,10 @@
  * API for ShopDjango project
  * OpenAPI spec version: 1.0.0
  */
-import type { StatusEnum } from './statusEnum';
+import type { ProductStatusEnum } from './productStatusEnum';
 import type { Category } from './category';
 import type { Manufacturer } from './manufacturer';
+import type { ProductImage } from './productImage';
 
 /**
  * Simplified serializer for product listings.
@@ -60,7 +61,7 @@ export interface ProductList {
 * `active` - Active
 * `inactive` - Inactive
 * `out_of_stock` - Out of Stock */
-  status?: StatusEnum;
+  status?: ProductStatusEnum;
   /** Is product visible to the users */
   is_visible?: boolean;
   readonly is_on_sale: boolean;
@@ -75,6 +76,7 @@ export interface ProductList {
    * @nullable
    */
   readonly primary_image: string | null;
+  readonly images: readonly ProductImage[];
   /** Timestamp when the record was created */
   readonly created_at: string;
 }

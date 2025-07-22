@@ -6,13 +6,20 @@ class Payment(TimestampedModel):
     """
     Model representing a payment transaction.
     """
+    
+    class PaymentStatus(models.TextChoices):
+        PENDING = "pending", "Pending"
+        COMPLETED = "completed", "Completed"
+        FAILED = "failed", "Failed"
+        CANCELED = "canceled", "Canceled"
+    
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=20, choices=[
-        ('pending', 'Pending'),
-        ('completed', 'Completed'),
-        ('failed', 'Failed'),
-        ('canceled', 'Canceled'),
-    ], default='pending')
+    status = models.CharField(
+        max_length=20, 
+        choices=PaymentStatus.choices,
+        default=PaymentStatus.PENDING,
+        help_text="Current status of the payment"
+    )
     
     # Stripe-specific fields
     stripe_payment_intent_id = models.CharField(max_length=255, null=True, blank=True)

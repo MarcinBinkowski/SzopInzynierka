@@ -27,8 +27,8 @@ export const geographicCountriesListResponseResultsItemNameMax = 100;
 
 export const geographicCountriesListResponse = zod.object({
   "count": zod.number(),
-  "next": zod.string().url().nullish(),
-  "previous": zod.string().url().nullish(),
+  "next": zod.url().nullish(),
+  "previous": zod.url().nullish(),
   "results": zod.array(zod.object({
   "id": zod.number(),
   "code": zod.string().max(geographicCountriesListResponseResultsItemCodeMax).describe('alpha-2 country code (e.g., PL, US, GB)'),
@@ -61,8 +61,8 @@ export const geographicCountriesRetrieveResponse = zod.object({
   "id": zod.number(),
   "code": zod.string().max(geographicCountriesRetrieveResponseCodeMax).describe('alpha-2 country code (e.g., PL, US, GB)'),
   "name": zod.string().max(geographicCountriesRetrieveResponseNameMax).describe('Official country name in English'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Full country serializer with all fields.')
 
 export const geographicCountriesUpdateParams = zod.object({

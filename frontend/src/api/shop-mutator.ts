@@ -35,22 +35,22 @@ shopClient.interceptors.request.use((config) => {
 
 shopClient.interceptors.response.use(
   async (response: AxiosResponse) => {
-    console.log('✅ Shop API Response:', {
-      status: response.status,
-      statusText: response.statusText,
-      url: response.config.url,
-      method: response.config.method?.toUpperCase(),
-      contentType: response.headers['content-type'],
-      dataType: typeof response.data,
-      dataSize: JSON.stringify(response.data).length,
-      timestamp: new Date().toISOString(),
-    })
+    // console.log('✅ Shop API Response:', {
+    //   status: response.status,
+    //   statusText: response.statusText,
+    //   url: response.config.url,
+    //   method: response.config.method?.toUpperCase(),
+    //   contentType: response.headers['content-type'],
+    //   dataType: typeof response.data,
+    //   dataSize: JSON.stringify(response.data).length,
+    //   timestamp: new Date().toISOString(),
+    // })
     
-    if (typeof response.data === 'string') {
-      console.log('📄 Response Preview:', response.data.substring(0, 200) + '...')
-    } else {
-      console.log('📊 Response Data:', response.data)
-    }
+    // if (typeof response.data === 'string') {
+    //   console.log('📄 Response Preview:', response.data.substring(0, 200) + '...')
+    // } else {
+    //   console.log('📊 Response Data:', response.data)
+    // }
     
     return response
   },

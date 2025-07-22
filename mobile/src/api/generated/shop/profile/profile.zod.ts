@@ -26,8 +26,8 @@ export const profileAddressesListResponseResultsItemLabelMax = 50;
 
 export const profileAddressesListResponse = zod.object({
   "count": zod.number(),
-  "next": zod.string().url().nullish(),
-  "previous": zod.string().url().nullish(),
+  "next": zod.url().nullish(),
+  "previous": zod.url().nullish(),
   "results": zod.array(zod.object({
   "id": zod.number(),
   "profile": zod.object({
@@ -42,7 +42,7 @@ export const profileAddressesListResponse = zod.object({
   "full_address": zod.string(),
   "label": zod.string().max(profileAddressesListResponseResultsItemLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
   "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }))
 })
 
@@ -102,8 +102,8 @@ export const profileAddressesRetrieveResponse = zod.object({
   "full_address": zod.string(),
   "address_dict": zod.record(zod.string(), zod.any()),
   "is_complete": zod.boolean(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 })
 
 export const profileAddressesUpdateParams = zod.object({
@@ -226,8 +226,8 @@ export const profileAddressesSetDefaultPartialUpdateResponse = zod.object({
   "full_address": zod.string(),
   "address_dict": zod.record(zod.string(), zod.any()),
   "is_complete": zod.boolean(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 })
 
 export const profileAddressesBillingRetrieveParams = zod.object({
@@ -262,8 +262,8 @@ export const profileAddressesBillingRetrieveResponse = zod.object({
   "full_address": zod.string(),
   "address_dict": zod.record(zod.string(), zod.any()),
   "is_complete": zod.boolean(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 })
 
 export const profileAddressesDefaultBillingRetrieveParams = zod.object({
@@ -298,8 +298,8 @@ export const profileAddressesDefaultBillingRetrieveResponse = zod.object({
   "full_address": zod.string(),
   "address_dict": zod.record(zod.string(), zod.any()),
   "is_complete": zod.boolean(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 })
 
 export const profileAddressesDefaultShippingRetrieveParams = zod.object({
@@ -334,8 +334,8 @@ export const profileAddressesDefaultShippingRetrieveResponse = zod.object({
   "full_address": zod.string(),
   "address_dict": zod.record(zod.string(), zod.any()),
   "is_complete": zod.boolean(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 })
 
 export const profileAddressesShippingRetrieveParams = zod.object({
@@ -370,8 +370,8 @@ export const profileAddressesShippingRetrieveResponse = zod.object({
   "full_address": zod.string(),
   "address_dict": zod.record(zod.string(), zod.any()),
   "is_complete": zod.boolean(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 })
 
 export const profileAddressesSummaryRetrieveParams = zod.object({
@@ -406,8 +406,8 @@ export const profileAddressesSummaryRetrieveResponse = zod.object({
   "full_address": zod.string(),
   "address_dict": zod.record(zod.string(), zod.any()),
   "is_complete": zod.boolean(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 })
 
 export const profileAddressesUnsetDefaultPartialUpdateParams = zod.object({
@@ -458,8 +458,8 @@ export const profileAddressesUnsetDefaultPartialUpdateResponse = zod.object({
   "full_address": zod.string(),
   "address_dict": zod.record(zod.string(), zod.any()),
   "is_complete": zod.boolean(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 })
 
 export const profileProfilesListParams = zod.object({
@@ -479,8 +479,8 @@ export const profileProfilesListResponseResultsItemLastNameMax = 150;
 
 export const profileProfilesListResponse = zod.object({
   "count": zod.number(),
-  "next": zod.string().url().nullish(),
-  "previous": zod.string().url().nullish(),
+  "next": zod.url().nullish(),
+  "previous": zod.url().nullish(),
   "results": zod.array(zod.object({
   "id": zod.number(),
   "first_name": zod.string().max(profileProfilesListResponseResultsItemFirstNameMax).optional().describe('User\'s first name'),
@@ -488,8 +488,8 @@ export const profileProfilesListResponse = zod.object({
   "display_name": zod.string(),
   "user_email": zod.string(),
   "profile_completed": zod.boolean().optional().describe('Whether profile has all required information for checkout'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }))
 })
 
@@ -506,7 +506,7 @@ export const profileProfilesCreateBody = zod.object({
   "user": zod.number().describe('Associated user account'),
   "first_name": zod.string().max(profileProfilesCreateBodyFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesCreateBodyLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesCreateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
 }).describe('Serializer for creating new profiles (admin only).')
 
@@ -523,7 +523,7 @@ export const profileProfilesRetrieveResponse = zod.object({
   "id": zod.number(),
   "first_name": zod.string().max(profileProfilesRetrieveResponseFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesRetrieveResponseLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesRetrieveResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
@@ -533,8 +533,8 @@ export const profileProfilesRetrieveResponse = zod.object({
   "missing_checkout_fields": zod.array(zod.any()),
   "shipping_address": zod.record(zod.string(), zod.any()),
   "billing_address": zod.record(zod.string(), zod.any()),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for user profile management.')
 
 export const profileProfilesUpdateParams = zod.object({
@@ -549,7 +549,7 @@ export const profileProfilesUpdateBodyPhoneNumberRegExp = new RegExp('^\\+?[\\d\
 export const profileProfilesUpdateBody = zod.object({
   "first_name": zod.string().max(profileProfilesUpdateBodyFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesUpdateBodyLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesUpdateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
 })
 
@@ -561,7 +561,7 @@ export const profileProfilesUpdateResponsePhoneNumberRegExp = new RegExp('^\\+?[
 export const profileProfilesUpdateResponse = zod.object({
   "first_name": zod.string().max(profileProfilesUpdateResponseFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesUpdateResponseLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesUpdateResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
 })
 
@@ -577,7 +577,7 @@ export const profileProfilesPartialUpdateBodyPhoneNumberRegExp = new RegExp('^\\
 export const profileProfilesPartialUpdateBody = zod.object({
   "first_name": zod.string().max(profileProfilesPartialUpdateBodyFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesPartialUpdateBodyLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesPartialUpdateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
 })
 
@@ -589,7 +589,7 @@ export const profileProfilesPartialUpdateResponsePhoneNumberRegExp = new RegExp(
 export const profileProfilesPartialUpdateResponse = zod.object({
   "first_name": zod.string().max(profileProfilesPartialUpdateResponseFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesPartialUpdateResponseLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesPartialUpdateResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
 })
 
@@ -609,7 +609,7 @@ export const profileProfilesUpdateCompletionStatusCreateBodyPhoneNumberRegExp = 
 export const profileProfilesUpdateCompletionStatusCreateBody = zod.object({
   "first_name": zod.string().max(profileProfilesUpdateCompletionStatusCreateBodyFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesUpdateCompletionStatusCreateBodyLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesUpdateCompletionStatusCreateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
 }).describe('Serializer for user profile management.')
 
@@ -622,7 +622,7 @@ export const profileProfilesUpdateCompletionStatusCreateResponse = zod.object({
   "id": zod.number(),
   "first_name": zod.string().max(profileProfilesUpdateCompletionStatusCreateResponseFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesUpdateCompletionStatusCreateResponseLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesUpdateCompletionStatusCreateResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
@@ -632,8 +632,8 @@ export const profileProfilesUpdateCompletionStatusCreateResponse = zod.object({
   "missing_checkout_fields": zod.array(zod.any()),
   "shipping_address": zod.record(zod.string(), zod.any()),
   "billing_address": zod.record(zod.string(), zod.any()),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for user profile management.')
 
 export const profileProfilesAddressesSummaryRetrieveParams = zod.object({
@@ -649,7 +649,7 @@ export const profileProfilesAddressesSummaryRetrieveResponse = zod.object({
   "id": zod.number(),
   "first_name": zod.string().max(profileProfilesAddressesSummaryRetrieveResponseFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesAddressesSummaryRetrieveResponseLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesAddressesSummaryRetrieveResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
@@ -659,8 +659,8 @@ export const profileProfilesAddressesSummaryRetrieveResponse = zod.object({
   "missing_checkout_fields": zod.array(zod.any()),
   "shipping_address": zod.record(zod.string(), zod.any()),
   "billing_address": zod.record(zod.string(), zod.any()),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for user profile management.')
 
 export const profileProfilesCheckoutStatusRetrieveParams = zod.object({
@@ -676,7 +676,7 @@ export const profileProfilesCheckoutStatusRetrieveResponse = zod.object({
   "id": zod.number(),
   "first_name": zod.string().max(profileProfilesCheckoutStatusRetrieveResponseFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesCheckoutStatusRetrieveResponseLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesCheckoutStatusRetrieveResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
@@ -686,8 +686,8 @@ export const profileProfilesCheckoutStatusRetrieveResponse = zod.object({
   "missing_checkout_fields": zod.array(zod.any()),
   "shipping_address": zod.record(zod.string(), zod.any()),
   "billing_address": zod.record(zod.string(), zod.any()),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for user profile management.')
 
 export const profileProfilesCompletionRequirementsRetrieveParams = zod.object({
@@ -703,7 +703,7 @@ export const profileProfilesCompletionRequirementsRetrieveResponse = zod.object(
   "id": zod.number(),
   "first_name": zod.string().max(profileProfilesCompletionRequirementsRetrieveResponseFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesCompletionRequirementsRetrieveResponseLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesCompletionRequirementsRetrieveResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
@@ -713,8 +713,8 @@ export const profileProfilesCompletionRequirementsRetrieveResponse = zod.object(
   "missing_checkout_fields": zod.array(zod.any()),
   "shipping_address": zod.record(zod.string(), zod.any()),
   "billing_address": zod.record(zod.string(), zod.any()),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for user profile management.')
 
 export const profileProfilesMarkCompletedPartialUpdateParams = zod.object({
@@ -729,7 +729,7 @@ export const profileProfilesMarkCompletedPartialUpdateBodyPhoneNumberRegExp = ne
 export const profileProfilesMarkCompletedPartialUpdateBody = zod.object({
   "first_name": zod.string().max(profileProfilesMarkCompletedPartialUpdateBodyFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesMarkCompletedPartialUpdateBodyLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesMarkCompletedPartialUpdateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
 }).describe('Serializer for user profile management.')
 
@@ -742,7 +742,7 @@ export const profileProfilesMarkCompletedPartialUpdateResponse = zod.object({
   "id": zod.number(),
   "first_name": zod.string().max(profileProfilesMarkCompletedPartialUpdateResponseFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesMarkCompletedPartialUpdateResponseLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesMarkCompletedPartialUpdateResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
@@ -752,8 +752,8 @@ export const profileProfilesMarkCompletedPartialUpdateResponse = zod.object({
   "missing_checkout_fields": zod.array(zod.any()),
   "shipping_address": zod.record(zod.string(), zod.any()),
   "billing_address": zod.record(zod.string(), zod.any()),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for user profile management.')
 
 export const profileProfilesMeRetrieveParams = zod.object({
@@ -769,7 +769,7 @@ export const profileProfilesMeRetrieveResponse = zod.object({
   "id": zod.number(),
   "first_name": zod.string().max(profileProfilesMeRetrieveResponseFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesMeRetrieveResponseLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesMeRetrieveResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
@@ -779,8 +779,8 @@ export const profileProfilesMeRetrieveResponse = zod.object({
   "missing_checkout_fields": zod.array(zod.any()),
   "shipping_address": zod.record(zod.string(), zod.any()),
   "billing_address": zod.record(zod.string(), zod.any()),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for user profile management.')
 
 export const profileProfilesMePartialUpdateParams = zod.object({
@@ -795,7 +795,7 @@ export const profileProfilesMePartialUpdateBodyPhoneNumberRegExp = new RegExp('^
 export const profileProfilesMePartialUpdateBody = zod.object({
   "first_name": zod.string().max(profileProfilesMePartialUpdateBodyFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesMePartialUpdateBodyLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesMePartialUpdateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
 }).describe('Serializer for user profile management.')
 
@@ -808,7 +808,7 @@ export const profileProfilesMePartialUpdateResponse = zod.object({
   "id": zod.number(),
   "first_name": zod.string().max(profileProfilesMePartialUpdateResponseFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesMePartialUpdateResponseLastNameMax).optional().describe('User\'s last name'),
-  "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
+  "date_of_birth": zod.iso.date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesMePartialUpdateResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
@@ -818,7 +818,7 @@ export const profileProfilesMePartialUpdateResponse = zod.object({
   "missing_checkout_fields": zod.array(zod.any()),
   "shipping_address": zod.record(zod.string(), zod.any()),
   "billing_address": zod.record(zod.string(), zod.any()),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for user profile management.')
 

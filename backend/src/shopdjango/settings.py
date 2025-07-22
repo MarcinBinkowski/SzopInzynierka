@@ -11,10 +11,15 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+import warnings
 from pathlib import Path
 import sys
 from corsheaders.defaults import default_headers
 from dotenv import load_dotenv
+
+# Suppress the OpenAPI authentication warning
+warnings.filterwarnings("ignore", message="could not resolve authenticator")
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -211,6 +216,10 @@ SPECTACULAR_SETTINGS = {
     "EXTERNAL_DOCS": {
         "description": "AllAuth API specification",
         "url": "/_allauth/openapi.html",
+    },
+    "ENUM_NAME_OVERRIDES": {
+        "CartStatusEnum": "apps.checkout.models.cart.Cart.CartStatus",
+        "ProductStatusEnum": "apps.catalog.models.product.Product.ProductStatus",
     },
 }
 

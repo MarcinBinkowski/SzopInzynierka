@@ -31,13 +31,6 @@ class Cart(TimestampedModel):
         default=CartStatus.ACTIVE,
         help_text="Current status of the cart",
     )
-    session_key = models.CharField(
-        max_length=40,
-        blank=True,
-        null=True,
-        help_text="Session key for anonymous users",
-    )
-
 
     class Meta:
         ordering = ["-created_at"]
@@ -78,18 +71,12 @@ class Cart(TimestampedModel):
         return self.item_count == 0
 
     @classmethod
-    def get_or_create_active_cart(cls, user: User, session_key: str = None) -> "Cart":
+    def get_or_create_active_cart(cls, user: User,) -> "Cart":
         """Get existing active cart or create new one."""
         if user.is_authenticated:
             cart, created = cls.objects.get_or_create(
                 user=user,
                 status=cls.CartStatus.ACTIVE,
-                defaults={"session_key": session_key},
             )
-        else:
-            cart, created = cls.objects.get_or_create(
-                session_key=session_key,
-                status=cls.CartStatus.ACTIVE,
-                defaults={"user": None},
-            )
+
         return cart

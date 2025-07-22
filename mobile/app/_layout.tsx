@@ -1,5 +1,4 @@
-// mobile/app/_layout.tsx
-import {  Slot, SplashScreen, Stack,  } from "expo-router";
+import {  Stack } from "expo-router";
 import "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -21,11 +20,11 @@ export default function RootLayout() {
   const theme = colorScheme === 'dark' ? MD3DarkTheme : MD3LightTheme;
   return (
     <QueryClientProvider client={queryClient}>
-      <PaperProvider theme={theme}>
         <StripeProvider
-          publishableKey="pk_test_your_publishable_key"
+          publishableKey="pk_test_51RkserQVpjgsiiP0FjYTpCLAffS30UKpMz9DHgawwgVpRT6NzwqInTrOcOP9xAGhjLc3hCCMi1pLCJzog0rsTFNA00MlFDqt5t"
           merchantIdentifier="szopinzynierka.com"
         >
+      <PaperProvider theme={theme}>
           <GestureHandlerRootView style={{ flex: 1 }}>
           <Stack>
             <Stack.Screen
@@ -43,8 +42,9 @@ export default function RootLayout() {
             />
           </Stack>
           </GestureHandlerRootView>
-        </StripeProvider>
       </PaperProvider>
+      </StripeProvider>
+
     </QueryClientProvider>
   );
 }

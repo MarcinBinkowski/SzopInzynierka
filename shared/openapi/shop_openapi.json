@@ -1161,6 +1161,493 @@ paths:
               schema:
                 $ref: '#/components/schemas/Tag'
           description: ''
+  /api/checkout/carts/:
+    get:
+      operationId: checkout_carts_list
+      description: ViewSet for Cart model with CRUD operations.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - checkout
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCartListList'
+          description: ''
+    post:
+      operationId: checkout_carts_create
+      description: ViewSet for Cart model with CRUD operations.
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Cart'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+  /api/checkout/carts/{id}/:
+    get:
+      operationId: checkout_carts_retrieve
+      description: ViewSet for Cart model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+    put:
+      operationId: checkout_carts_update
+      description: ViewSet for Cart model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Cart'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+    patch:
+      operationId: checkout_carts_partial_update
+      description: ViewSet for Cart model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCart'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCart'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCart'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+    delete:
+      operationId: checkout_carts_destroy
+      description: ViewSet for Cart model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/checkout/carts/{id}/clear/:
+    post:
+      operationId: checkout_carts_clear_create
+      description: Clear all items from cart.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Cart'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+  /api/checkout/carts/{id}/summary/:
+    get:
+      operationId: checkout_carts_summary_retrieve
+      description: Get cart summary with totals.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+  /api/checkout/items/:
+    get:
+      operationId: checkout_items_list
+      description: ViewSet for CartItem model with CRUD operations.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - checkout
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCartItemList'
+          description: ''
+    post:
+      operationId: checkout_items_create
+      description: ViewSet for CartItem model with CRUD operations.
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItemCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CartItemCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CartItemCreate'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItemCreate'
+          description: ''
+  /api/checkout/items/{id}/:
+    get:
+      operationId: checkout_items_retrieve
+      description: ViewSet for CartItem model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+          description: ''
+    put:
+      operationId: checkout_items_update
+      description: ViewSet for CartItem model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+          description: ''
+    patch:
+      operationId: checkout_items_partial_update
+      description: ViewSet for CartItem model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCartItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCartItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCartItem'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+          description: ''
+    delete:
+      operationId: checkout_items_destroy
+      description: ViewSet for CartItem model with CRUD operations.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/checkout/items/{id}/decrease_quantity/:
+    post:
+      operationId: checkout_items_decrease_quantity_create
+      description: Decrease item quantity.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+          description: ''
+  /api/checkout/items/{id}/increase_quantity/:
+    post:
+      operationId: checkout_items_increase_quantity_create
+      description: Increase item quantity.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+          description: ''
+  /api/checkout/items/{id}/update_quantity/:
+    post:
+      operationId: checkout_items_update_quantity_create
+      description: Update item quantity.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+          description: ''
   /api/geographic/countries/:
     get:
       operationId: geographic_countries_list
@@ -2232,6 +2719,175 @@ components:
       - city
       - country
       - postal_code
+    Cart:
+      type: object
+      description: Serializer for Cart model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+          nullable: true
+          description: User who owns this cart
+        status:
+          allOf:
+          - $ref: '#/components/schemas/CartStatusEnum'
+          description: |-
+            Current status of the cart
+
+            * `active` - Active
+            * `converted` - Converted to Order
+            * `abandoned` - Abandoned
+            * `expired` - Expired
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+          readOnly: true
+        item_count:
+          type: integer
+          description: Get total number of items in cart.
+          readOnly: true
+        subtotal:
+          type: number
+          format: double
+          description: Get subtotal of all items in cart.
+          readOnly: true
+        total:
+          type: number
+          format: double
+          description: Get total including taxes and shipping.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - created_at
+      - id
+      - item_count
+      - items
+      - subtotal
+      - total
+      - updated_at
+      - user
+    CartItem:
+      type: object
+      description: Serializer for CartItem model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          allOf:
+          - $ref: '#/components/schemas/ProductList'
+          readOnly: true
+        product_id:
+          type: integer
+          writeOnly: true
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 1
+          description: Quantity of this product in cart
+        unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+          description: Price per unit when added to cart
+        total_price:
+          type: number
+          format: double
+          description: Get total price for this item.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - created_at
+      - id
+      - product
+      - product_id
+      - total_price
+      - unit_price
+      - updated_at
+    CartItemCreate:
+      type: object
+      description: Serializer for creating cart items.
+      properties:
+        product_id:
+          type: integer
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 1
+          description: Quantity of this product in cart
+      required:
+      - product_id
+    CartList:
+      type: object
+      description: Simplified cart serializer for list views.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/CartStatusEnum'
+          description: |-
+            Current status of the cart
+
+            * `active` - Active
+            * `converted` - Converted to Order
+            * `abandoned` - Abandoned
+            * `expired` - Expired
+        item_count:
+          type: integer
+          description: Get total number of items in cart.
+          readOnly: true
+        subtotal:
+          type: number
+          format: double
+          description: Get subtotal of all items in cart.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+      required:
+      - created_at
+      - id
+      - item_count
+      - subtotal
+    CartStatusEnum:
+      enum:
+      - active
+      - converted
+      - abandoned
+      - expired
+      type: string
+      description: |-
+        * `active` - Active
+        * `converted` - Converted to Order
+        * `abandoned` - Abandoned
+        * `expired` - Expired
     Category:
       type: object
       description: Serializer for Category model.
@@ -2489,6 +3145,52 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AddressList'
+    PaginatedCartItemList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+    PaginatedCartListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartList'
     PaginatedCategoryList:
       type: object
       required:
@@ -2738,6 +3440,97 @@ components:
           type: string
           description: Optional label like 'Home', 'Office', etc.
           maxLength: 50
+    PatchedCart:
+      type: object
+      description: Serializer for Cart model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+          nullable: true
+          description: User who owns this cart
+        status:
+          allOf:
+          - $ref: '#/components/schemas/CartStatusEnum'
+          description: |-
+            Current status of the cart
+
+            * `active` - Active
+            * `converted` - Converted to Order
+            * `abandoned` - Abandoned
+            * `expired` - Expired
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+          readOnly: true
+        item_count:
+          type: integer
+          description: Get total number of items in cart.
+          readOnly: true
+        subtotal:
+          type: number
+          format: double
+          description: Get subtotal of all items in cart.
+          readOnly: true
+        total:
+          type: number
+          format: double
+          description: Get total including taxes and shipping.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+    PatchedCartItem:
+      type: object
+      description: Serializer for CartItem model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          allOf:
+          - $ref: '#/components/schemas/ProductList'
+          readOnly: true
+        product_id:
+          type: integer
+          writeOnly: true
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 1
+          description: Quantity of this product in cart
+        unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+          description: Price per unit when added to cart
+        total_price:
+          type: number
+          format: double
+          description: Get total price for this item.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
     PatchedCategory:
       type: object
       description: Serializer for Category model.
@@ -2903,7 +3696,7 @@ components:
           writeOnly: true
         status:
           allOf:
-          - $ref: '#/components/schemas/StatusEnum'
+          - $ref: '#/components/schemas/ProductStatusEnum'
           description: |-
             Product status
 
@@ -2959,6 +3752,11 @@ components:
           type: string
           format: uri
           description: Product image
+        image_url:
+          type: string
+          nullable: true
+          description: Get full URL of the image.
+          readOnly: true
         alt_text:
           type: string
           description: Alternative text for the image
@@ -3141,7 +3939,7 @@ components:
             type: integer
         status:
           allOf:
-          - $ref: '#/components/schemas/StatusEnum'
+          - $ref: '#/components/schemas/ProductStatusEnum'
           description: |-
             Product status
 
@@ -3246,7 +4044,7 @@ components:
           writeOnly: true
         status:
           allOf:
-          - $ref: '#/components/schemas/StatusEnum'
+          - $ref: '#/components/schemas/ProductStatusEnum'
           description: |-
             Product status
 
@@ -3322,6 +4120,11 @@ components:
           type: string
           format: uri
           description: Product image
+        image_url:
+          type: string
+          nullable: true
+          description: Get full URL of the image.
+          readOnly: true
         alt_text:
           type: string
           description: Alternative text for the image
@@ -3348,6 +4151,7 @@ components:
       - created_at
       - id
       - image
+      - image_url
       - updated_at
     ProductList:
       type: object
@@ -3398,7 +4202,7 @@ components:
           description: Available quantity in stock
         status:
           allOf:
-          - $ref: '#/components/schemas/StatusEnum'
+          - $ref: '#/components/schemas/ProductStatusEnum'
           description: |-
             Product status
 
@@ -3433,6 +4237,11 @@ components:
           nullable: true
           description: Get URL of primary product image.
           readOnly: true
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductImage'
+          readOnly: true
         created_at:
           type: string
           format: date-time
@@ -3444,6 +4253,7 @@ components:
       - current_price
       - discount_percentage
       - id
+      - images
       - is_available
       - is_in_stock
       - is_on_sale
@@ -3454,6 +4264,18 @@ components:
       - primary_image
       - sku
       - slug
+    ProductStatusEnum:
+      enum:
+      - draft
+      - active
+      - inactive
+      - out_of_stock
+      type: string
+      description: |-
+        * `draft` - Draft
+        * `active` - Active
+        * `inactive` - Inactive
+        * `out_of_stock` - Out of Stock
     Profile:
       type: object
       description: Serializer for user profile management.
@@ -3641,18 +4463,6 @@ components:
           description: 'Phone number in international format. Supports digits, spaces,
             hyphens, parentheses, and optional ''+'' prefix. Example: +48131012012'
           pattern: ^\+?[\d\s\-\(\)]+$
-    StatusEnum:
-      enum:
-      - draft
-      - active
-      - inactive
-      - out_of_stock
-      type: string
-      description: |-
-        * `draft` - Draft
-        * `active` - Active
-        * `inactive` - Inactive
-        * `out_of_stock` - Out of Stock
     Tag:
       type: object
       description: Serializer for Tag model.

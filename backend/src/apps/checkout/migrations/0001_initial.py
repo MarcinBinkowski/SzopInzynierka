@@ -24,7 +24,6 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True, help_text='Timestamp when the record was created')),
                 ('updated_at', models.DateTimeField(auto_now=True, help_text='Timestamp when the record was last updated')),
                 ('status', models.CharField(choices=[('active', 'Active'), ('converted', 'Converted to Order'), ('abandoned', 'Abandoned'), ('expired', 'Expired')], default='active', help_text='Current status of the cart', max_length=20)),
-                ('session_key', models.CharField(blank=True, help_text='Session key for anonymous users', max_length=40, null=True)),
                 ('notes', models.TextField(blank=True, help_text='Additional notes for the cart')),
                 ('user', models.ForeignKey(blank=True, help_text='User who owns this cart', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='carts', to=settings.AUTH_USER_MODEL)),
             ],

@@ -12,11 +12,11 @@
 * `inactive` - Inactive
 * `out_of_stock` - Out of Stock
  */
-export type StatusEnum = typeof StatusEnum[keyof typeof StatusEnum];
+export type ProductStatusEnum = typeof ProductStatusEnum[keyof typeof ProductStatusEnum];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const StatusEnum = {
+export const ProductStatusEnum = {
   draft: 'draft',
   active: 'active',
   inactive: 'inactive',

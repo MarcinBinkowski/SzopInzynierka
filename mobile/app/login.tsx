@@ -1,6 +1,6 @@
 // mobile/app/login.tsx
 import { useState } from 'react';
-import { View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { TextInput, Button, Text, Card } from 'react-native-paper';
 import { useAuth } from '@/hooks/useAuth';
 import { Controller, useForm } from 'react-hook-form';
@@ -8,6 +8,7 @@ import { PostAllauthClientV1AuthLoginMutationBody } from '@/api/generated/auth/a
 import { zodResolver } from "@hookform/resolvers/zod"
 import { postAllauthClientV1AuthLoginBody } from '@/api/generated/auth/authentication-account/authentication-account.zod';
 import { z } from 'zod';
+import { ScreenWrapper } from '@/components/layout/ScreenWrapper';
 
 const schema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -23,7 +24,7 @@ export default function LoginScreen() {
     }
   );
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+    <SafeAreaView style={{ flex: 1, padding: 10 }}>
       <Card>
         <Card.Content>
           <Text variant="headlineMedium" style={{ marginBottom: 16, textAlign: 'center' }}>
@@ -71,6 +72,7 @@ export default function LoginScreen() {
           {errors.password && <Text style={{ color: 'red' }}>{errors.password.message}</Text>}
         </Card.Content>
       </Card>
-    </View>
+  </SafeAreaView>
+
   );
 }

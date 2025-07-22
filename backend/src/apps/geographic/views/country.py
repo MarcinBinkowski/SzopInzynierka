@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from typing import TYPE_CHECKING
 
 from rest_framework import viewsets

@@ -50,20 +50,16 @@ export function useAuth(): UseAuthResult {
   const loginMutation = usePostAllauthClientV1AuthLogin({
     mutation: {
       onSuccess: async (response) => {
-        console.log("login success", response);
         if (response.meta?.session_token) {
-          console.log("setting session token", response.meta.session_token);
           await SecureStore.setItemAsync('session_token', response.meta.session_token);
         }
         if (response.data.user) {
-          console.log("setting user", response.data.user);
           await SecureStore.setItem('user', JSON.stringify(response.data.user));
         }
         setIsAuthenticated(true);
-        router.replace("/cart");
+        router.replace("/maint");
       },
       onError: (error: AxiosError) => {
-        console.log("login error");
         setLoginError(`Login failed. Please try again. ${error.response?.data}`);
       },
     },
@@ -78,11 +74,9 @@ export function useAuth(): UseAuthResult {
     mutation: {
       onError: async (error: AxiosError) => {
         if (error.response?.status === 410) {
-          console.log("logout success", error);
           setIsAuthenticated(false);
         }
         else {
-          console.log("logout error", error);
           setLoginError("Logout failed. Please try again.");
         }
       },

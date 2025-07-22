@@ -26,7 +26,6 @@ class CartAdmin(admin.ModelAdmin):
     search_fields = [
         "user__username",
         "user__email",
-        "session_key",
     ]
     readonly_fields = [
         "id",
@@ -38,7 +37,7 @@ class CartAdmin(admin.ModelAdmin):
     ]
 
     fieldsets = (
-        ("Basic Information", {"fields": ("user", "session_key", "status")}),
+        ("Basic Information", {"fields": ("user", "status")}),
         (
             "Calculated Fields",
             {

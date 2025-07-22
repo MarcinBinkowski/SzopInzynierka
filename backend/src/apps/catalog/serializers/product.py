@@ -14,6 +14,7 @@ class ProductListSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     manufacturer = ManufacturerSerializer(read_only=True)
     primary_image = serializers.SerializerMethodField()
+    current_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -49,14 +50,18 @@ class ProductListSerializer(serializers.ModelSerializer):
             "created_at",
         ]
 
+    def get_current_price(self, obj: Product) -> str:
+        """Get current price as formatted decimal string."""
+        return f"{obj.current_price:.2f}"
+
     def get_primary_image(self, obj: Product) -> str | None:
         """Get URL of primary product image."""
         primary_image = obj.images.filter(is_primary=True).first()
         if primary_image and primary_image.image:
             request = self.context.get("request")
-            # if request:
-            return request.build_absolute_uri(primary_image.image.url)
-            # return primary_image.image.url
+            if request:
+                return request.build_absolute_uri(primary_image.image.url)
+            return primary_image.image.url
         return None
 
 
@@ -86,6 +91,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         required=False,
     )
     images = ProductImageSerializer(many=True, read_only=True)
+    current_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -125,9 +131,14 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             "is_on_sale",
             "is_in_stock",
             "is_available",
+            "images",
             "created_at",
             "updated_at",
         ]
+
+    def get_current_price(self, obj: Product) -> str:
+        """Get current price as formatted decimal string."""
+        return f"{obj.current_price:.2f}"
 
     def validate(self, attrs: Dict[str, Any]) -> Dict[str, Any]:
         """Validate product data."""

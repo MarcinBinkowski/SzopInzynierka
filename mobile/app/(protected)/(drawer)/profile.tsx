@@ -8,12 +8,12 @@ import {
 } from 'react-native-paper';
 import { useAuth } from '@/hooks/useAuth';
 import * as SecureStore from 'expo-secure-store';
+import { ScreenWrapper } from '@/components/layout/ScreenWrapper';
 
 export default function ProfileScreen() {
-  const theme = useTheme();
   const { logout } = useAuth();
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+    <ScreenWrapper>
       <View>
         <Button
         mode="contained"
@@ -25,6 +25,6 @@ export default function ProfileScreen() {
       </View>
       <Text variant="headlineMedium">{SecureStore.getItem('session_token')}</Text>
       <Text variant="headlineMedium">User: {SecureStore.getItem('user')}</Text>
-    </SafeAreaView> 
+    </ScreenWrapper> 
   );
 } 

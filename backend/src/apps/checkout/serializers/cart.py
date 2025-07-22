@@ -74,7 +74,7 @@ class CartItemCreateSerializer(serializers.ModelSerializer):
             if value > product.stock_quantity:
                 raise serializers.ValidationError(
                     f"Requested quantity ({value}) exceeds available stock ({product.stock_quantity})"
-                )
+                )   
         return value
 
 
@@ -92,7 +92,6 @@ class CartSerializer(serializers.ModelSerializer):
             "id",
             "user",
             "status",
-            "session_key",
             "items",
             "item_count",
             "subtotal",
