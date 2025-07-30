@@ -44,7 +44,8 @@ export interface ProductDetail {
    * @pattern ^-?\d{0,8}(?:\.\d{0,2})?$
    */
   original_price: string;
-  readonly current_price: number;
+  /** Get current price as formatted decimal string. */
+  readonly current_price: string;
   /** Calculate discount percentage. */
   readonly discount_percentage: number;
   /**

@@ -78,5 +78,5 @@ class Cart(TimestampedModel):
                 user=user,
                 status=cls.CartStatus.ACTIVE,
             )
-
-        return cart
+            return cart
+        raise ValueError("User must be authenticated to get or create cart")

@@ -15,19 +15,18 @@ import ScreenLoader from '@/components/common/ScreenLoader';
 import ErrorScreen from '@/components/common/ErrorScreen';
 import { useCheckoutItemsList } from '@/api/generated/shop/checkout/checkout';
 import { useCheckoutItemsIncreaseQuantityCreate, useCheckoutItemsDecreaseQuantityCreate } from '@/api/generated/shop/checkout/checkout';
+import { usePaymentsCreateCheckoutSessionCreate, usePaymentsConfirmPaymentIntentCreate } from '@/api/generated/shop/payments/payments';
 import { Alert } from 'react-native';
 import { useStripe } from '@stripe/stripe-react-native';
 
 export default function CartScreen() {
-  const theme = useTheme();
-  
-  const { data: cartItems, isLoading, error, refetch } = useCheckoutItemsList();
+  const { data: cartItems, isLoading: cartItemsLoading, error: cartItemsError, refetch: refetchCartItems } = useCheckoutItemsList();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
   const increaseQuantityMutation = useCheckoutItemsIncreaseQuantityCreate({
     mutation: {
       onSuccess: () => {
-        refetch();
+        refetchCartItems();
       },
       onError: (error) => {
         Alert.alert('Error', 'Failed to increase quantity. Please try again.');
@@ -39,11 +38,75 @@ export default function CartScreen() {
   const decreaseQuantityMutation = useCheckoutItemsDecreaseQuantityCreate({
     mutation: {
       onSuccess: () => {
-        refetch();
+        refetchCartItems();
       },
       onError: (error) => {
         Alert.alert('Error', 'Failed to decrease quantity. Please try again.');
         console.error('Decrease quantity error:', error);
+      },
+    },
+  });
+
+  const confirmPaymentMutation = usePaymentsConfirmPaymentIntentCreate({
+    mutation: {
+      onSuccess: (data) => {
+        refetchCartItems();
+      },
+      onError: (error) => {
+        refetchCartItems();
+      },
+    },
+  });
+
+  const createCheckoutSessionMutation = usePaymentsCreateCheckoutSessionCreate({
+    mutation: {
+      onSuccess: async (data) => {
+        if (data.client_secret) {
+          try {
+            const { error } = await initPaymentSheet({
+              paymentIntentClientSecret: data.client_secret,
+              merchantDisplayName: 'Your Store',
+            });
+            
+            if (error) {
+              Alert.alert('Error', error.message);
+            } else {
+              const { error: presentError } = await presentPaymentSheet();
+              if (presentError) {
+                Alert.alert('Error', presentError.message);
+              } else {
+                // Payment successful, confirm with backend and clear cart
+                confirmPaymentMutation.mutate({
+                  data: {
+                    session_id: data.payment_intent_id  // Using session_id field for payment_intent_id
+                  }
+                });
+                
+                Alert.alert(
+                  'Payment Successful!', 
+                  'Your payment has been processed successfully and your cart has been cleared.',
+                  [
+                    {
+                      text: 'OK',
+                      onPress: () => {
+                        refetchCartItems();
+                      }
+                    }
+                  ]
+                );
+              }
+            }
+          } catch (error) {
+            Alert.alert('Error', 'Failed to initialize payment sheet.');
+            console.error('Payment sheet error:', error);
+          }
+        } else {
+          Alert.alert('Error', 'No client secret received from server.');
+        }
+      },
+      onError: (error) => {
+        Alert.alert('Error', 'Failed to create payment intent. Please try again.');
+        console.error('Create payment intent error:', error);
       },
     },
   });
@@ -62,6 +125,14 @@ export default function CartScreen() {
     });
   };
 
+  const handleCheckout = () => {
+    createCheckoutSessionMutation.mutate({
+      data: {
+        currency: 'usd'
+      }
+    });
+  };
+
   // Calculate total
   const total = cartItems?.results?.reduce((sum, item) => sum + item.total_price, 0) || 0;
   
@@ -69,14 +140,18 @@ export default function CartScreen() {
   console.log('Cart items1:', cartItems?.results);
   console.log('Cart items length:', cartItems?.results?.length);
   console.log('Is cart empty?', !cartItems?.results || cartItems.results.length === 0);
-  if (isLoading) {
+
+  if (cartItemsLoading) {
     return <ScreenLoader />;
   }
-  if (error || !cartItems) {
+
+  if (cartItemsError || !cartItems) {
     return <ErrorScreen
       title="Failed to load cart"
       message="We couldn't load the cart information. Please check your connection and try again."
-      onRetry={() => refetch()}
+      onRetry={() => {
+        refetchCartItems();
+      }}
       icon="alert-circle"
     />
   }
@@ -98,25 +173,24 @@ export default function CartScreen() {
           <Card.Content>
             {cartItems?.results && cartItems.results.length > 0 ? (
               <>
-                {cartItems.results.map((item, index: number) => (
+                {cartItems.results.map((item) => (
                   <View key={item.id}>
                     <List.Item
-                      title={item.product?.name || 'Unknown Product'}
+                      title={item.product.name}
                       description={`$${item.unit_price} x ${item.quantity}`}
-                      left={(props) => (
+                      left={() => (
                         <View style={styles.imageContainer}>
-                          {item.product?.primary_image ? (
+                          {item.product.primary_image ? (
                             <Image
                               source={{ uri: item.product.primary_image }}
                               style={styles.productImage}
-                              resizeMode="cover"
                             />
                           ) : (
-                            <List.Icon {...props} icon="package-variant" />
+                            <List.Icon icon="image-off" />
                           )}
                         </View>
                       )}
-                      right={(props) => (
+                      right={() => (
                         <View style={styles.quantityContainer}>
                           <IconButton
                             icon="minus"
@@ -124,7 +198,7 @@ export default function CartScreen() {
                             onPress={() => handleDecreaseQuantity(item.id)}
                             disabled={decreaseQuantityMutation.isPending}
                           />
-                          <Text variant="titleMedium" style={[styles.quantityText, { color: theme.colors.primary }]}>
+                          <Text variant="bodyMedium" style={styles.quantityText}>
                             {item.quantity}
                           </Text>
                           <IconButton
@@ -136,16 +210,24 @@ export default function CartScreen() {
                         </View>
                       )}
                     />
-                    {index < cartItems.results.length - 1 && <Divider />}
+                    <Divider />
                   </View>
                 ))}
-                <Divider style={{ marginVertical: 10 }} />
-                <List.Item
-                  title="Total"
-                  description={`$${total.toFixed(2)}`}
-                  titleStyle={{ fontWeight: 'bold' }}
-                  descriptionStyle={{ fontWeight: 'bold' }}
-                />
+                
+                <View style={{ marginTop: 20, alignItems: 'center' }}>
+                  <Text variant="headlineSmall" style={{ marginBottom: 10 }}>
+                    Total: ${total.toFixed(2)}
+                  </Text>
+                  <Button
+                    mode="contained"
+                    onPress={handleCheckout}
+                    disabled={createCheckoutSessionMutation.isPending}
+                    loading={createCheckoutSessionMutation.isPending}
+                    style={{ minWidth: 200 }}
+                  >
+                    {createCheckoutSessionMutation.isPending ? 'Preparing Payment...' : 'Pay with Stripe'}
+                  </Button>
+                </View>
               </>
             ) : (
               <Text variant="bodyLarge">
@@ -154,14 +236,6 @@ export default function CartScreen() {
             )}
           </Card.Content>
         </Card>
-
-        <Button 
-          mode="contained" 
-          onPress={() => console.log('Checkout pressed')}
-          disabled={!cartItems?.results || cartItems.results.length === 0}
-        >
-          Checkout
-        </Button>
     </ScreenWrapper>
   );
 }
@@ -170,25 +244,22 @@ const styles = StyleSheet.create({
   quantityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'center',
   },
   quantityText: {
+    marginHorizontal: 10,
     minWidth: 30,
     textAlign: 'center',
-    fontWeight: 'bold',
   },
   imageContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 8,
-    overflow: 'hidden',
-    backgroundColor: '#f5f5f5',
+    width: 50,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
   productImage: {
-    width: '100%',
-    height: '100%',
+    width: 40,
+    height: 40,
+    borderRadius: 4,
   },
-
 });

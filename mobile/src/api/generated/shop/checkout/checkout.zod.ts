@@ -66,10 +66,6 @@ export const checkoutCartsRetrieveResponseItemsItemProductManufacturerSlugMax = 
 
 export const checkoutCartsRetrieveResponseItemsItemProductManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const checkoutCartsRetrieveResponseItemsItemProductManufacturerWebsiteMax = 200;
-export const checkoutCartsRetrieveResponseItemsItemProductImagesItemAltTextMax = 255;
-export const checkoutCartsRetrieveResponseItemsItemProductImagesItemSortOrderMin = 0;
-
-export const checkoutCartsRetrieveResponseItemsItemProductImagesItemSortOrderMax = 2147483647;
 export const checkoutCartsRetrieveResponseItemsItemQuantityMax = 2147483647;
 export const checkoutCartsRetrieveResponseItemsItemUnitPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
@@ -87,7 +83,7 @@ export const checkoutCartsRetrieveResponse = zod.object({
   "short_description": zod.string().max(checkoutCartsRetrieveResponseItemsItemProductShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(checkoutCartsRetrieveResponseItemsItemProductPriceRegExp).describe('Product price'),
   "original_price": zod.regex(checkoutCartsRetrieveResponseItemsItemProductOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(checkoutCartsRetrieveResponseItemsItemProductSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(checkoutCartsRetrieveResponseItemsItemProductStockQuantityMin).max(checkoutCartsRetrieveResponseItemsItemProductStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -118,16 +114,6 @@ export const checkoutCartsRetrieveResponse = zod.object({
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
-  "alt_text": zod.string().max(checkoutCartsRetrieveResponseItemsItemProductImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(checkoutCartsRetrieveResponseItemsItemProductImagesItemSortOrderMin).max(checkoutCartsRetrieveResponseItemsItemProductImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'),
   "product_id": zod.number(),
@@ -175,10 +161,6 @@ export const checkoutCartsUpdateResponseItemsItemProductManufacturerSlugMax = 10
 
 export const checkoutCartsUpdateResponseItemsItemProductManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const checkoutCartsUpdateResponseItemsItemProductManufacturerWebsiteMax = 200;
-export const checkoutCartsUpdateResponseItemsItemProductImagesItemAltTextMax = 255;
-export const checkoutCartsUpdateResponseItemsItemProductImagesItemSortOrderMin = 0;
-
-export const checkoutCartsUpdateResponseItemsItemProductImagesItemSortOrderMax = 2147483647;
 export const checkoutCartsUpdateResponseItemsItemQuantityMax = 2147483647;
 export const checkoutCartsUpdateResponseItemsItemUnitPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
@@ -196,7 +178,7 @@ export const checkoutCartsUpdateResponse = zod.object({
   "short_description": zod.string().max(checkoutCartsUpdateResponseItemsItemProductShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(checkoutCartsUpdateResponseItemsItemProductPriceRegExp).describe('Product price'),
   "original_price": zod.regex(checkoutCartsUpdateResponseItemsItemProductOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(checkoutCartsUpdateResponseItemsItemProductSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(checkoutCartsUpdateResponseItemsItemProductStockQuantityMin).max(checkoutCartsUpdateResponseItemsItemProductStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -227,16 +209,6 @@ export const checkoutCartsUpdateResponse = zod.object({
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
-  "alt_text": zod.string().max(checkoutCartsUpdateResponseItemsItemProductImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(checkoutCartsUpdateResponseItemsItemProductImagesItemSortOrderMin).max(checkoutCartsUpdateResponseItemsItemProductImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'),
   "product_id": zod.number(),
@@ -284,10 +256,6 @@ export const checkoutCartsPartialUpdateResponseItemsItemProductManufacturerSlugM
 
 export const checkoutCartsPartialUpdateResponseItemsItemProductManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const checkoutCartsPartialUpdateResponseItemsItemProductManufacturerWebsiteMax = 200;
-export const checkoutCartsPartialUpdateResponseItemsItemProductImagesItemAltTextMax = 255;
-export const checkoutCartsPartialUpdateResponseItemsItemProductImagesItemSortOrderMin = 0;
-
-export const checkoutCartsPartialUpdateResponseItemsItemProductImagesItemSortOrderMax = 2147483647;
 export const checkoutCartsPartialUpdateResponseItemsItemQuantityMax = 2147483647;
 export const checkoutCartsPartialUpdateResponseItemsItemUnitPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
@@ -305,7 +273,7 @@ export const checkoutCartsPartialUpdateResponse = zod.object({
   "short_description": zod.string().max(checkoutCartsPartialUpdateResponseItemsItemProductShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(checkoutCartsPartialUpdateResponseItemsItemProductPriceRegExp).describe('Product price'),
   "original_price": zod.regex(checkoutCartsPartialUpdateResponseItemsItemProductOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(checkoutCartsPartialUpdateResponseItemsItemProductSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(checkoutCartsPartialUpdateResponseItemsItemProductStockQuantityMin).max(checkoutCartsPartialUpdateResponseItemsItemProductStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -336,16 +304,6 @@ export const checkoutCartsPartialUpdateResponse = zod.object({
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
-  "alt_text": zod.string().max(checkoutCartsPartialUpdateResponseItemsItemProductImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(checkoutCartsPartialUpdateResponseItemsItemProductImagesItemSortOrderMin).max(checkoutCartsPartialUpdateResponseItemsItemProductImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'),
   "product_id": zod.number(),
@@ -400,10 +358,6 @@ export const checkoutCartsClearCreateResponseItemsItemProductManufacturerSlugMax
 
 export const checkoutCartsClearCreateResponseItemsItemProductManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const checkoutCartsClearCreateResponseItemsItemProductManufacturerWebsiteMax = 200;
-export const checkoutCartsClearCreateResponseItemsItemProductImagesItemAltTextMax = 255;
-export const checkoutCartsClearCreateResponseItemsItemProductImagesItemSortOrderMin = 0;
-
-export const checkoutCartsClearCreateResponseItemsItemProductImagesItemSortOrderMax = 2147483647;
 export const checkoutCartsClearCreateResponseItemsItemQuantityMax = 2147483647;
 export const checkoutCartsClearCreateResponseItemsItemUnitPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
@@ -421,7 +375,7 @@ export const checkoutCartsClearCreateResponse = zod.object({
   "short_description": zod.string().max(checkoutCartsClearCreateResponseItemsItemProductShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(checkoutCartsClearCreateResponseItemsItemProductPriceRegExp).describe('Product price'),
   "original_price": zod.regex(checkoutCartsClearCreateResponseItemsItemProductOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(checkoutCartsClearCreateResponseItemsItemProductSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(checkoutCartsClearCreateResponseItemsItemProductStockQuantityMin).max(checkoutCartsClearCreateResponseItemsItemProductStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -452,16 +406,6 @@ export const checkoutCartsClearCreateResponse = zod.object({
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
-  "alt_text": zod.string().max(checkoutCartsClearCreateResponseItemsItemProductImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(checkoutCartsClearCreateResponseItemsItemProductImagesItemSortOrderMin).max(checkoutCartsClearCreateResponseItemsItemProductImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'),
   "product_id": zod.number(),
@@ -505,10 +449,6 @@ export const checkoutCartsSummaryRetrieveResponseItemsItemProductManufacturerSlu
 
 export const checkoutCartsSummaryRetrieveResponseItemsItemProductManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const checkoutCartsSummaryRetrieveResponseItemsItemProductManufacturerWebsiteMax = 200;
-export const checkoutCartsSummaryRetrieveResponseItemsItemProductImagesItemAltTextMax = 255;
-export const checkoutCartsSummaryRetrieveResponseItemsItemProductImagesItemSortOrderMin = 0;
-
-export const checkoutCartsSummaryRetrieveResponseItemsItemProductImagesItemSortOrderMax = 2147483647;
 export const checkoutCartsSummaryRetrieveResponseItemsItemQuantityMax = 2147483647;
 export const checkoutCartsSummaryRetrieveResponseItemsItemUnitPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
@@ -526,7 +466,7 @@ export const checkoutCartsSummaryRetrieveResponse = zod.object({
   "short_description": zod.string().max(checkoutCartsSummaryRetrieveResponseItemsItemProductShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(checkoutCartsSummaryRetrieveResponseItemsItemProductPriceRegExp).describe('Product price'),
   "original_price": zod.regex(checkoutCartsSummaryRetrieveResponseItemsItemProductOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(checkoutCartsSummaryRetrieveResponseItemsItemProductSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(checkoutCartsSummaryRetrieveResponseItemsItemProductStockQuantityMin).max(checkoutCartsSummaryRetrieveResponseItemsItemProductStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -557,16 +497,6 @@ export const checkoutCartsSummaryRetrieveResponse = zod.object({
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
-  "alt_text": zod.string().max(checkoutCartsSummaryRetrieveResponseItemsItemProductImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(checkoutCartsSummaryRetrieveResponseItemsItemProductImagesItemSortOrderMin).max(checkoutCartsSummaryRetrieveResponseItemsItemProductImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'),
   "product_id": zod.number(),
@@ -612,10 +542,6 @@ export const checkoutItemsListResponseResultsItemProductManufacturerSlugMax = 10
 
 export const checkoutItemsListResponseResultsItemProductManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const checkoutItemsListResponseResultsItemProductManufacturerWebsiteMax = 200;
-export const checkoutItemsListResponseResultsItemProductImagesItemAltTextMax = 255;
-export const checkoutItemsListResponseResultsItemProductImagesItemSortOrderMin = 0;
-
-export const checkoutItemsListResponseResultsItemProductImagesItemSortOrderMax = 2147483647;
 export const checkoutItemsListResponseResultsItemQuantityMax = 2147483647;
 export const checkoutItemsListResponseResultsItemUnitPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
@@ -633,7 +559,7 @@ export const checkoutItemsListResponse = zod.object({
   "short_description": zod.string().max(checkoutItemsListResponseResultsItemProductShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(checkoutItemsListResponseResultsItemProductPriceRegExp).describe('Product price'),
   "original_price": zod.regex(checkoutItemsListResponseResultsItemProductOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(checkoutItemsListResponseResultsItemProductSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(checkoutItemsListResponseResultsItemProductStockQuantityMin).max(checkoutItemsListResponseResultsItemProductStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -664,16 +590,6 @@ export const checkoutItemsListResponse = zod.object({
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
-  "alt_text": zod.string().max(checkoutItemsListResponseResultsItemProductImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(checkoutItemsListResponseResultsItemProductImagesItemSortOrderMin).max(checkoutItemsListResponseResultsItemProductImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'),
   "product_id": zod.number(),
@@ -723,10 +639,6 @@ export const checkoutItemsRetrieveResponseProductManufacturerSlugMax = 100;
 
 export const checkoutItemsRetrieveResponseProductManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const checkoutItemsRetrieveResponseProductManufacturerWebsiteMax = 200;
-export const checkoutItemsRetrieveResponseProductImagesItemAltTextMax = 255;
-export const checkoutItemsRetrieveResponseProductImagesItemSortOrderMin = 0;
-
-export const checkoutItemsRetrieveResponseProductImagesItemSortOrderMax = 2147483647;
 export const checkoutItemsRetrieveResponseQuantityMax = 2147483647;
 export const checkoutItemsRetrieveResponseUnitPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
@@ -740,7 +652,7 @@ export const checkoutItemsRetrieveResponse = zod.object({
   "short_description": zod.string().max(checkoutItemsRetrieveResponseProductShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(checkoutItemsRetrieveResponseProductPriceRegExp).describe('Product price'),
   "original_price": zod.regex(checkoutItemsRetrieveResponseProductOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(checkoutItemsRetrieveResponseProductSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(checkoutItemsRetrieveResponseProductStockQuantityMin).max(checkoutItemsRetrieveResponseProductStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -771,16 +683,6 @@ export const checkoutItemsRetrieveResponse = zod.object({
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
-  "alt_text": zod.string().max(checkoutItemsRetrieveResponseProductImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(checkoutItemsRetrieveResponseProductImagesItemSortOrderMin).max(checkoutItemsRetrieveResponseProductImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'),
   "product_id": zod.number(),
@@ -826,10 +728,6 @@ export const checkoutItemsUpdateResponseProductManufacturerSlugMax = 100;
 
 export const checkoutItemsUpdateResponseProductManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const checkoutItemsUpdateResponseProductManufacturerWebsiteMax = 200;
-export const checkoutItemsUpdateResponseProductImagesItemAltTextMax = 255;
-export const checkoutItemsUpdateResponseProductImagesItemSortOrderMin = 0;
-
-export const checkoutItemsUpdateResponseProductImagesItemSortOrderMax = 2147483647;
 export const checkoutItemsUpdateResponseQuantityMax = 2147483647;
 export const checkoutItemsUpdateResponseUnitPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
@@ -843,7 +741,7 @@ export const checkoutItemsUpdateResponse = zod.object({
   "short_description": zod.string().max(checkoutItemsUpdateResponseProductShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(checkoutItemsUpdateResponseProductPriceRegExp).describe('Product price'),
   "original_price": zod.regex(checkoutItemsUpdateResponseProductOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(checkoutItemsUpdateResponseProductSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(checkoutItemsUpdateResponseProductStockQuantityMin).max(checkoutItemsUpdateResponseProductStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -874,16 +772,6 @@ export const checkoutItemsUpdateResponse = zod.object({
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
-  "alt_text": zod.string().max(checkoutItemsUpdateResponseProductImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(checkoutItemsUpdateResponseProductImagesItemSortOrderMin).max(checkoutItemsUpdateResponseProductImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'),
   "product_id": zod.number(),
@@ -929,10 +817,6 @@ export const checkoutItemsPartialUpdateResponseProductManufacturerSlugMax = 100;
 
 export const checkoutItemsPartialUpdateResponseProductManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const checkoutItemsPartialUpdateResponseProductManufacturerWebsiteMax = 200;
-export const checkoutItemsPartialUpdateResponseProductImagesItemAltTextMax = 255;
-export const checkoutItemsPartialUpdateResponseProductImagesItemSortOrderMin = 0;
-
-export const checkoutItemsPartialUpdateResponseProductImagesItemSortOrderMax = 2147483647;
 export const checkoutItemsPartialUpdateResponseQuantityMax = 2147483647;
 export const checkoutItemsPartialUpdateResponseUnitPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
@@ -946,7 +830,7 @@ export const checkoutItemsPartialUpdateResponse = zod.object({
   "short_description": zod.string().max(checkoutItemsPartialUpdateResponseProductShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(checkoutItemsPartialUpdateResponseProductPriceRegExp).describe('Product price'),
   "original_price": zod.regex(checkoutItemsPartialUpdateResponseProductOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(checkoutItemsPartialUpdateResponseProductSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(checkoutItemsPartialUpdateResponseProductStockQuantityMin).max(checkoutItemsPartialUpdateResponseProductStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -977,16 +861,6 @@ export const checkoutItemsPartialUpdateResponse = zod.object({
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
-  "alt_text": zod.string().max(checkoutItemsPartialUpdateResponseProductImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(checkoutItemsPartialUpdateResponseProductImagesItemSortOrderMin).max(checkoutItemsPartialUpdateResponseProductImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'),
   "product_id": zod.number(),
@@ -1039,10 +913,6 @@ export const checkoutItemsDecreaseQuantityCreateResponseProductManufacturerSlugM
 
 export const checkoutItemsDecreaseQuantityCreateResponseProductManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const checkoutItemsDecreaseQuantityCreateResponseProductManufacturerWebsiteMax = 200;
-export const checkoutItemsDecreaseQuantityCreateResponseProductImagesItemAltTextMax = 255;
-export const checkoutItemsDecreaseQuantityCreateResponseProductImagesItemSortOrderMin = 0;
-
-export const checkoutItemsDecreaseQuantityCreateResponseProductImagesItemSortOrderMax = 2147483647;
 export const checkoutItemsDecreaseQuantityCreateResponseQuantityMax = 2147483647;
 export const checkoutItemsDecreaseQuantityCreateResponseUnitPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
@@ -1056,7 +926,7 @@ export const checkoutItemsDecreaseQuantityCreateResponse = zod.object({
   "short_description": zod.string().max(checkoutItemsDecreaseQuantityCreateResponseProductShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(checkoutItemsDecreaseQuantityCreateResponseProductPriceRegExp).describe('Product price'),
   "original_price": zod.regex(checkoutItemsDecreaseQuantityCreateResponseProductOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(checkoutItemsDecreaseQuantityCreateResponseProductSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(checkoutItemsDecreaseQuantityCreateResponseProductStockQuantityMin).max(checkoutItemsDecreaseQuantityCreateResponseProductStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -1087,16 +957,6 @@ export const checkoutItemsDecreaseQuantityCreateResponse = zod.object({
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
-  "alt_text": zod.string().max(checkoutItemsDecreaseQuantityCreateResponseProductImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(checkoutItemsDecreaseQuantityCreateResponseProductImagesItemSortOrderMin).max(checkoutItemsDecreaseQuantityCreateResponseProductImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'),
   "product_id": zod.number(),
@@ -1142,10 +1002,6 @@ export const checkoutItemsIncreaseQuantityCreateResponseProductManufacturerSlugM
 
 export const checkoutItemsIncreaseQuantityCreateResponseProductManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const checkoutItemsIncreaseQuantityCreateResponseProductManufacturerWebsiteMax = 200;
-export const checkoutItemsIncreaseQuantityCreateResponseProductImagesItemAltTextMax = 255;
-export const checkoutItemsIncreaseQuantityCreateResponseProductImagesItemSortOrderMin = 0;
-
-export const checkoutItemsIncreaseQuantityCreateResponseProductImagesItemSortOrderMax = 2147483647;
 export const checkoutItemsIncreaseQuantityCreateResponseQuantityMax = 2147483647;
 export const checkoutItemsIncreaseQuantityCreateResponseUnitPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
@@ -1159,7 +1015,7 @@ export const checkoutItemsIncreaseQuantityCreateResponse = zod.object({
   "short_description": zod.string().max(checkoutItemsIncreaseQuantityCreateResponseProductShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(checkoutItemsIncreaseQuantityCreateResponseProductPriceRegExp).describe('Product price'),
   "original_price": zod.regex(checkoutItemsIncreaseQuantityCreateResponseProductOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(checkoutItemsIncreaseQuantityCreateResponseProductSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(checkoutItemsIncreaseQuantityCreateResponseProductStockQuantityMin).max(checkoutItemsIncreaseQuantityCreateResponseProductStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -1190,16 +1046,6 @@ export const checkoutItemsIncreaseQuantityCreateResponse = zod.object({
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
-  "alt_text": zod.string().max(checkoutItemsIncreaseQuantityCreateResponseProductImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(checkoutItemsIncreaseQuantityCreateResponseProductImagesItemSortOrderMin).max(checkoutItemsIncreaseQuantityCreateResponseProductImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'),
   "product_id": zod.number(),
@@ -1245,10 +1091,6 @@ export const checkoutItemsUpdateQuantityCreateResponseProductManufacturerSlugMax
 
 export const checkoutItemsUpdateQuantityCreateResponseProductManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const checkoutItemsUpdateQuantityCreateResponseProductManufacturerWebsiteMax = 200;
-export const checkoutItemsUpdateQuantityCreateResponseProductImagesItemAltTextMax = 255;
-export const checkoutItemsUpdateQuantityCreateResponseProductImagesItemSortOrderMin = 0;
-
-export const checkoutItemsUpdateQuantityCreateResponseProductImagesItemSortOrderMax = 2147483647;
 export const checkoutItemsUpdateQuantityCreateResponseQuantityMax = 2147483647;
 export const checkoutItemsUpdateQuantityCreateResponseUnitPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
@@ -1262,7 +1104,7 @@ export const checkoutItemsUpdateQuantityCreateResponse = zod.object({
   "short_description": zod.string().max(checkoutItemsUpdateQuantityCreateResponseProductShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(checkoutItemsUpdateQuantityCreateResponseProductPriceRegExp).describe('Product price'),
   "original_price": zod.regex(checkoutItemsUpdateQuantityCreateResponseProductOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(checkoutItemsUpdateQuantityCreateResponseProductSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(checkoutItemsUpdateQuantityCreateResponseProductStockQuantityMin).max(checkoutItemsUpdateQuantityCreateResponseProductStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -1293,16 +1135,6 @@ export const checkoutItemsUpdateQuantityCreateResponse = zod.object({
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
-  "alt_text": zod.string().max(checkoutItemsUpdateQuantityCreateResponseProductImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(checkoutItemsUpdateQuantityCreateResponseProductImagesItemSortOrderMin).max(checkoutItemsUpdateQuantityCreateResponseProductImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'),
   "product_id": zod.number(),

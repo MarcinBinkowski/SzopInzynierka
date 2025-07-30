@@ -564,10 +564,6 @@ export const catalogProductsListResponseResultsItemManufacturerSlugMax = 100;
 
 export const catalogProductsListResponseResultsItemManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 export const catalogProductsListResponseResultsItemManufacturerWebsiteMax = 200;
-export const catalogProductsListResponseResultsItemImagesItemAltTextMax = 255;
-export const catalogProductsListResponseResultsItemImagesItemSortOrderMin = 0;
-
-export const catalogProductsListResponseResultsItemImagesItemSortOrderMax = 2147483647;
 
 
 export const catalogProductsListResponse = zod.object({
@@ -581,7 +577,7 @@ export const catalogProductsListResponse = zod.object({
   "short_description": zod.string().max(catalogProductsListResponseResultsItemShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(catalogProductsListResponseResultsItemPriceRegExp).describe('Product price'),
   "original_price": zod.regex(catalogProductsListResponseResultsItemOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsListResponseResultsItemSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsListResponseResultsItemStockQuantityMin).max(catalogProductsListResponseResultsItemStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -612,16 +608,6 @@ export const catalogProductsListResponse = zod.object({
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Manufacturer model.'),
   "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
-  "alt_text": zod.string().max(catalogProductsListResponseResultsItemImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(catalogProductsListResponseResultsItemImagesItemSortOrderMin).max(catalogProductsListResponseResultsItemImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Simplified serializer for product listings.'))
 })
@@ -705,7 +691,7 @@ export const catalogProductsRetrieveResponse = zod.object({
   "short_description": zod.string().max(catalogProductsRetrieveResponseShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(catalogProductsRetrieveResponsePriceRegExp).describe('Product price'),
   "original_price": zod.regex(catalogProductsRetrieveResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsRetrieveResponseSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsRetrieveResponseStockQuantityMin).max(catalogProductsRetrieveResponseStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -837,7 +823,7 @@ export const catalogProductsUpdateResponse = zod.object({
   "short_description": zod.string().max(catalogProductsUpdateResponseShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(catalogProductsUpdateResponsePriceRegExp).describe('Product price'),
   "original_price": zod.regex(catalogProductsUpdateResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsUpdateResponseSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsUpdateResponseStockQuantityMin).max(catalogProductsUpdateResponseStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -969,7 +955,7 @@ export const catalogProductsPartialUpdateResponse = zod.object({
   "short_description": zod.string().max(catalogProductsPartialUpdateResponseShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(catalogProductsPartialUpdateResponsePriceRegExp).describe('Product price'),
   "original_price": zod.regex(catalogProductsPartialUpdateResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsPartialUpdateResponseSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsPartialUpdateResponseStockQuantityMin).max(catalogProductsPartialUpdateResponseStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -1108,7 +1094,7 @@ export const catalogProductsAddToWishlistCreateResponse = zod.object({
   "short_description": zod.string().max(catalogProductsAddToWishlistCreateResponseShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(catalogProductsAddToWishlistCreateResponsePriceRegExp).describe('Product price'),
   "original_price": zod.regex(catalogProductsAddToWishlistCreateResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsAddToWishlistCreateResponseSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsAddToWishlistCreateResponseStockQuantityMin).max(catalogProductsAddToWishlistCreateResponseStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -1209,7 +1195,7 @@ export const catalogProductsRelatedRetrieveResponse = zod.object({
   "short_description": zod.string().max(catalogProductsRelatedRetrieveResponseShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(catalogProductsRelatedRetrieveResponsePriceRegExp).describe('Product price'),
   "original_price": zod.regex(catalogProductsRelatedRetrieveResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsRelatedRetrieveResponseSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsRelatedRetrieveResponseStockQuantityMin).max(catalogProductsRelatedRetrieveResponseStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -1306,7 +1292,7 @@ export const catalogProductsOnSaleRetrieveResponse = zod.object({
   "short_description": zod.string().max(catalogProductsOnSaleRetrieveResponseShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.regex(catalogProductsOnSaleRetrieveResponsePriceRegExp).describe('Product price'),
   "original_price": zod.regex(catalogProductsOnSaleRetrieveResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsOnSaleRetrieveResponseSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsOnSaleRetrieveResponseStockQuantityMin).max(catalogProductsOnSaleRetrieveResponseStockQuantityMax).optional().describe('Available quantity in stock'),
