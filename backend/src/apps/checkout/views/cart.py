@@ -6,10 +6,9 @@ from rest_framework.filters import OrderingFilter
 
 from apps.checkout.models import Cart, CartItem
 from apps.checkout.serializers import (
-    CartSerializer,
-    CartListSerializer,
-    CartItemSerializer,
-    CartItemCreateSerializer,
+    CartSerializer, CartListSerializer, CartItemSerializer, CartItemCreateSerializer,
+    CartItemQuantitySerializer, CartItemUpdateQuantitySerializer,
+    CartShippingAddressSerializer, CartShippingMethodSerializer
 )
 
 
@@ -40,8 +39,11 @@ class CartViewSet(viewsets.ModelViewSet):
     def clear(self, request, pk=None):
         """Clear all items from cart."""
         cart = self.get_object()
-        cart.clear()
-        return Response({"message": "Cart cleared successfully"})
+        cart.items.all().delete()
+        
+        # Return the updated cart data using the same serializer
+        response_serializer = CartSerializer(cart, context={"request": request})
+        return Response(response_serializer.data)
 
     @action(detail=True, methods=["get"])
     def summary(self, request, pk=None):
@@ -49,6 +51,58 @@ class CartViewSet(viewsets.ModelViewSet):
         cart = self.get_object()
         serializer = CartSerializer(cart, context={"request": request})
         return Response(serializer.data)
+
+    @action(detail=True, methods=["post"])
+    def set_shipping_address(self, request, pk=None):
+        """Set shipping address for cart."""
+        cart = self.get_object()
+        
+        serializer = CartShippingAddressSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        address_id = serializer.validated_data['address_id']
+        
+        try:
+            from apps.profile.models import Address
+            address = Address.objects.get(
+                id=address_id,
+                profile__user=request.user,
+                address_type=Address.AddressType.SHIPPING
+            )
+            cart.shipping_address = address
+            cart.save()
+            
+            response_serializer = CartSerializer(cart, context={"request": request})
+            return Response(response_serializer.data)
+            
+        except Address.DoesNotExist:
+            return Response(
+                {"error": "Shipping address not found"}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+    @action(detail=True, methods=["post"])
+    def set_shipping_method(self, request, pk=None):
+        """Set shipping method for cart."""
+        cart = self.get_object()
+        
+        serializer = CartShippingMethodSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        shipping_method_id = serializer.validated_data['shipping_method_id']
+        
+        try:
+            from apps.checkout.models import ShippingMethod
+            shipping_method = ShippingMethod.objects.get(id=shipping_method_id)
+            cart.shipping_method = shipping_method
+            cart.save()
+            
+            response_serializer = CartSerializer(cart, context={"request": request})
+            return Response(response_serializer.data)
+            
+        except ShippingMethod.DoesNotExist:
+            return Response(
+                {"error": "Shipping method not found"}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class CartItemViewSet(viewsets.ModelViewSet):
@@ -59,6 +113,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
     filter_backends = [OrderingFilter]
     ordering_fields = ["created_at", "quantity", "unit_price"]
     ordering = ["created_at"]
+    pagination_class = None
 
     def get_queryset(self):
         """Filter queryset to user's cart items only."""
@@ -79,29 +134,42 @@ class CartItemViewSet(viewsets.ModelViewSet):
     def increase_quantity(self, request, pk=None):
         """Increase item quantity."""
         item = self.get_object()
-        amount = int(request.data.get("amount", 1))
+        
+        serializer = CartItemQuantitySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        amount = serializer.validated_data['amount']
+        
         item.increase_quantity(amount)
-        serializer = self.get_serializer(item)
-        return Response(serializer.data)
+        response_serializer = self.get_serializer(item)
+        return Response(response_serializer.data)
 
     @action(detail=True, methods=["post"])
     def decrease_quantity(self, request, pk=None):
         """Decrease item quantity."""
         item = self.get_object()
-        amount = int(request.data.get("amount", 1))
+        
+        serializer = CartItemQuantitySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        amount = serializer.validated_data['amount']
+        
         item.decrease_quantity(amount)
-        if item.quantity > 0:
-            serializer = self.get_serializer(item)
-            return Response(serializer.data)
-        return Response({"message": "Item removed from cart"})
+        # Always return the item data, even if quantity is 0
+        response_serializer = self.get_serializer(item)
+        return Response(response_serializer.data)
 
     @action(detail=True, methods=["post"])
     def update_quantity(self, request, pk=None):
         """Update item quantity."""
         item = self.get_object()
-        quantity = int(request.data.get("quantity", 1))
+        
+        serializer = CartItemUpdateQuantitySerializer(
+            data=request.data, 
+            context={'cart_item': item}
+        )
+        serializer.is_valid(raise_exception=True)
+        quantity = serializer.validated_data['quantity']
+        
         item.update_quantity(quantity)
-        if item.quantity > 0:
-            serializer = self.get_serializer(item)
-            return Response(serializer.data)
-        return Response({"message": "Item removed from cart"})
+        # Always return the item data, even if quantity is 0
+        response_serializer = self.get_serializer(item)
+        return Response(response_serializer.data)

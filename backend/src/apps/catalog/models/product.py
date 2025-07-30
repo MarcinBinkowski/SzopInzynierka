@@ -136,4 +136,8 @@ class Product(TimestampedModel):
     @property
     def is_available(self) -> bool:
         """Check if product is available for purchase."""
-        return self.status == self.ProductStatus.ACTIVE and self.is_in_stock
+        return (
+            self.status == self.ProductStatus.ACTIVE
+            and self.is_visible
+            and self.is_in_stock
+        )

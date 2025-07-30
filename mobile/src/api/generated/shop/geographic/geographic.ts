@@ -27,9 +27,9 @@ import type {
 import type {
   Country,
   CountryCreate,
+  CountryList,
   CountryUpdate,
   GeographicCountriesListParams,
-  PaginatedCountryListList,
   PatchedCountryUpdate
 } from '.././schemas';
 
@@ -45,7 +45,7 @@ export const geographicCountriesList = (
 ) => {
       
       
-      return shopInstance<PaginatedCountryListList>(
+      return shopInstance<CountryList[]>(
       {url: `/api/geographic/countries/`, method: 'GET',
         params, signal
     },

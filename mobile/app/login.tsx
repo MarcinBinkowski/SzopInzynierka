@@ -1,24 +1,19 @@
-// mobile/app/login.tsx
-import { useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { TextInput, Button, Text, Card } from 'react-native-paper';
 import { useAuth } from '@/hooks/useAuth';
 import { Controller, useForm } from 'react-hook-form';
-import { PostAllauthClientV1AuthLoginMutationBody } from '@/api/generated/auth/authentication-account/authentication-account';
 import { zodResolver } from "@hookform/resolvers/zod"
-import { postAllauthClientV1AuthLoginBody } from '@/api/generated/auth/authentication-account/authentication-account.zod';
 import { z } from 'zod';
-import { ScreenWrapper } from '@/components/layout/ScreenWrapper';
 
 const schema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.email("Please enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 export default function LoginScreen() {
   
   const { login, isLoggingIn, loginError} = useAuth();
-  const { control, handleSubmit, register, formState: { errors } } = useForm<z.infer<typeof schema>>(
+  const { control, handleSubmit, formState: { errors } } = useForm<z.infer<typeof schema>>(
     {
       resolver: zodResolver(schema),
     }

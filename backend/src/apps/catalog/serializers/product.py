@@ -1,7 +1,10 @@
 from rest_framework import serializers
 from typing import Dict, Any
 
-from apps.catalog.models import Category, Manufacturer, Product, Tag
+from apps.catalog.models.category import Category
+from apps.catalog.models.manufacturer import Manufacturer
+from apps.catalog.models.product import Product
+from apps.catalog.models.tag import Tag
 from apps.catalog.serializers.category import CategorySerializer
 from apps.catalog.serializers.manufacturer import ManufacturerSerializer
 from apps.catalog.serializers.product_image import ProductImageSerializer

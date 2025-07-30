@@ -16,6 +16,8 @@ class AllAuthSessionAuthentication(authentication.BaseAuthentication):
         # Get the session token from the X-Session-Token header
         session_token = request.META.get("HTTP_X_SESSION_TOKEN")
 
+        # If no session token header is present, let other authentication classes handle it
+        # This allows SessionAuthentication to work for browser requests
         if not session_token:
             return None
 
@@ -35,8 +37,11 @@ class AllAuthSessionAuthentication(authentication.BaseAuthentication):
             return (user, session_token)
 
         except (Session.DoesNotExist, User.DoesNotExist):
-            raise AuthenticationFailed("Invalid session token")
+            # Don't raise AuthenticationFailed here, just return None
+            # This allows other authentication classes to try
+            return None
         except Exception as e:
+            # Only raise AuthenticationFailed for actual errors, not missing sessions
             raise AuthenticationFailed(f"Session authentication failed: {str(e)}")
 
     def authenticate_header(self, request):

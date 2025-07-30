@@ -22,6 +22,7 @@ class ProductImageViewSet(viewsets.ModelViewSet):
     filterset_fields = ["product", "is_primary"]
     ordering_fields = ["sort_order", "created_at"]
     ordering = ["sort_order", "created_at"]
+    pagination_class = None
 
     def get_queryset(self):
         """Optimize queryset with select_related."""

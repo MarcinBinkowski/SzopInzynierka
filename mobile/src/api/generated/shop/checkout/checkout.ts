@@ -30,10 +30,14 @@ import type {
   CartItemCreate,
   CheckoutCartsListParams,
   CheckoutItemsListParams,
-  PaginatedCartItemList,
+  CheckoutSessionResponse,
+  ConfirmPayment,
+  CreateCheckoutSession,
   PaginatedCartListList,
   PatchedCart,
-  PatchedCartItem
+  PatchedCartItem,
+  PaymentConfirmationResponse,
+  ShippingMethod
 } from '.././schemas';
 
 import { shopInstance } from '../../../shop-mutator';
@@ -542,6 +546,130 @@ const {mutation: mutationOptions} = options ?
       return useMutation(mutationOptions , queryClient);
     }
     /**
+ * Set shipping address for cart.
+ */
+export const checkoutCartsSetShippingAddressCreate = (
+    id: string,
+    cart: BodyType<NonReadonly<Cart>>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<Cart>(
+      {url: `/api/checkout/carts/${id}/set_shipping_address/`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: cart, signal
+    },
+      );
+    }
+  
+
+
+export const getCheckoutCartsSetShippingAddressCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCartsSetShippingAddressCreate>>, TError,{id: string;data: BodyType<NonReadonly<Cart>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof checkoutCartsSetShippingAddressCreate>>, TError,{id: string;data: BodyType<NonReadonly<Cart>>}, TContext> => {
+
+const mutationKey = ['checkoutCartsSetShippingAddressCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof checkoutCartsSetShippingAddressCreate>>, {id: string;data: BodyType<NonReadonly<Cart>>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  checkoutCartsSetShippingAddressCreate(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CheckoutCartsSetShippingAddressCreateMutationResult = NonNullable<Awaited<ReturnType<typeof checkoutCartsSetShippingAddressCreate>>>
+    export type CheckoutCartsSetShippingAddressCreateMutationBody = BodyType<NonReadonly<Cart>>
+    export type CheckoutCartsSetShippingAddressCreateMutationError = ErrorType<unknown>
+
+    export const useCheckoutCartsSetShippingAddressCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCartsSetShippingAddressCreate>>, TError,{id: string;data: BodyType<NonReadonly<Cart>>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof checkoutCartsSetShippingAddressCreate>>,
+        TError,
+        {id: string;data: BodyType<NonReadonly<Cart>>},
+        TContext
+      > => {
+
+      const mutationOptions = getCheckoutCartsSetShippingAddressCreateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * Set shipping method for cart.
+ */
+export const checkoutCartsSetShippingMethodCreate = (
+    id: string,
+    cart: BodyType<NonReadonly<Cart>>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<Cart>(
+      {url: `/api/checkout/carts/${id}/set_shipping_method/`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: cart, signal
+    },
+      );
+    }
+  
+
+
+export const getCheckoutCartsSetShippingMethodCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCartsSetShippingMethodCreate>>, TError,{id: string;data: BodyType<NonReadonly<Cart>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof checkoutCartsSetShippingMethodCreate>>, TError,{id: string;data: BodyType<NonReadonly<Cart>>}, TContext> => {
+
+const mutationKey = ['checkoutCartsSetShippingMethodCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof checkoutCartsSetShippingMethodCreate>>, {id: string;data: BodyType<NonReadonly<Cart>>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  checkoutCartsSetShippingMethodCreate(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CheckoutCartsSetShippingMethodCreateMutationResult = NonNullable<Awaited<ReturnType<typeof checkoutCartsSetShippingMethodCreate>>>
+    export type CheckoutCartsSetShippingMethodCreateMutationBody = BodyType<NonReadonly<Cart>>
+    export type CheckoutCartsSetShippingMethodCreateMutationError = ErrorType<unknown>
+
+    export const useCheckoutCartsSetShippingMethodCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCartsSetShippingMethodCreate>>, TError,{id: string;data: BodyType<NonReadonly<Cart>>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof checkoutCartsSetShippingMethodCreate>>,
+        TError,
+        {id: string;data: BodyType<NonReadonly<Cart>>},
+        TContext
+      > => {
+
+      const mutationOptions = getCheckoutCartsSetShippingMethodCreateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
  * Get cart summary with totals.
  */
 export const checkoutCartsSummaryRetrieve = (
@@ -626,6 +754,128 @@ export function useCheckoutCartsSummaryRetrieve<TData = Awaited<ReturnType<typeo
 
 
 /**
+ * Confirm PaymentIntent and create order after successful PaymentSheet payment.
+ */
+export const checkoutConfirmPaymentIntentCreate = (
+    confirmPayment: BodyType<ConfirmPayment>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<PaymentConfirmationResponse>(
+      {url: `/api/checkout/confirm_payment_intent/`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: confirmPayment, signal
+    },
+      );
+    }
+  
+
+
+export const getCheckoutConfirmPaymentIntentCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutConfirmPaymentIntentCreate>>, TError,{data: BodyType<ConfirmPayment>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof checkoutConfirmPaymentIntentCreate>>, TError,{data: BodyType<ConfirmPayment>}, TContext> => {
+
+const mutationKey = ['checkoutConfirmPaymentIntentCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof checkoutConfirmPaymentIntentCreate>>, {data: BodyType<ConfirmPayment>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  checkoutConfirmPaymentIntentCreate(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CheckoutConfirmPaymentIntentCreateMutationResult = NonNullable<Awaited<ReturnType<typeof checkoutConfirmPaymentIntentCreate>>>
+    export type CheckoutConfirmPaymentIntentCreateMutationBody = BodyType<ConfirmPayment>
+    export type CheckoutConfirmPaymentIntentCreateMutationError = ErrorType<unknown>
+
+    export const useCheckoutConfirmPaymentIntentCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutConfirmPaymentIntentCreate>>, TError,{data: BodyType<ConfirmPayment>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof checkoutConfirmPaymentIntentCreate>>,
+        TError,
+        {data: BodyType<ConfirmPayment>},
+        TContext
+      > => {
+
+      const mutationOptions = getCheckoutConfirmPaymentIntentCreateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * Create a Stripe Checkout session for a cart.
+ */
+export const checkoutCreateCheckoutSessionCreate = (
+    createCheckoutSession: BodyType<CreateCheckoutSession>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<CheckoutSessionResponse>(
+      {url: `/api/checkout/create_checkout_session/`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createCheckoutSession, signal
+    },
+      );
+    }
+  
+
+
+export const getCheckoutCreateCheckoutSessionCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCreateCheckoutSessionCreate>>, TError,{data: BodyType<CreateCheckoutSession>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof checkoutCreateCheckoutSessionCreate>>, TError,{data: BodyType<CreateCheckoutSession>}, TContext> => {
+
+const mutationKey = ['checkoutCreateCheckoutSessionCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof checkoutCreateCheckoutSessionCreate>>, {data: BodyType<CreateCheckoutSession>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  checkoutCreateCheckoutSessionCreate(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CheckoutCreateCheckoutSessionCreateMutationResult = NonNullable<Awaited<ReturnType<typeof checkoutCreateCheckoutSessionCreate>>>
+    export type CheckoutCreateCheckoutSessionCreateMutationBody = BodyType<CreateCheckoutSession>
+    export type CheckoutCreateCheckoutSessionCreateMutationError = ErrorType<unknown>
+
+    export const useCheckoutCreateCheckoutSessionCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCreateCheckoutSessionCreate>>, TError,{data: BodyType<CreateCheckoutSession>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof checkoutCreateCheckoutSessionCreate>>,
+        TError,
+        {data: BodyType<CreateCheckoutSession>},
+        TContext
+      > => {
+
+      const mutationOptions = getCheckoutCreateCheckoutSessionCreateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
  * ViewSet for CartItem model with CRUD operations.
  */
 export const checkoutItemsList = (
@@ -634,7 +884,7 @@ export const checkoutItemsList = (
 ) => {
       
       
-      return shopInstance<PaginatedCartItemList>(
+      return shopInstance<CartItem[]>(
       {url: `/api/checkout/items/`, method: 'GET',
         params, signal
     },
@@ -1221,4 +1471,171 @@ const {mutation: mutationOptions} = options ?
 
       return useMutation(mutationOptions , queryClient);
     }
+    /**
+ * ViewSet for ShippingMethod model - read-only for users.
+ */
+export const checkoutShippingMethodsList = (
     
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<ShippingMethod[]>(
+      {url: `/api/checkout/shipping-methods/`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getCheckoutShippingMethodsListQueryKey = () => {
+    return [`/api/checkout/shipping-methods/`] as const;
+    }
+
+    
+export const getCheckoutShippingMethodsListQueryOptions = <TData = Awaited<ReturnType<typeof checkoutShippingMethodsList>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutShippingMethodsList>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCheckoutShippingMethodsListQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkoutShippingMethodsList>>> = ({ signal }) => checkoutShippingMethodsList(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof checkoutShippingMethodsList>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckoutShippingMethodsListQueryResult = NonNullable<Awaited<ReturnType<typeof checkoutShippingMethodsList>>>
+export type CheckoutShippingMethodsListQueryError = ErrorType<unknown>
+
+
+export function useCheckoutShippingMethodsList<TData = Awaited<ReturnType<typeof checkoutShippingMethodsList>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutShippingMethodsList>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutShippingMethodsList>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutShippingMethodsList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutShippingMethodsList<TData = Awaited<ReturnType<typeof checkoutShippingMethodsList>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutShippingMethodsList>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutShippingMethodsList>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutShippingMethodsList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutShippingMethodsList<TData = Awaited<ReturnType<typeof checkoutShippingMethodsList>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutShippingMethodsList>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCheckoutShippingMethodsList<TData = Awaited<ReturnType<typeof checkoutShippingMethodsList>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutShippingMethodsList>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCheckoutShippingMethodsListQueryOptions(options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * ViewSet for ShippingMethod model - read-only for users.
+ */
+export const checkoutShippingMethodsRetrieve = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<ShippingMethod>(
+      {url: `/api/checkout/shipping-methods/${id}/`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getCheckoutShippingMethodsRetrieveQueryKey = (id: number,) => {
+    return [`/api/checkout/shipping-methods/${id}/`] as const;
+    }
+
+    
+export const getCheckoutShippingMethodsRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCheckoutShippingMethodsRetrieveQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>> = ({ signal }) => checkoutShippingMethodsRetrieve(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckoutShippingMethodsRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>>
+export type CheckoutShippingMethodsRetrieveQueryError = ErrorType<unknown>
+
+
+export function useCheckoutShippingMethodsRetrieve<TData = Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutShippingMethodsRetrieve<TData = Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutShippingMethodsRetrieve<TData = Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCheckoutShippingMethodsRetrieve<TData = Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutShippingMethodsRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCheckoutShippingMethodsRetrieveQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+

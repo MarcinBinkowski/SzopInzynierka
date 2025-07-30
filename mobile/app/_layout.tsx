@@ -17,7 +17,7 @@ const queryClient = new QueryClient({
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const theme = colorScheme === 'dark' ? MD3DarkTheme : MD3LightTheme;
+  const theme = (colorScheme === 'dark') ? MD3DarkTheme : MD3LightTheme;
   return (
     <QueryClientProvider client={queryClient}>
         <StripeProvider

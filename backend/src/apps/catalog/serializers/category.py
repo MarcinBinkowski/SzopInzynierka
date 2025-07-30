@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from apps.catalog.models import Category, Product
+from apps.catalog.models.category import Category
+from apps.catalog.models.product import Product
 from drf_spectacular.utils import extend_schema_field
 
 

@@ -26,6 +26,7 @@ class CountryViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     search_fields = ["code", "name"]
     filter_backends = [SearchFilter, OrderingFilter]
+    pagination_class = None
 
     def get_serializer_class(self):
         """Use different serializers for different actions."""

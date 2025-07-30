@@ -76,13 +76,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         )
         return Response(serializer.data)
 
-    @action(detail=True, methods=["post"])
-    def add_to_wishlist(self, request, slug: str = None) -> Response:
-        """Add product to user's wishlist."""
-        product = self.get_object()
-        # TODO implement
 
-        return Response({"message": f"Added {product.name} to wishlist"})
 
     @action(detail=True, methods=["get"])
     def related(self, request, slug: str = None) -> Response:

@@ -8,24 +8,29 @@ import {
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCatalogProductsRetrieve } from '@/api/generated/shop/catalog/catalog';
+import { 
+  useCatalogWishlistCreate, 
+  useCatalogWishlistDestroy, 
+  useCatalogWishlistCheckRetrieve,
+  getCatalogWishlistListQueryKey,
+  getCatalogWishlistCheckRetrieveQueryKey
+} from '@/api/generated/shop/wishlist/wishlist';
 import { useCheckoutItemsCreate, useCheckoutItemsDecreaseQuantityCreate, useCheckoutItemsIncreaseQuantityCreate, useCheckoutItemsList } from '@/api/generated/shop/checkout/checkout';
 import { ScreenWrapper } from '@/components/layout/ScreenWrapper';
 import { Card, Text, Button, Chip, Divider, IconButton, useTheme } from 'react-native-paper';
-import { Ionicons } from '@expo/vector-icons';
+import { useQueryClient } from '@tanstack/react-query';
 import ScreenLoader from '@/components/common/ScreenLoader';
 import ErrorScreen from '@/components/common/ErrorScreen';
 import PriceBadge from '@/components/products/PriceBadge';
-import Carousel, { ICarouselInstance, Pagination } from 'react-native-reanimated-carousel';
-import { useSharedValue } from 'react-native-reanimated';
+import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
 
 const { width } = Dimensions.get('window');
 
 export default function ProductDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const router = useRouter();
   const theme = useTheme();
+  const queryClient = useQueryClient();
   const carouselRef = useRef<ICarouselInstance>(null);
-  const progress = useSharedValue<number>(0);
   
   const productId = parseInt(id, 10);
   
@@ -62,7 +67,7 @@ export default function ProductDetailScreen() {
     },
   });
 
-  const cartItem = cartItems?.results?.find(item => item.product?.id === productId);
+  const cartItem = cartItems?.find(item => item.product?.id === productId);
 
 
   const handleAddToCart = () => {
@@ -94,8 +99,66 @@ export default function ProductDetailScreen() {
     });
   };
 
-  const handleAddToWishlist = () => {
-    Alert.alert('Success', 'Product added to wishlist!');
+  const { data: wishlistCheck, refetch: refetchWishlistCheck } = useCatalogWishlistCheckRetrieve(
+    product?.id || 0,
+    {
+      query: {
+        enabled: !!product?.id,
+      },
+    }
+  );
+
+  const isInWishlist = wishlistCheck?.is_in_wishlist || false;
+  const wishlistItemId = wishlistCheck?.wishlist_item_id || null;
+
+  const addToWishlistMutation = useCatalogWishlistCreate({
+    mutation: {
+      onSuccess: () => {
+        refetchWishlistCheck();
+        
+        queryClient.invalidateQueries({
+          queryKey: getCatalogWishlistListQueryKey(),
+        });
+        
+        queryClient.invalidateQueries({
+          queryKey: getCatalogWishlistCheckRetrieveQueryKey(productId),
+        });
+      },
+      onError: () => {
+        Alert.alert('Error', 'Failed to add product to wishlist');
+      },
+    },
+  });
+
+  const removeFromWishlistMutation = useCatalogWishlistDestroy({
+    mutation: {
+      onSuccess: () => {
+        refetchWishlistCheck();
+        
+        queryClient.invalidateQueries({
+          queryKey: getCatalogWishlistListQueryKey(),
+        });
+        
+        queryClient.invalidateQueries({
+          queryKey: getCatalogWishlistCheckRetrieveQueryKey(productId),
+        });
+      },
+      onError: () => {
+        Alert.alert('Error', 'Failed to remove product from wishlist');
+      },
+    },
+  });
+
+  const handleWishlistToggle = () => {
+    if (!product) return;
+    
+    if (isInWishlist && wishlistItemId) {
+      removeFromWishlistMutation.mutate({ id: wishlistItemId.toString() });
+    } else {
+      addToWishlistMutation.mutate({
+        data: { product_id: product.id },
+      });
+    }
   };
 
   if (isLoading) {
@@ -133,7 +196,6 @@ export default function ProductDetailScreen() {
                   autoPlay={product.images.length > 1}
                   data={[...product.images]}
                   scrollAnimationDuration={1000}
-                  onProgressChange={progress}
                   renderItem={({ item }) => (
                     <Card.Cover 
                       source={{ uri: item.image_url || 'https://placehold.co/300x200/png' }} 
@@ -141,26 +203,6 @@ export default function ProductDetailScreen() {
                     />
                   )}
                 />
-                
-                {product.images.length > 1 && (
-                  <Pagination.Basic
-                    progress={progress}
-                    data={[...product.images]}
-                    dotStyle={{ 
-                      backgroundColor: theme.colors.onSurfaceVariant, 
-                      borderRadius: 4,
-                      width: 8,
-                      height: 8,
-                    }}
-                    activeDotStyle={{ 
-                      backgroundColor: theme.colors.primary, 
-                      borderRadius: 4,
-                      width: 8,
-                      height: 8,
-                    }}
-                    containerStyle={styles.paginationContainer}
-                  />
-                )}
                 
                 {isOnSale && (
                   <View style={[styles.saleBadge, { backgroundColor: theme.colors.error }]}>
@@ -275,11 +317,15 @@ export default function ProductDetailScreen() {
                   </Button>
                 )}
                 <Button
-                  mode="outlined"
-                  onPress={handleAddToWishlist}
-                  icon="heart-outline"
+                  mode={isInWishlist ? "contained" : "outlined"}
+                  onPress={handleWishlistToggle}
+                  icon={isInWishlist ? "heart" : "heart-outline"}
+                  buttonColor={isInWishlist ? theme.colors.error : undefined}
+                  textColor={isInWishlist ? theme.colors.onError : undefined}
+                  disabled={addToWishlistMutation.isPending || removeFromWishlistMutation.isPending}
+                  loading={addToWishlistMutation.isPending || removeFromWishlistMutation.isPending}
                 >
-                  Wishlist
+                  {isInWishlist ? 'In Wishlist' : 'Add to Wishlist'}
                 </Button>
               </View>
             </Card.Content>
@@ -332,16 +378,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 
-  paginationContainer: {
-    position: 'absolute',
-    bottom: 16,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 8,
-  },
+
   productCard: {
     marginBottom: 12,
   },
@@ -400,3 +437,4 @@ const styles = StyleSheet.create({
 
 
 });
+

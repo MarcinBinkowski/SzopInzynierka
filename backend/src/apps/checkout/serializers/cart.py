@@ -4,6 +4,8 @@ from decimal import Decimal
 from apps.checkout.models import Cart, CartItem
 from apps.catalog.models import Product
 from apps.catalog.serializers.product import ProductListSerializer
+from apps.profile.serializers.address import AddressSerializer
+from apps.checkout.serializers.shipping_method import ShippingMethodSerializer
 
 
 class CartItemSerializer(serializers.ModelSerializer):
@@ -78,12 +80,85 @@ class CartItemCreateSerializer(serializers.ModelSerializer):
         return value
 
 
+class CartItemQuantitySerializer(serializers.Serializer):
+    """Serializer for cart item quantity operations."""
+    
+    amount = serializers.IntegerField(
+        default=1,
+        min_value=1,
+        help_text="Amount to increase/decrease quantity by"
+    )
+
+
+class CartItemUpdateQuantitySerializer(serializers.Serializer):
+    """Serializer for updating cart item quantity."""
+    
+    quantity = serializers.IntegerField(
+        min_value=1,
+        help_text="New quantity for the cart item"
+    )
+
+    def validate_quantity(self, value: int) -> int:
+        """Validate quantity against product stock."""
+        cart_item = self.context.get('cart_item')
+        if cart_item and cart_item.product.stock_quantity:
+            if value > cart_item.product.stock_quantity:
+                raise serializers.ValidationError(
+                    f"Requested quantity ({value}) exceeds available stock ({cart_item.product.stock_quantity})"
+                )
+        return value
+
+
+class CartShippingAddressSerializer(serializers.Serializer):
+    """Serializer for setting shipping address on cart."""
+    
+    address_id = serializers.IntegerField(
+        help_text="ID of the shipping address to set on the cart"
+    )
+
+    def validate_address_id(self, value):
+        """Validate that the shipping address exists and belongs to the user."""
+        request = self.context.get('request')
+        if request and request.user:
+            try:
+                from apps.profile.models import Address
+                Address.objects.get(
+                    id=value,
+                    profile__user=request.user,
+                    address_type='shipping'
+                )
+                return value
+            except Address.DoesNotExist:
+                raise serializers.ValidationError("Shipping address not found")
+        return value
+
+
+class CartShippingMethodSerializer(serializers.Serializer):
+    """Serializer for setting shipping method on cart."""
+    
+    shipping_method_id = serializers.IntegerField(
+        help_text="ID of the shipping method to set on the cart"
+    )
+
+    def validate_shipping_method_id(self, value):
+        """Validate that the shipping method exists."""
+        try:
+            from apps.checkout.models import ShippingMethod
+            ShippingMethod.objects.get(id=value)
+            return value
+        except ShippingMethod.DoesNotExist:
+            raise serializers.ValidationError("Shipping method not found")
+
+
 class CartSerializer(serializers.ModelSerializer):
     """Serializer for Cart model."""
 
     items = CartItemSerializer(many=True, read_only=True)
+    shipping_address = AddressSerializer(read_only=True)
+    shipping_method = ShippingMethodSerializer(read_only=True)
     item_count = serializers.SerializerMethodField()
     subtotal = serializers.SerializerMethodField()
+    shipping_cost = serializers.SerializerMethodField()
     total = serializers.SerializerMethodField()
 
     class Meta:
@@ -93,8 +168,11 @@ class CartSerializer(serializers.ModelSerializer):
             "user",
             "status",
             "items",
+            "shipping_address",
+            "shipping_method",
             "item_count",
             "subtotal",
+            "shipping_cost",
             "total",
             "created_at",
             "updated_at",
@@ -104,6 +182,7 @@ class CartSerializer(serializers.ModelSerializer):
             "user",
             "item_count",
             "subtotal",
+            "shipping_cost",
             "total",
             "created_at",
             "updated_at",
@@ -117,8 +196,12 @@ class CartSerializer(serializers.ModelSerializer):
         """Get subtotal of all items in cart."""
         return obj.subtotal
 
+    def get_shipping_cost(self, obj: Cart) -> Decimal:
+        """Get shipping cost from selected shipping method."""
+        return obj.shipping_cost
+
     def get_total(self, obj: Cart) -> Decimal:
-        """Get total including taxes and shipping."""
+        """Get total including shipping."""
         return obj.total
 
 
@@ -127,6 +210,7 @@ class CartListSerializer(serializers.ModelSerializer):
 
     item_count = serializers.SerializerMethodField()
     subtotal = serializers.SerializerMethodField()
+    shipping_cost = serializers.SerializerMethodField()
 
     class Meta:
         model = Cart
@@ -135,12 +219,14 @@ class CartListSerializer(serializers.ModelSerializer):
             "status",
             "item_count",
             "subtotal",
+            "shipping_cost",
             "created_at",
         ]
         read_only_fields = [
             "id",
             "item_count",
             "subtotal",
+            "shipping_cost",
             "created_at",
         ]
 
@@ -151,3 +237,7 @@ class CartListSerializer(serializers.ModelSerializer):
     def get_subtotal(self, obj: Cart) -> Decimal:
         """Get subtotal of all items in cart."""
         return obj.subtotal
+
+    def get_shipping_cost(self, obj: Cart) -> Decimal:
+        """Get shipping cost from selected shipping method."""
+        return obj.shipping_cost

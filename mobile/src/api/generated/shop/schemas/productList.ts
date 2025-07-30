@@ -8,7 +8,6 @@
 import type { ProductStatusEnum } from './productStatusEnum';
 import type { Category } from './category';
 import type { Manufacturer } from './manufacturer';
-import type { ProductImage } from './productImage';
 
 /**
  * Simplified serializer for product listings.
@@ -41,7 +40,8 @@ export interface ProductList {
    * @pattern ^-?\d{0,8}(?:\.\d{0,2})?$
    */
   original_price: string;
-  readonly current_price: number;
+  /** Get current price as formatted decimal string. */
+  readonly current_price: string;
   /** Calculate discount percentage. */
   readonly discount_percentage: number;
   /**
@@ -76,7 +76,6 @@ export interface ProductList {
    * @nullable
    */
   readonly primary_image: string | null;
-  readonly images: readonly ProductImage[];
   /** Timestamp when the record was created */
   readonly created_at: string;
 }

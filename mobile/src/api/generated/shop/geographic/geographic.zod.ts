@@ -16,25 +16,19 @@ export const geographicCountriesListParams = zod.object({
 
 export const geographicCountriesListQueryParams = zod.object({
   "ordering": zod.coerce.string().optional().describe('Which field to use when ordering the results.'),
-  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
-  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.'),
   "search": zod.coerce.string().optional().describe('A search term.')
 })
 
-export const geographicCountriesListResponseResultsItemCodeMax = 2;
-export const geographicCountriesListResponseResultsItemNameMax = 100;
+export const geographicCountriesListResponseCodeMax = 2;
+export const geographicCountriesListResponseNameMax = 100;
 
 
-export const geographicCountriesListResponse = zod.object({
-  "count": zod.number(),
-  "next": zod.url().nullish(),
-  "previous": zod.url().nullish(),
-  "results": zod.array(zod.object({
+export const geographicCountriesListResponseItem = zod.object({
   "id": zod.number(),
-  "code": zod.string().max(geographicCountriesListResponseResultsItemCodeMax).describe('alpha-2 country code (e.g., PL, US, GB)'),
-  "name": zod.string().max(geographicCountriesListResponseResultsItemNameMax).describe('Official country name in English')
-}).describe('Simplified country serializer for list views.'))
-})
+  "code": zod.string().max(geographicCountriesListResponseCodeMax).describe('alpha-2 country code (e.g., PL, US, GB)'),
+  "name": zod.string().max(geographicCountriesListResponseNameMax).describe('Official country name in English')
+}).describe('Simplified country serializer for list views.')
+export const geographicCountriesListResponse = zod.array(geographicCountriesListResponseItem)
 
 export const geographicCountriesCreateParams = zod.object({
   "id": zod.coerce.number()

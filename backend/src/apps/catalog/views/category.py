@@ -22,6 +22,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "description"]
     ordering_fields = ["name", "created_at"]
     ordering = ["name"]
+    pagination_class = None
 
     def get_queryset(self):
         """Optimize queryset based on action."""

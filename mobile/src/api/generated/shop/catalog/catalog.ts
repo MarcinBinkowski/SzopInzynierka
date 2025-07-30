@@ -33,10 +33,8 @@ import type {
   Category,
   Manufacturer,
   ManufacturerCreate,
+  ManufacturerList,
   ManufacturerUpdate,
-  PaginatedCategoryList,
-  PaginatedManufacturerListList,
-  PaginatedProductImageList,
   PaginatedProductListList,
   PaginatedTagList,
   PatchedCategory,
@@ -92,7 +90,7 @@ export const catalogCategoriesList = (
 ) => {
       
       
-      return shopInstance<PaginatedCategoryList>(
+      return shopInstance<Category[]>(
       {url: `/api/catalog/categories/`, method: 'GET',
         params, signal
     },
@@ -586,7 +584,7 @@ export const catalogImagesList = (
 ) => {
       
       
-      return shopInstance<PaginatedProductImageList>(
+      return shopInstance<ProductImage[]>(
       {url: `/api/catalog/images/`, method: 'GET',
         params, signal
     },
@@ -1055,7 +1053,7 @@ const {mutation: mutationOptions} = options ?
 ) => {
       
       
-      return shopInstance<PaginatedManufacturerListList>(
+      return shopInstance<ManufacturerList[]>(
       {url: `/api/catalog/manufacturers/`, method: 'GET',
         params, signal
     },
@@ -1848,68 +1846,6 @@ const {mutation: mutationOptions} = options ?
       > => {
 
       const mutationOptions = getCatalogProductsDestroyMutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
-    }
-    /**
- * Add product to user's wishlist.
- */
-export const catalogProductsAddToWishlistCreate = (
-    id: number,
-    productDetail: BodyType<NonReadonly<ProductDetail>>,
- signal?: AbortSignal
-) => {
-      
-      
-      return shopInstance<ProductDetail>(
-      {url: `/api/catalog/products/${id}/add_to_wishlist/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: productDetail, signal
-    },
-      );
-    }
-  
-
-
-export const getCatalogProductsAddToWishlistCreateMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsAddToWishlistCreate>>, TError,{id: number;data: BodyType<NonReadonly<ProductDetail>>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogProductsAddToWishlistCreate>>, TError,{id: number;data: BodyType<NonReadonly<ProductDetail>>}, TContext> => {
-
-const mutationKey = ['catalogProductsAddToWishlistCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogProductsAddToWishlistCreate>>, {id: number;data: BodyType<NonReadonly<ProductDetail>>}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  catalogProductsAddToWishlistCreate(id,data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CatalogProductsAddToWishlistCreateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogProductsAddToWishlistCreate>>>
-    export type CatalogProductsAddToWishlistCreateMutationBody = BodyType<NonReadonly<ProductDetail>>
-    export type CatalogProductsAddToWishlistCreateMutationError = ErrorType<unknown>
-
-    export const useCatalogProductsAddToWishlistCreate = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsAddToWishlistCreate>>, TError,{id: number;data: BodyType<NonReadonly<ProductDetail>>}, TContext>, }
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof catalogProductsAddToWishlistCreate>>,
-        TError,
-        {id: number;data: BodyType<NonReadonly<ProductDetail>>},
-        TContext
-      > => {
-
-      const mutationOptions = getCatalogProductsAddToWishlistCreateMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

@@ -31,6 +31,22 @@ class Cart(TimestampedModel):
         default=CartStatus.ACTIVE,
         help_text="Current status of the cart",
     )
+    shipping_address = models.ForeignKey(
+        'profile.Address',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='carts',
+        help_text="Selected shipping address for this cart",
+    )
+    shipping_method = models.ForeignKey(
+        'ShippingMethod',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='carts',
+        help_text="Selected shipping method for this cart",
+    )
 
     class Meta:
         ordering = ["-created_at"]
@@ -57,10 +73,16 @@ class Cart(TimestampedModel):
         return total
 
     @property
+    def shipping_cost(self) -> Decimal:
+        """Get shipping cost from selected shipping method."""
+        if self.shipping_method:
+            return self.shipping_method.price
+        return Decimal("0.00")
+
+    @property
     def total(self) -> Decimal:
-        """Calculate total including taxes and shipping (placeholder)."""
-        # TODO: Add tax and shipping calculation
-        return self.subtotal
+        """Calculate total (subtotal + shipping)."""
+        return self.subtotal + self.shipping_cost
 
     def clear(self) -> None:
         """Remove all items from cart."""
@@ -78,5 +100,5 @@ class Cart(TimestampedModel):
                 user=user,
                 status=cls.CartStatus.ACTIVE,
             )
-
-        return cart
+            return cart
+        raise ValueError("User must be authenticated to get or create cart")

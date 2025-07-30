@@ -8,6 +8,6 @@ class TimeDelayMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        # time.sleep(2)  # Delay in seconds, can be configured
+        # time.sleep(2)  # Delay in seconds
         response = self.get_response(request)
         return response

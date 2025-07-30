@@ -23,6 +23,8 @@ export interface CartList {
   readonly item_count: number;
   /** Get subtotal of all items in cart. */
   readonly subtotal: number;
+  /** Get shipping cost from selected shipping method. */
+  readonly shipping_cost: number;
   /** Timestamp when the record was created */
   readonly created_at: string;
 }

@@ -12,6 +12,11 @@ from apps.catalog.serializers.product import (
     ProductDetailSerializer,
     ProductCreateSerializer,
 )
+from apps.catalog.serializers.wishlist import (
+    WishlistItemSerializer,
+    WishlistItemCreateSerializer,
+    WishlistCheckSerializer,
+)
 
 __all__ = [
     "TagSerializer",
@@ -25,4 +30,7 @@ __all__ = [
     "ProductDetailSerializer",
     "ProductCreateSerializer",
     "ProductImageSerializer",
+    "WishlistItemSerializer",
+    "WishlistItemCreateSerializer",
+    "WishlistCheckSerializer",
 ]

@@ -15,18 +15,6 @@ paths:
         description: Which field to use when ordering the results.
         schema:
           type: string
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      - name: page_size
-        required: false
-        in: query
-        description: Number of results to return per page.
-        schema:
-          type: integer
       - name: search
         required: false
         in: query
@@ -44,7 +32,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedCategoryList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
           description: ''
     post:
       operationId: catalog_categories_create
@@ -221,18 +211,6 @@ paths:
         description: Which field to use when ordering the results.
         schema:
           type: string
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      - name: page_size
-        required: false
-        in: query
-        description: Number of results to return per page.
-        schema:
-          type: integer
       - in: query
         name: product
         schema:
@@ -248,7 +226,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedProductImageList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductImage'
           description: ''
     post:
       operationId: catalog_images_create
@@ -436,18 +416,6 @@ paths:
         description: Which field to use when ordering the results.
         schema:
           type: string
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      - name: page_size
-        required: false
-        in: query
-        description: Number of results to return per page.
-        schema:
-          type: integer
       - name: search
         required: false
         in: query
@@ -464,7 +432,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedManufacturerListList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ManufacturerList'
           description: ''
     post:
       operationId: catalog_manufacturers_create
@@ -883,41 +853,6 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/catalog/products/{id}/add_to_wishlist/:
-    post:
-      operationId: catalog_products_add_to_wishlist_create
-      description: Add product to user's wishlist.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this product.
-        required: true
-      tags:
-      - catalog
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProductDetail'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/ProductDetail'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/ProductDetail'
-        required: true
-      security:
-      - tokenAuth: []
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductDetail'
-          description: ''
   /api/catalog/products/{id}/related/:
     get:
       operationId: catalog_products_related_retrieve
@@ -1161,6 +1096,202 @@ paths:
               schema:
                 $ref: '#/components/schemas/Tag'
           description: ''
+  /api/catalog/wishlist/:
+    get:
+      operationId: catalog_wishlist_list
+      description: List all wishlist items for the current user
+      tags:
+      - wishlist
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WishlistItem'
+          description: ''
+    post:
+      operationId: catalog_wishlist_create
+      description: Create a new wishlist item
+      tags:
+      - wishlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WishlistItemCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WishlistItemCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WishlistItemCreate'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WishlistItem'
+          description: ''
+  /api/catalog/wishlist/{id}/:
+    get:
+      operationId: catalog_wishlist_retrieve
+      description: Retrieve a specific wishlist item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - wishlist
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WishlistItem'
+          description: ''
+    put:
+      operationId: catalog_wishlist_update
+      description: Update a wishlist item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - wishlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WishlistItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WishlistItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WishlistItem'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WishlistItem'
+          description: ''
+    patch:
+      operationId: catalog_wishlist_partial_update
+      description: Partially update a wishlist item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - wishlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWishlistItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedWishlistItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedWishlistItem'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WishlistItem'
+          description: ''
+    delete:
+      operationId: catalog_wishlist_destroy
+      description: Delete a wishlist item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - wishlist
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/catalog/wishlist/check/{product_id}/:
+    get:
+      operationId: catalog_wishlist_check_retrieve
+      description: Check if a product is in wishlist
+      parameters:
+      - in: path
+        name: product_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - wishlist
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WishlistCheck'
+          description: ''
+  /api/catalog/wishlist/filtered/:
+    get:
+      operationId: catalog_wishlist_filtered_retrieve
+      description: Filter wishlist items by stock and sale status
+      parameters:
+      - in: query
+        name: in_stock
+        schema:
+          type: boolean
+      - in: query
+        name: on_sale
+        schema:
+          type: boolean
+      tags:
+      - wishlist
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WishlistItem'
+          description: ''
   /api/checkout/carts/:
     get:
       operationId: checkout_carts_list
@@ -1358,6 +1489,72 @@ paths:
               schema:
                 $ref: '#/components/schemas/Cart'
           description: ''
+  /api/checkout/carts/{id}/set_shipping_address/:
+    post:
+      operationId: checkout_carts_set_shipping_address_create
+      description: Set shipping address for cart.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Cart'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+  /api/checkout/carts/{id}/set_shipping_method/:
+    post:
+      operationId: checkout_carts_set_shipping_method_create
+      description: Set shipping method for cart.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Cart'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
   /api/checkout/carts/{id}/summary/:
     get:
       operationId: checkout_carts_summary_retrieve
@@ -1380,6 +1577,63 @@ paths:
               schema:
                 $ref: '#/components/schemas/Cart'
           description: ''
+  /api/checkout/confirm_payment_intent/:
+    post:
+      operationId: checkout_confirm_payment_intent_create
+      description: Confirm PaymentIntent and create order after successful PaymentSheet
+        payment.
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmPayment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ConfirmPayment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConfirmPayment'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentConfirmationResponse'
+          description: ''
+  /api/checkout/create_checkout_session/:
+    post:
+      operationId: checkout_create_checkout_session_create
+      description: Create a Stripe Checkout session for a cart.
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCheckoutSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateCheckoutSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateCheckoutSession'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutSessionResponse'
+          description: ''
   /api/checkout/items/:
     get:
       operationId: checkout_items_list
@@ -1391,18 +1645,6 @@ paths:
         description: Which field to use when ordering the results.
         schema:
           type: string
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      - name: page_size
-        required: false
-        in: query
-        description: Number of results to return per page.
-        schema:
-          type: integer
       tags:
       - checkout
       security:
@@ -1413,7 +1655,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedCartItemList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/CartItem'
           description: ''
     post:
       operationId: checkout_items_create
@@ -1648,6 +1892,47 @@ paths:
               schema:
                 $ref: '#/components/schemas/CartItem'
           description: ''
+  /api/checkout/shipping-methods/:
+    get:
+      operationId: checkout_shipping_methods_list
+      description: ViewSet for ShippingMethod model - read-only for users.
+      tags:
+      - checkout
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShippingMethod'
+          description: ''
+  /api/checkout/shipping-methods/{id}/:
+    get:
+      operationId: checkout_shipping_methods_retrieve
+      description: ViewSet for ShippingMethod model - read-only for users.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Shipping Method.
+        required: true
+      tags:
+      - checkout
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingMethod'
+          description: ''
   /api/geographic/countries/:
     get:
       operationId: geographic_countries_list
@@ -1663,18 +1948,6 @@ paths:
         description: Which field to use when ordering the results.
         schema:
           type: string
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      - name: page_size
-        required: false
-        in: query
-        description: Number of results to return per page.
-        schema:
-          type: integer
       - name: search
         required: false
         in: query
@@ -1691,7 +1964,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedCountryListList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/CountryList'
           description: ''
     post:
       operationId: geographic_countries_create
@@ -1834,18 +2109,6 @@ paths:
         schema:
           type: integer
         required: true
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      - name: page_size
-        required: false
-        in: query
-        description: Number of results to return per page.
-        schema:
-          type: integer
       tags:
       - profile
       security:
@@ -1856,7 +2119,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedAddressListList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/AddressList'
           description: ''
     post:
       operationId: profile_addresses_create
@@ -2746,6 +3011,14 @@ components:
           items:
             $ref: '#/components/schemas/CartItem'
           readOnly: true
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+          readOnly: true
+        shipping_method:
+          allOf:
+          - $ref: '#/components/schemas/ShippingMethod'
+          readOnly: true
         item_count:
           type: integer
           description: Get total number of items in cart.
@@ -2755,10 +3028,15 @@ components:
           format: double
           description: Get subtotal of all items in cart.
           readOnly: true
+        shipping_cost:
+          type: number
+          format: double
+          description: Get shipping cost from selected shipping method.
+          readOnly: true
         total:
           type: number
           format: double
-          description: Get total including taxes and shipping.
+          description: Get total including shipping.
           readOnly: true
         created_at:
           type: string
@@ -2775,6 +3053,9 @@ components:
       - id
       - item_count
       - items
+      - shipping_address
+      - shipping_cost
+      - shipping_method
       - subtotal
       - total
       - updated_at
@@ -2866,6 +3147,11 @@ components:
           format: double
           description: Get subtotal of all items in cart.
           readOnly: true
+        shipping_cost:
+          type: number
+          format: double
+          description: Get shipping cost from selected shipping method.
+          readOnly: true
         created_at:
           type: string
           format: date-time
@@ -2875,6 +3161,7 @@ components:
       - created_at
       - id
       - item_count
+      - shipping_cost
       - subtotal
     CartStatusEnum:
       enum:
@@ -2930,6 +3217,29 @@ components:
       - name
       - slug
       - updated_at
+    CheckoutSessionResponse:
+      type: object
+      description: Serializer for payment intent response (PaymentSheet).
+      properties:
+        client_secret:
+          type: string
+        payment_intent_id:
+          type: string
+        payment_id:
+          type: integer
+      required:
+      - client_secret
+      - payment_id
+      - payment_intent_id
+    ConfirmPayment:
+      type: object
+      description: Serializer for confirming payment.
+      properties:
+        session_id:
+          type: string
+          description: Stripe checkout session ID
+      required:
+      - session_id
     Country:
       type: object
       description: Full country serializer with all fields.
@@ -3010,6 +3320,24 @@ components:
       required:
       - code
       - name
+    CreateCheckoutSession:
+      type: object
+      description: Serializer for creating payment intent (PaymentSheet).
+      properties:
+        currency:
+          type: string
+          default: usd
+          description: 'Currency code (default: usd)'
+          maxLength: 3
+        shipping_address_id:
+          type: integer
+          description: ID of the shipping address to use for this order
+        shipping_method_id:
+          type: integer
+          description: ID of the shipping method to use for this order
+      required:
+      - shipping_address_id
+      - shipping_method_id
     Manufacturer:
       type: object
       description: Serializer for Manufacturer model.
@@ -3122,52 +3450,6 @@ components:
           description: Whether this manufacturer is visible
       required:
       - name
-    PaginatedAddressListList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/AddressList'
-    PaginatedCartItemList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/CartItem'
     PaginatedCartListList:
       type: object
       required:
@@ -3191,98 +3473,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CartList'
-    PaginatedCategoryList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
-    PaginatedCountryListList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/CountryList'
-    PaginatedManufacturerListList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ManufacturerList'
-    PaginatedProductImageList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductImage'
     PaginatedProductListList:
       type: object
       required:
@@ -3467,6 +3657,14 @@ components:
           items:
             $ref: '#/components/schemas/CartItem'
           readOnly: true
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+          readOnly: true
+        shipping_method:
+          allOf:
+          - $ref: '#/components/schemas/ShippingMethod'
+          readOnly: true
         item_count:
           type: integer
           description: Get total number of items in cart.
@@ -3476,10 +3674,15 @@ components:
           format: double
           description: Get subtotal of all items in cart.
           readOnly: true
+        shipping_cost:
+          type: number
+          format: double
+          description: Get shipping cost from selected shipping method.
+          readOnly: true
         total:
           type: number
           format: double
-          description: Get total including taxes and shipping.
+          description: Get total including shipping.
           readOnly: true
         created_at:
           type: string
@@ -3652,8 +3855,8 @@ components:
           pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
           description: Original price for showing discounts
         current_price:
-          type: number
-          format: double
+          type: string
+          description: Get current price as formatted decimal string.
           readOnly: true
         discount_percentage:
           type: integer
@@ -3889,6 +4092,50 @@ components:
           format: date-time
           readOnly: true
           description: Timestamp when the record was last updated
+    PatchedWishlistItem:
+      type: object
+      description: Serializer for WishlistItem model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          allOf:
+          - $ref: '#/components/schemas/ProductList'
+          readOnly: true
+        product_id:
+          type: integer
+          writeOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+    PaymentConfirmationResponse:
+      type: object
+      description: Serializer for payment confirmation response.
+      properties:
+        success:
+          type: boolean
+        payment_id:
+          type: integer
+        order_number:
+          type: string
+        message:
+          type: string
+        amount_paid:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        currency:
+          type: string
+      required:
+      - amount_paid
+      - currency
+      - message
+      - order_number
+      - payment_id
+      - success
     ProductCreate:
       type: object
       description: Serializer for creating products.
@@ -4000,8 +4247,8 @@ components:
           pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
           description: Original price for showing discounts
         current_price:
-          type: number
-          format: double
+          type: string
+          description: Get current price as formatted decimal string.
           readOnly: true
         discount_percentage:
           type: integer
@@ -4184,8 +4431,8 @@ components:
           pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
           description: Original price for showing discounts
         current_price:
-          type: number
-          format: double
+          type: string
+          description: Get current price as formatted decimal string.
           readOnly: true
         discount_percentage:
           type: integer
@@ -4237,11 +4484,6 @@ components:
           nullable: true
           description: Get URL of primary product image.
           readOnly: true
-        images:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductImage'
-          readOnly: true
         created_at:
           type: string
           format: date-time
@@ -4253,7 +4495,6 @@ components:
       - current_price
       - discount_percentage
       - id
-      - images
       - is_available
       - is_in_stock
       - is_on_sale
@@ -4463,6 +4704,26 @@ components:
           description: 'Phone number in international format. Supports digits, spaces,
             hyphens, parentheses, and optional ''+'' prefix. Example: +48131012012'
           pattern: ^\+?[\d\s\-\(\)]+$
+    ShippingMethod:
+      type: object
+      description: Serializer for ShippingMethod model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Name of the shipping method (e.g., 'Standard', 'Express')
+          maxLength: 100
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Shipping cost
+      required:
+      - id
+      - name
+      - price
     Tag:
       type: object
       description: Serializer for Tag model.
@@ -4495,6 +4756,52 @@ components:
       - name
       - slug
       - updated_at
+    WishlistCheck:
+      type: object
+      description: Serializer for wishlist check response.
+      properties:
+        product_id:
+          type: integer
+        is_in_wishlist:
+          type: boolean
+        wishlist_item_id:
+          type: integer
+          nullable: true
+      required:
+      - is_in_wishlist
+      - product_id
+    WishlistItem:
+      type: object
+      description: Serializer for WishlistItem model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          allOf:
+          - $ref: '#/components/schemas/ProductList'
+          readOnly: true
+        product_id:
+          type: integer
+          writeOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+      required:
+      - created_at
+      - id
+      - product
+      - product_id
+    WishlistItemCreate:
+      type: object
+      description: Serializer for creating wishlist items.
+      properties:
+        product_id:
+          type: integer
+      required:
+      - product_id
   securitySchemes:
     cookieAuth:
       type: apiKey

@@ -54,6 +54,11 @@ shopClient.interceptors.response.use(
     return response
   },
   async (error: AxiosError) => {
+    // Ignore canceled requests (they're not real errors)
+    if (error.code === 'ERR_CANCELED' || error.message === 'canceled') {
+      return Promise.reject(error);
+    }
+
     const status = error.response?.status;
 
     if (status === 401) {
@@ -76,6 +81,7 @@ shopClient.interceptors.response.use(
         'An error occurred';
       Alert.alert(message);
     } else {
+      console.error("error", error);
       Alert.alert('Something went wrong');
     }
     return Promise.reject(error);

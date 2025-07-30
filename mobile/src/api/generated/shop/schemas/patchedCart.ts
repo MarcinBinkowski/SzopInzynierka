@@ -7,6 +7,8 @@
  */
 import type { CartStatusEnum } from './cartStatusEnum';
 import type { CartItem } from './cartItem';
+import type { Address } from './address';
+import type { ShippingMethod } from './shippingMethod';
 
 /**
  * Serializer for Cart model.
@@ -26,11 +28,15 @@ export interface PatchedCart {
 * `expired` - Expired */
   status?: CartStatusEnum;
   readonly items?: readonly CartItem[];
+  readonly shipping_address?: Address;
+  readonly shipping_method?: ShippingMethod;
   /** Get total number of items in cart. */
   readonly item_count?: number;
   /** Get subtotal of all items in cart. */
   readonly subtotal?: number;
-  /** Get total including taxes and shipping. */
+  /** Get shipping cost from selected shipping method. */
+  readonly shipping_cost?: number;
+  /** Get total including shipping. */
   readonly total?: number;
   /** Timestamp when the record was created */
   readonly created_at?: string;

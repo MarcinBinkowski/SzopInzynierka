@@ -27,7 +27,7 @@ class ManufacturerViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     search_fields = ["name", "description"]
     filter_backends = [SearchFilter, OrderingFilter]
-
+    pagination_class = None
     def get_queryset(self) -> QuerySet[Manufacturer]:
         """Filter queryset based on user permissions."""
         queryset = Manufacturer.objects.all()

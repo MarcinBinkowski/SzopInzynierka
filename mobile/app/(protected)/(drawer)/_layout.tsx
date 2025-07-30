@@ -1,17 +1,15 @@
-// mobile/app/(drawer)/_layout.tsx
-import { Colors } from '@/constants/Colors';
-import { useAuth } from '@/hooks/useAuth';
-import { useIsAuthenticated } from '@/stores/authStore';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Redirect, router, useSegments } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
-import { useEffect, useState } from 'react';
-import { useColorScheme } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
+
 export default function DrawerLayout() {
-  const colorScheme = useColorScheme();
   const theme = useTheme();
+  
+
+
+
+
   return (
     <Drawer
       screenOptions={{
@@ -27,6 +25,7 @@ export default function DrawerLayout() {
         drawerLabelStyle: {
           color: theme.colors.onSurface,
         },
+
       }}
     >
         <Drawer.Screen
@@ -56,6 +55,16 @@ export default function DrawerLayout() {
           drawerLabel: 'Cart',
           drawerIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="cart" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="wishlist"
+        options={{
+          title: 'Wishlist',
+          drawerLabel: 'Wishlist',
+          drawerIcon: ({ size, color }) => (
+            <MaterialCommunityIcons name="heart" size={size} color={color} />
           ),
         }}
       />

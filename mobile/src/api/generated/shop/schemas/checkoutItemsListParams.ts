@@ -11,12 +11,4 @@ export type CheckoutItemsListParams = {
  * Which field to use when ordering the results.
  */
 ordering?: string;
-/**
- * A page number within the paginated result set.
- */
-page?: number;
-/**
- * Number of results to return per page.
- */
-page_size?: number;
 };

@@ -1,0 +1,133 @@
+from decimal import Decimal
+from django.db import models
+from django.contrib.auth import get_user_model
+import uuid
+
+from apps.common.models import TimestampedModel
+from apps.checkout.models.order_item import OrderItem
+
+User = get_user_model()
+
+
+class Order(TimestampedModel):
+    """Order model for completed purchases."""
+
+    class OrderStatus(models.TextChoices):
+        PENDING = "pending", "Pending"
+        CONFIRMED = "confirmed", "Confirmed"
+        SHIPPED = "shipped", "Shipped"
+        DELIVERED = "delivered", "Delivered"
+        CANCELLED = "cancelled", "Cancelled"
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="orders",
+        help_text="User who placed this order",
+    )
+    order_number = models.CharField(
+        max_length=50,
+        unique=True,
+        help_text="Unique order number",
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=OrderStatus.choices,
+        default=OrderStatus.PENDING,
+        help_text="Current status of the order",
+    )
+    
+    # Pricing
+    subtotal = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Subtotal of all items",
+    )
+    shipping_cost = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=Decimal("0.00"),
+        help_text="Shipping cost",
+    )
+    total = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Total amount including shipping",
+    )
+    
+    # Relationships
+    payment = models.OneToOneField(
+        'Payment',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='order',
+        help_text="Payment associated with this order",
+    )
+    shipping_address = models.ForeignKey(
+        'profile.Address',
+        on_delete=models.PROTECT,
+        related_name='orders',
+        help_text="Shipping address for this order",
+    )
+    shipping_method = models.ForeignKey(
+        'ShippingMethod',
+        on_delete=models.PROTECT,
+        related_name='orders',
+        help_text="Shipping method used for this order",
+    )
+    
+    # Additional info
+    notes = models.TextField(
+        blank=True,
+        help_text="Additional notes for the order",
+    )
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Order"
+        verbose_name_plural = "Orders"
+        indexes = [
+            models.Index(fields=["user", "status"]),
+            models.Index(fields=["order_number"]),
+            models.Index(fields=["status", "created_at"]),
+        ]
+
+    def __str__(self) -> str:
+        return f"Order {self.order_number} - {self.user.username} ({self.status})"
+
+    def save(self, *args, **kwargs) -> None:
+        if not self.order_number:
+            self.order_number = self.generate_order_number()
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def generate_order_number(cls) -> str:
+        """Generate unique order number."""
+        return f"ORD-{uuid.uuid4().hex[:8].upper()}"
+
+    @classmethod
+    def create_from_cart(cls, cart, payment) -> "Order":
+        """Create order from cart and payment."""
+        order = cls.objects.create(
+            user=cart.user,
+            subtotal=cart.subtotal,
+            shipping_cost=cart.shipping_cost,
+            total=cart.total,
+            payment=payment,
+            shipping_address=cart.shipping_address,
+            shipping_method=cart.shipping_method,
+            status=cls.OrderStatus.CONFIRMED,
+        )
+        
+        # Create order items from cart items
+        for cart_item in cart.items.all():
+            OrderItem.objects.create(
+                order=order,
+                product=cart_item.product,
+                quantity=cart_item.quantity,
+                unit_price=cart_item.unit_price,
+                total_price=cart_item.total_price,
+            )
+        
+        return order 

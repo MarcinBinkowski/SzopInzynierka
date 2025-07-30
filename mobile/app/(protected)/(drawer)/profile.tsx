@@ -1,10 +1,7 @@
 import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useQuery } from '@tanstack/react-query';
 import { 
   Text, 
   Button,
-  useTheme, 
 } from 'react-native-paper';
 import { useAuth } from '@/hooks/useAuth';
 import * as SecureStore from 'expo-secure-store';
