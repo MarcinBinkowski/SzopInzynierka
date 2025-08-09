@@ -4,6 +4,19 @@ from apps.catalog.models.product import Product
 from apps.catalog.models.product_image import ProductImage
 from apps.catalog.models.tag import Tag
 from apps.catalog.models.wishlist import WishlistItem
+from apps.catalog.models.notification import (
+    NotificationPreference,
+    NotificationHistory,
+)
 
 
-__all__ = ["Category", "Manufacturer", "Product", "ProductImage", "Tag", "WishlistItem"]
+__all__ = [
+    "Category", 
+    "Manufacturer", 
+    "Product", 
+    "ProductImage", 
+    "Tag", 
+    "WishlistItem",
+    "NotificationPreference",
+    "NotificationHistory",
+]

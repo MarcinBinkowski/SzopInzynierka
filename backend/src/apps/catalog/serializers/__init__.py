@@ -17,6 +17,12 @@ from apps.catalog.serializers.wishlist import (
     WishlistItemCreateSerializer,
     WishlistCheckSerializer,
 )
+from apps.catalog.serializers.notification import (
+    NotificationPreferenceSerializer,
+    NotificationPreferenceUpdateSerializer,
+    NotificationHistorySerializer,
+    PushTokenRegistrationSerializer,
+)
 
 __all__ = [
     "TagSerializer",
@@ -33,4 +39,8 @@ __all__ = [
     "WishlistItemSerializer",
     "WishlistItemCreateSerializer",
     "WishlistCheckSerializer",
+    "NotificationPreferenceSerializer",
+    "NotificationPreferenceUpdateSerializer", 
+    "NotificationHistorySerializer",
+    "PushTokenRegistrationSerializer",
 ]

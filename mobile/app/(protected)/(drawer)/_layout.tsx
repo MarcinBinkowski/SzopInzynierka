@@ -69,6 +69,16 @@ export default function DrawerLayout() {
         }}
       />
       <Drawer.Screen
+        name="notifications"
+        options={{
+          title: 'Notifications',
+          drawerLabel: 'Notifications',
+          drawerIcon: ({ size, color }) => (
+            <MaterialCommunityIcons name="bell" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
         name="product/[id]"
         options={{
           title: 'Product Details',

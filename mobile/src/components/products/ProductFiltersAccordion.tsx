@@ -34,9 +34,8 @@ export function ProductFiltersAccordion({
   const theme = useTheme();
   const { searchQuery, selectedCategory, selectedTags, ordering } = filters;
 
-  // Count active filters
+  // Count active filters (excluding search)
   const activeFiltersCount = [
-    searchQuery.trim(),
     selectedCategory,
     selectedTags.length > 0,
     ordering
@@ -62,7 +61,7 @@ export function ProductFiltersAccordion({
   return (
     <List.Accordion
       title="Filters & Sort"
-      left={(props) => <List.Icon {...props} icon="filter" />}
+      left={(props) => <List.Icon {...props} icon="tune" />}
       right={(props) => (
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {activeFiltersCount > 0 && (

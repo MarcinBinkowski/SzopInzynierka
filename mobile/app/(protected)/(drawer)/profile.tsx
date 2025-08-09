@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, ScrollView, StyleSheet, Alert } from 'react-native';
 import { 
   Text, 
@@ -23,9 +23,14 @@ import {
   useProfileAddressesCreate,
   useProfileAddressesPartialUpdate,
   useProfileAddressesRetrieve,
+  useProfileAddressesDestroy,
   getProfileAddressesRetrieveQueryKey,
   getProfileAddressesListQueryKey
 } from '@/api/generated/shop/profile/profile';
+import type { PatchedProfileUpdate } from '@/api/generated/shop/schemas/patchedProfileUpdate';
+import type { AddressCreate } from '@/api/generated/shop/schemas/addressCreate';
+import type { PatchedAddressUpdate } from '@/api/generated/shop/schemas/patchedAddressUpdate';
+import type { AddressList } from '@/api/generated/shop/schemas/addressList';
 
 export default function ProfileScreen() {
   const { logout } = useAuth();
@@ -106,26 +111,69 @@ export default function ProfileScreen() {
     },
   });
 
-  const handleProfileSubmit = (data: any) => {
+  const deleteAddressMutation = useProfileAddressesDestroy({
+    mutation: {
+      onSuccess: (data, variables) => {
+        queryClient.removeQueries({ 
+          queryKey: getProfileAddressesRetrieveQueryKey(variables.id) 
+        });
+        queryClient.invalidateQueries({ queryKey: getProfileAddressesListQueryKey() });
+        refetchAddresses();
+        
+        setEditingAddressId(null);
+        setEditingAddress(null);
+        Alert.alert('Success', 'Address deleted successfully!');
+      },
+      onError: (error) => {
+        Alert.alert('Error', 'Failed to delete address. Please try again.');
+      },
+    },
+  });
+
+  const handleProfileSubmit = useCallback((data: PatchedProfileUpdate) => {
     updateProfileMutation.mutate({
       data,
     });
-  };
+  }, [updateProfileMutation]);
 
-  const handleAddressSubmit = (data: any) => {
+  const handleAddressSubmit = useCallback((data: AddressCreate | PatchedAddressUpdate) => {
     if (editingAddress) {
       updateAddressMutation.mutate({
         id: editingAddress.id.toString(),
-        data,
+        data: data as PatchedAddressUpdate,
       });
     } else {
-      createAddressMutation.mutate({ data });
+      createAddressMutation.mutate({ data: data as AddressCreate });
     }
-  };
+  }, [editingAddress, updateAddressMutation, createAddressMutation]);
 
-  const handleEditAddress = (address: any) => {
+  const handleAddressDelete = useCallback(() => {
+    if (!editingAddress) return;
+    
+    Alert.alert(
+      'Delete Address',
+      'Are you sure you want to delete this address? This action cannot be undone.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            deleteAddressMutation.mutate({
+              id: editingAddress.id.toString(),
+            });
+          },
+        },
+      ]
+    );
+  }, [editingAddress, deleteAddressMutation]);
+
+  const handleEditAddress = useCallback((address: AddressList) => {
     setEditingAddressId(address.id);
-  };
+  }, []);
 
   useEffect(() => {
     if (fullAddressData) {
@@ -257,7 +305,8 @@ export default function ProfileScreen() {
           <AddressForm
             initialData={editingAddress}
             onSubmit={handleAddressSubmit}
-            isLoading={createAddressMutation.isPending || updateAddressMutation.isPending || addressLoading}
+            onDelete={editingAddress ? handleAddressDelete : undefined}
+            isLoading={createAddressMutation.isPending || updateAddressMutation.isPending || deleteAddressMutation.isPending || addressLoading}
             submitText={editingAddress ? 'Update Address' : 'Add Address'}
           />
         )}

@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { catalogProductsList } from '@/api/generated/shop/catalog/catalog';
 import { createGetNextPageParam, flattenPaginatedData } from '@/lib/pagination';
+import type { CatalogProductsListParams } from '@/api/generated/shop/schemas/catalogProductsListParams';
 
 export interface ProductQueryFilters {
   searchQuery: string;
@@ -18,8 +19,8 @@ interface UseProductQueryOptions {
 export function useProductQuery({ filters, pageSize = 10 }: UseProductQueryOptions) {
   const { searchQuery, selectedCategory, selectedTags, ordering } = filters;
 
-  const buildQueryParams = useCallback((pageParam: number = 1) => {
-    const params: any = { 
+  const buildQueryParams = useCallback((pageParam: number = 1): CatalogProductsListParams => {
+    const params: CatalogProductsListParams = { 
       page: pageParam, 
       page_size: pageSize 
     };

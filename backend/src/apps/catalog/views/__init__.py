@@ -4,6 +4,10 @@ from apps.catalog.views.manufacturer import ManufacturerViewSet
 from apps.catalog.views.tag import TagViewSet
 from apps.catalog.views.product_image import ProductImageViewSet
 from apps.catalog.views.wishlist import WishlistViewSet
+from apps.catalog.views.notification import (
+    NotificationPreferenceViewSet,
+    NotificationHistoryViewSet,
+)
 
 __all__ = [
     "ProductViewSet",
@@ -12,4 +16,6 @@ __all__ = [
     "TagViewSet",
     "ProductImageViewSet",
     "WishlistViewSet",
+    "NotificationPreferenceViewSet",
+    "NotificationHistoryViewSet",
 ]

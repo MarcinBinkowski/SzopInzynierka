@@ -11,7 +11,7 @@ import ScreenLoader from '@/components/common/ScreenLoader';
 
 import { View, FlatList, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useProductQuery } from '@/hooks/products/useProductQuery';
 import { ProductFiltersAccordion } from '@/components/products/ProductFiltersAccordion';
@@ -23,9 +23,8 @@ import { ProductCard } from '@/components/products/ProductCard';
 import type { ProductList } from '@/api/generated/shop/schemas/productList';
 
 export default function MainScreen() {
-  const theme = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
-  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+  const debouncedSearchQuery = useDebounce(searchQuery, 700);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [showCategoryDialog, setShowCategoryDialog] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -76,7 +75,6 @@ export default function MainScreen() {
   ), []);
 
   const clearFilters = () => {
-    setSearchQuery('');
     setSelectedCategory(null);
     setSelectedTags([]);
     setOrdering(null);

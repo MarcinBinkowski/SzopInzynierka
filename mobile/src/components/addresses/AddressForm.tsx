@@ -13,6 +13,7 @@ type AddressFormData = z.infer<typeof profileAddressesCreateBody>;
 interface AddressFormProps {
   initialData?: Partial<AddressFormData>;
   onSubmit: (data: AddressFormData) => void;
+  onDelete?: () => void;
   isLoading?: boolean;
   submitText?: string;
 }
@@ -20,6 +21,7 @@ interface AddressFormProps {
 export function AddressForm({ 
   initialData, 
   onSubmit, 
+  onDelete,
   isLoading = false, 
   submitText = 'Save Address'
 }: AddressFormProps) {
@@ -45,6 +47,7 @@ export function AddressForm({
 
 
   const countryOptions = countries || [];
+  const isEditing = !!initialData;
 
   return (
     <View style={styles.container}>
@@ -213,15 +216,31 @@ export function AddressForm({
         />
       </View>
 
-      <Button
-        mode="contained"
-        onPress={handleSubmit(onSubmit)}
-        loading={isLoading}
-        disabled={isLoading}
-        style={styles.submitButton}
-      >
-        {submitText}
-      </Button>
+      <View style={styles.buttonContainer}>
+        <Button
+          mode="contained"
+          onPress={handleSubmit(onSubmit)}
+          loading={isLoading}
+          disabled={isLoading}
+          style={[styles.submitButton, isEditing && onDelete && styles.buttonInRow]}
+        >
+          {submitText}
+        </Button>
+
+        {isEditing && onDelete && (
+          <Button
+            mode="outlined"
+            onPress={onDelete}
+            disabled={isLoading}
+            style={[styles.deleteButton, styles.buttonInRow]}
+            buttonColor={theme.colors.errorContainer}
+            textColor={theme.colors.error}
+            icon="delete"
+          >
+            Delete
+          </Button>
+        )}
+      </View>
     </View>
   );
 }
@@ -259,8 +278,19 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 16,
   },
-  submitButton: {
+  buttonContainer: {
     marginTop: 16,
+    flexDirection: 'row',
+    gap: 12,
+  },
+  submitButton: {
+    flex: 1,
+  },
+  deleteButton: {
+    flex: 1,
+  },
+  buttonInRow: {
+    marginTop: 0,
   },
 });
 

@@ -13,6 +13,14 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: shopdjango-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
   web:
     build: .
     container_name: shopdjango-web
@@ -26,10 +34,43 @@ services:
       POSTGRES_HOST: shopdjango-db
       POSTGRES_PORT: 5432
       DEBUG: "True"
+      CELERY_BROKER_URL: redis://shopdjango-redis:6379/0
+      CELERY_RESULT_BACKEND: redis://shopdjango-redis:6379/1
     ports:
       - "8000:8000"
     depends_on:
       - db
+      - redis
+
+  celery-worker:
+    build: .
+    container_name: shopdjango-celery-worker
+    command: celery -A shopdjango worker --loglevel=INFO
+    volumes:
+      - ./src:/app/src
+    environment:
+      POSTGRES_DB: shopdjango
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_HOST: shopdjango-db
+      POSTGRES_PORT: 5432
+      CELERY_BROKER_URL: redis://shopdjango-redis:6379/0
+      CELERY_RESULT_BACKEND: redis://shopdjango-redis:6379/1
+    depends_on:
+      - db
+      - redis
+
+  celery-beat:
+    build: .
+    container_name: shopdjango-celery-beat
+    command: celery -A shopdjango beat --loglevel=INFO
+    volumes:
+      - ./src:/app/src
+    environment:
+      CELERY_BROKER_URL: redis://shopdjango-redis:6379/0
+      CELERY_RESULT_BACKEND: redis://shopdjango-redis:6379/1
+    depends_on:
+      - redis
 
 volumes:
   pgdata:

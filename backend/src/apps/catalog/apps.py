@@ -7,4 +7,5 @@ class CatalogConfig(AppConfig):
     verbose_name = "Catalog"
 
     def ready(self):
-        pass
+        # Import signals to register them
+        import apps.catalog.signals
