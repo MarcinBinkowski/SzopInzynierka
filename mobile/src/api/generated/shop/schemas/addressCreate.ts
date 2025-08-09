@@ -5,7 +5,6 @@
  * API for ShopDjango project
  * OpenAPI spec version: 1.0.0
  */
-import type { AddressTypeEnum } from './addressTypeEnum';
 
 export interface AddressCreate {
   /** Profile ID to assign this address to. If not provided, uses current user's profile. */
@@ -27,12 +26,7 @@ export interface AddressCreate {
   postal_code: string;
   /** Country for this address */
   country: number;
-  /** Type of address (shipping or billing)
-
-* `shipping` - Shipping
-* `billing` - Billing */
-  address_type: AddressTypeEnum;
-  /** Whether this is the default address for this type */
+  /** Whether this is the default address */
   is_default?: boolean;
   /**
    * Optional label like 'Home', 'Office', etc.

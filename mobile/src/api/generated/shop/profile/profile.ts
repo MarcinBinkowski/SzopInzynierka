@@ -525,320 +525,80 @@ const {mutation: mutationOptions} = options ?
 
       return useMutation(mutationOptions , queryClient);
     }
-    export const profileAddressesBillingRetrieve = (
+    /**
+ * Get the default address for the current user or specified profile.
+ */
+export const profileAddressesDefaultRetrieve = (
     
  signal?: AbortSignal
 ) => {
       
       
       return shopInstance<Address>(
-      {url: `/api/profile/addresses/billing/`, method: 'GET', signal
+      {url: `/api/profile/addresses/default/`, method: 'GET', signal
     },
       );
     }
   
 
-export const getProfileAddressesBillingRetrieveQueryKey = () => {
-    return [`/api/profile/addresses/billing/`] as const;
+export const getProfileAddressesDefaultRetrieveQueryKey = () => {
+    return [`/api/profile/addresses/default/`] as const;
     }
 
     
-export const getProfileAddressesBillingRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError, TData>>, }
+export const getProfileAddressesDefaultRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesBillingRetrieveQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesDefaultRetrieveQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>> = ({ signal }) => profileAddressesBillingRetrieve(signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>> = ({ signal }) => profileAddressesDefaultRetrieve(signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ProfileAddressesBillingRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>>
-export type ProfileAddressesBillingRetrieveQueryError = ErrorType<unknown>
+export type ProfileAddressesDefaultRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>>
+export type ProfileAddressesDefaultRetrieveQueryError = ErrorType<unknown>
 
 
-export function useProfileAddressesBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError, TData>> & Pick<
+export function useProfileAddressesDefaultRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>,
+          Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>,
           TError,
-          Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>
+          Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>
         > , 'initialData'
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError, TData>> & Pick<
+export function useProfileAddressesDefaultRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>,
+          Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>,
           TError,
-          Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>
+          Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>
         > , 'initialData'
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError, TData>>, }
+export function useProfileAddressesDefaultRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useProfileAddressesBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError, TData>>, }
+export function useProfileAddressesDefaultRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getProfileAddressesBillingRetrieveQueryOptions(options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const profileAddressesDefaultBillingRetrieve = (
-    
- signal?: AbortSignal
-) => {
-      
-      
-      return shopInstance<Address>(
-      {url: `/api/profile/addresses/default_billing/`, method: 'GET', signal
-    },
-      );
-    }
-  
-
-export const getProfileAddressesDefaultBillingRetrieveQueryKey = () => {
-    return [`/api/profile/addresses/default_billing/`] as const;
-    }
-
-    
-export const getProfileAddressesDefaultBillingRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError, TData>>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesDefaultBillingRetrieveQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>> = ({ signal }) => profileAddressesDefaultBillingRetrieve(signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ProfileAddressesDefaultBillingRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>>
-export type ProfileAddressesDefaultBillingRetrieveQueryError = ErrorType<unknown>
-
-
-export function useProfileAddressesDefaultBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>,
-          TError,
-          Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesDefaultBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>,
-          TError,
-          Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesDefaultBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError, TData>>, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useProfileAddressesDefaultBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError, TData>>, }
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getProfileAddressesDefaultBillingRetrieveQueryOptions(options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const profileAddressesDefaultShippingRetrieve = (
-    
- signal?: AbortSignal
-) => {
-      
-      
-      return shopInstance<Address>(
-      {url: `/api/profile/addresses/default_shipping/`, method: 'GET', signal
-    },
-      );
-    }
-  
-
-export const getProfileAddressesDefaultShippingRetrieveQueryKey = () => {
-    return [`/api/profile/addresses/default_shipping/`] as const;
-    }
-
-    
-export const getProfileAddressesDefaultShippingRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError, TData>>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesDefaultShippingRetrieveQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>> = ({ signal }) => profileAddressesDefaultShippingRetrieve(signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ProfileAddressesDefaultShippingRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>>
-export type ProfileAddressesDefaultShippingRetrieveQueryError = ErrorType<unknown>
-
-
-export function useProfileAddressesDefaultShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>,
-          TError,
-          Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesDefaultShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>,
-          TError,
-          Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesDefaultShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError, TData>>, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useProfileAddressesDefaultShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError, TData>>, }
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getProfileAddressesDefaultShippingRetrieveQueryOptions(options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const profileAddressesShippingRetrieve = (
-    
- signal?: AbortSignal
-) => {
-      
-      
-      return shopInstance<Address>(
-      {url: `/api/profile/addresses/shipping/`, method: 'GET', signal
-    },
-      );
-    }
-  
-
-export const getProfileAddressesShippingRetrieveQueryKey = () => {
-    return [`/api/profile/addresses/shipping/`] as const;
-    }
-
-    
-export const getProfileAddressesShippingRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError, TData>>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesShippingRetrieveQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>> = ({ signal }) => profileAddressesShippingRetrieve(signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ProfileAddressesShippingRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>>
-export type ProfileAddressesShippingRetrieveQueryError = ErrorType<unknown>
-
-
-export function useProfileAddressesShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>,
-          TError,
-          Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>,
-          TError,
-          Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError, TData>>, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useProfileAddressesShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError, TData>>, }
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getProfileAddressesShippingRetrieveQueryOptions(options)
+  const queryOptions = getProfileAddressesDefaultRetrieveQueryOptions(options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -930,6 +690,9 @@ export function useProfileAddressesSummaryRetrieve<TData = Awaited<ReturnType<ty
 
 
 
+/**
+ * Unset the default address for the current user or specified profile.
+ */
 export const profileAddressesUnsetDefaultPartialUpdate = (
     patchedAddress: BodyType<NonReadonly<PatchedAddress>>,
  ) => {

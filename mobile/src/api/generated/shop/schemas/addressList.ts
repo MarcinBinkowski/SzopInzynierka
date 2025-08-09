@@ -6,24 +6,17 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ProfileMinimal } from './profileMinimal';
-import type { AddressTypeEnum } from './addressTypeEnum';
 
 export interface AddressList {
   readonly id: number;
   readonly profile: ProfileMinimal;
-  /** Type of address (shipping or billing)
-
-* `shipping` - Shipping
-* `billing` - Billing */
-  address_type: AddressTypeEnum;
-  readonly address_type_display: string;
   readonly full_address: string;
   /**
    * Optional label like 'Home', 'Office', etc.
    * @maxLength 50
    */
   label?: string;
-  /** Whether this is the default address for this type */
+  /** Whether this is the default address */
   is_default?: boolean;
   /** Timestamp when the record was created */
   readonly created_at: string;

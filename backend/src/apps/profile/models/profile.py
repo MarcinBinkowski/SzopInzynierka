@@ -84,17 +84,11 @@ class Profile(TimestampedModel):
             )
         )
 
-    def get_default_shipping_address(self):
-        """Get user's default shipping address."""
+    def get_default_address(self):
+        """Get user's default address."""
         from apps.profile.models import Address
 
-        return Address.get_shipping_address_for_profile(self)
-
-    def get_default_billing_address(self):
-        """Get user's default billing address."""
-        from apps.profile.models import Address
-
-        return Address.get_billing_address_for_profile(self)
+        return Address.get_default_address_for_profile(self)
 
     def is_checkout_ready(self) -> bool:
         """Check if profile has all required information for checkout."""
@@ -107,16 +101,13 @@ class Profile(TimestampedModel):
             ]
         )
 
-        # Check if default addresses exist and are complete
-        shipping_address = self.get_default_shipping_address()
-        billing_address = self.get_default_billing_address()
+        # Check if default address exists and is complete
+        default_address = self.get_default_address()
 
         return (
             personal_info_complete
-            and shipping_address is not None
-            and shipping_address.is_complete()
-            and billing_address is not None
-            and billing_address.is_complete()
+            and default_address is not None
+            and default_address.is_complete()
         )
 
     def get_missing_checkout_fields(self) -> list[str]:
@@ -131,31 +122,14 @@ class Profile(TimestampedModel):
         if not (self.phone_number and self.phone_number.strip()):
             missing_fields.append("Phone Number")
 
-        # Check shipping address
-        shipping_address = self.get_default_shipping_address()
-        if not shipping_address:
-            missing_fields.append("Shipping Address")
-        elif not shipping_address.is_complete():
-            missing_fields.append("Complete Shipping Address")
-
-        # Check billing address
-        billing_address = self.get_default_billing_address()
-        if not billing_address:
-            missing_fields.append("Billing Address")
-        elif not billing_address.is_complete():
-            missing_fields.append("Complete Billing Address")
+        # Check default address
+        default_address = self.get_default_address()
+        if not default_address:
+            missing_fields.append("Default Address")
+        elif not default_address.is_complete():
+            missing_fields.append("Complete Default Address")
 
         return missing_fields
-
-    def get_shipping_address_dict(self) -> dict[str, str] | None:
-        """Get shipping address as a dictionary for APIs or templates."""
-        shipping_address = self.get_default_shipping_address()
-        return shipping_address.get_address_dict() if shipping_address else None
-
-    def get_billing_address_dict(self) -> dict[str, str] | None:
-        """Get billing address as a dictionary."""
-        billing_address = self.get_default_billing_address()
-        return billing_address.get_address_dict() if billing_address else None
 
     def update_completion_status(self) -> None:
         """Update profile completion status based on current data."""

@@ -9,13 +9,9 @@ from apps.profile.querysets.address import AddressQuerySet
 
 
 class Address(TimestampedModel):
-    """Address model for shipping and billing addresses."""
+    """Address model for user addresses."""
 
     objects = AddressQuerySet.as_manager()
-
-    class AddressType(models.TextChoices):
-        SHIPPING = "shipping", "Shipping"
-        BILLING = "billing", "Billing"
 
     profile = models.ForeignKey(
         Profile,
@@ -42,14 +38,9 @@ class Address(TimestampedModel):
         related_name="addresses",
         help_text="Country for this address",
     )
-    address_type = models.CharField(
-        max_length=20,
-        choices=AddressType.choices,
-        help_text="Type of address (shipping or billing)",
-    )
     is_default = models.BooleanField(
         default=False,
-        help_text="Whether this is the default address for this type",
+        help_text="Whether this is the default address",
     )
     label = models.CharField(
         max_length=50,
@@ -63,14 +54,13 @@ class Address(TimestampedModel):
         ordering = ["-is_default", "-created_at"]
 
         indexes = [
-            models.Index(fields=["profile", "address_type"]),
             models.Index(fields=["profile", "is_default"]),
             models.Index(fields=["country"]),
         ]
 
     def __str__(self) -> str:
         label_part = f" ({self.label})" if self.label else ""
-        return f"{self.get_address_type_display()}{label_part} - {self.address}, {self.city}"
+        return f"{label_part} - {self.address}, {self.city}".lstrip(" - ")
 
     def get_full_address(self) -> str:
         address_parts = [self.address, self.city, self.postal_code, self.country.name]
@@ -84,7 +74,6 @@ class Address(TimestampedModel):
             "postal_code": self.postal_code,
             "country": self.country.name,
             "country_code": self.country.code,
-            "address_type": self.address_type,
             "is_default": self.is_default,
             "label": self.label,
         }
@@ -107,15 +96,11 @@ class Address(TimestampedModel):
     def save(self, *args, **kwargs) -> None:
         if self.is_default:
             Address.objects.filter(
-                profile=self.profile, address_type=self.address_type, is_default=True
+                profile=self.profile, is_default=True
             ).exclude(pk=self.pk).update(is_default=False)
 
         super().save(*args, **kwargs)
 
     @classmethod
-    def get_shipping_address_for_profile(cls, profile: "Profile") -> "Address | None":
-        return cls.objects.get_default_for_profile(profile, cls.AddressType.SHIPPING)
-
-    @classmethod
-    def get_billing_address_for_profile(cls, profile: "Profile") -> "Address | None":
-        return cls.objects.get_default_for_profile(profile, cls.AddressType.BILLING)
+    def get_default_address_for_profile(cls, profile: "Profile") -> "Address | None":
+        return cls.objects.filter(profile=profile, is_default=True).first()

@@ -8,7 +8,6 @@ class AddressAdmin(admin.ModelAdmin):
 
     list_display = [
         "profile",
-        "address_type",
         "address",
         "city",
         "country",
@@ -18,7 +17,6 @@ class AddressAdmin(admin.ModelAdmin):
     ]
 
     list_filter = [
-        "address_type",
         "country",
         "is_default",
         "created_at",
@@ -41,7 +39,6 @@ class AddressAdmin(admin.ModelAdmin):
             "Address Information",
             {
                 "fields": (
-                    "address_type",
                     "address",
                     "city",
                     "postal_code",

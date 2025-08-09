@@ -12,6 +12,9 @@ from apps.catalog.serializers import (
     ProductListSerializer,
 )
 from apps.catalog.filters import ProductFilter
+from django.db.models import Case, When, F, DecimalField
+from django.db.models.functions import Lower
+from django.utils import timezone
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -22,8 +25,8 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
-    search_fields = ["name", "description", "short_description", "sku"]
-    ordering_fields = "__all__"
+    search_fields = ["name"]
+    ordering_fields = ["name_lower", "price", "original_price", "created_at", "updated_at", "effective_price"]
     ordering = ["-created_at"]
 
     def get_queryset(self):
@@ -35,9 +38,18 @@ class ProductViewSet(viewsets.ModelViewSet):
             "tags", "images"
         )
 
-        # Filter based on user permissions
+        # Annotate with effective_price and case-insensitive name for sorting
+        now = timezone.now()
+        queryset = queryset.annotate(
+            effective_price=Case(
+                When(sale_start__lte=now, sale_end__gte=now, then=F("price")),
+                default=F("original_price"),
+                output_field=DecimalField(max_digits=10, decimal_places=2),
+            ),
+            name_lower=Lower("name")
+        )
+
         if not self.request.user.is_staff:
-            # Non-staff users only see available products
             queryset = queryset.available()
 
         return queryset

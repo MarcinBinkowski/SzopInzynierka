@@ -81,36 +81,12 @@ class AddressViewSet(viewsets.ModelViewSet):
     def _unset_other_defaults(self, address: Address) -> None:
         Address.objects.filter(
             profile=address.profile,
-            address_type=address.address_type,
             is_default=True,
         ).exclude(id=address.id).update(is_default=False)
 
     @action(detail=False, methods=["get"])
-    def shipping(self, request: Request) -> Response:
-        if request.user.is_staff:
-            # Admin can see all shipping addresses
-            addresses = Address.objects.shipping_addresses()
-        else:
-            profile = request.user.profile
-            addresses = Address.objects.for_profile(profile).shipping_addresses()
-
-        serializer = AddressListSerializer(addresses, many=True)
-        return Response(serializer.data)
-
-    @action(detail=False, methods=["get"])
-    def billing(self, request: Request) -> Response:
-        if request.user.is_staff:
-            # Admin can see all billing addresses
-            addresses = Address.objects.billing_addresses()
-        else:
-            profile = request.user.profile
-            addresses = Address.objects.for_profile(profile).billing_addresses()
-
-        serializer = AddressListSerializer(addresses, many=True)
-        return Response(serializer.data)
-
-    @action(detail=False, methods=["get"])
-    def default_shipping(self, request: Request) -> Response:
+    def default(self, request: Request) -> Response:
+        """Get the default address for the current user or specified profile."""
         if request.user.is_staff:
             # Admin needs to specify profile
             profile_id = request.query_params.get("profile_id")
@@ -131,48 +107,11 @@ class AddressViewSet(viewsets.ModelViewSet):
         else:
             profile = request.user.profile
 
-        address = Address.objects.get_default_for_profile(
-            profile, Address.AddressType.SHIPPING
-        )
+        address = Address.objects.get_default_for_profile(profile)
 
         if not address:
             return Response(
-                {"detail": "No default shipping address found"},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        serializer = AddressSerializer(address)
-        return Response(serializer.data)
-
-    @action(detail=False, methods=["get"])
-    def default_billing(self, request: Request) -> Response:
-        if request.user.is_staff:
-            # Admin needs to specify profile
-            profile_id = request.query_params.get("profile_id")
-            if not profile_id:
-                return Response(
-                    {"detail": "profile_id parameter required for admin access"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            try:
-                from apps.profile.models import Profile
-
-                profile = Profile.objects.get(id=profile_id)
-            except Profile.DoesNotExist:
-                return Response(
-                    {"detail": "Profile not found"},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-        else:
-            profile = request.user.profile
-
-        address = Address.objects.get_default_for_profile(
-            profile, Address.AddressType.BILLING
-        )
-
-        if not address:
-            return Response(
-                {"detail": "No default billing address found"},
+                {"detail": "No default address found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -184,7 +123,7 @@ class AddressViewSet(viewsets.ModelViewSet):
         address = self.get_object()
 
         Address.objects.filter(
-            profile=address.profile, address_type=address.address_type, is_default=True
+            profile=address.profile, is_default=True
         ).exclude(id=address.id).update(is_default=False)
 
         address.is_default = True
@@ -195,19 +134,7 @@ class AddressViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["patch"])
     def unset_default(self, request: Request) -> Response:
-        address_type = request.data.get("address_type")
-
-        if not address_type:
-            return Response(
-                {"error": "address_type is required"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if address_type not in [choice[0] for choice in Address.AddressType.choices]:
-            return Response(
-                {"error": "Invalid address_type"}, status=status.HTTP_400_BAD_REQUEST
-            )
-
+        """Unset the default address for the current user or specified profile."""
         if request.user.is_staff:
             # Admin needs to specify profile
             profile_id = request.data.get("profile_id")
@@ -230,13 +157,13 @@ class AddressViewSet(viewsets.ModelViewSet):
 
         updated_count = (
             Address.objects.for_profile(profile)
-            .filter(address_type=address_type, is_default=True)
+            .filter(is_default=True)
             .update(is_default=False)
         )
 
         return Response(
             {
-                "message": f"Unset default for {address_type} addresses",
+                "message": "Unset default address",
                 "updated_count": updated_count,
             }
         )
@@ -263,24 +190,13 @@ class AddressViewSet(viewsets.ModelViewSet):
         else:
             profile: "Profile" = request.user.profile
 
-        shipping_addresses = Address.objects.for_profile(profile).shipping_addresses()
-        billing_addresses = Address.objects.for_profile(profile).billing_addresses()
-
-        default_shipping = Address.objects.get_default_for_profile(
-            profile, Address.AddressType.SHIPPING
-        )
-        default_billing = Address.objects.get_default_for_profile(
-            profile, Address.AddressType.BILLING
-        )
+        addresses = Address.objects.for_profile(profile)
+        default_address = Address.objects.get_default_for_profile(profile)
 
         return Response(
             {
-                "total_addresses": Address.objects.for_profile(profile).count(),
-                "shipping_count": shipping_addresses.count(),
-                "billing_count": billing_addresses.count(),
-                "has_default_shipping": default_shipping is not None,
-                "has_default_billing": default_billing is not None,
-                "is_checkout_ready": default_shipping is not None
-                and default_billing is not None,
+                "total_addresses": addresses.count(),
+                "has_default_address": default_address is not None,
+                "is_checkout_ready": default_address is not None,
             }
         )

@@ -269,7 +269,7 @@ export default function ProductDetailScreen() {
 
               {product.tags && product.tags.length > 0 && (
                 <View style={styles.tagsContainer}>
-                  <Text variant="titleMedium" style={styles.descriptionTitle}>Tags</Text>
+                  <Text variant="titleSmall" style={styles.descriptionTitle}>Tags</Text>
                   <View style={styles.tagsList}>
                     {product.tags.map((tag) => (
                       <Chip key={tag.id} mode="outlined" style={styles.tag}>

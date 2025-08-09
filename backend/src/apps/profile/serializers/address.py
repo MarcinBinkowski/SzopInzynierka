@@ -27,9 +27,6 @@ class AddressSerializer(serializers.ModelSerializer):
     full_address = serializers.CharField(source="get_full_address", read_only=True)
     address_dict = serializers.DictField(source="get_address_dict", read_only=True)
     is_complete = serializers.BooleanField(read_only=True)
-    address_type_display = serializers.CharField(
-        source="get_address_type_display", read_only=True
-    )
     profile = ProfileMinimalSerializer(read_only=True)
 
     class Meta:
@@ -41,8 +38,6 @@ class AddressSerializer(serializers.ModelSerializer):
             "city",
             "postal_code",
             "country",
-            "address_type",
-            "address_type_display",
             "is_default",
             "label",
             "full_address",
@@ -54,7 +49,6 @@ class AddressSerializer(serializers.ModelSerializer):
         read_only_fields = [
             "id",
             "profile",
-            "address_type_display",
             "full_address",
             "address_dict",
             "is_complete",
@@ -96,7 +90,6 @@ class AddressCreateSerializer(serializers.ModelSerializer):
             "city",
             "postal_code",
             "country",
-            "address_type",
             "is_default",
             "label",
         ]
@@ -126,9 +119,6 @@ class AddressCreateSerializer(serializers.ModelSerializer):
 
 
 class AddressListSerializer(serializers.ModelSerializer):
-    address_type_display = serializers.CharField(
-        source="get_address_type_display", read_only=True
-    )
     full_address = serializers.CharField(source="get_full_address", read_only=True)
     profile = ProfileMinimalSerializer(read_only=True)
 
@@ -137,8 +127,6 @@ class AddressListSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "profile",
-            "address_type",
-            "address_type_display",
             "full_address",
             "label",
             "is_default",

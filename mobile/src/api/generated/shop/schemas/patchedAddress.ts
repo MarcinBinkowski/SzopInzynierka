@@ -6,7 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ProfileMinimal } from './profileMinimal';
-import type { AddressTypeEnum } from './addressTypeEnum';
 import type { PatchedAddressAddressDict } from './patchedAddressAddressDict';
 
 export interface PatchedAddress {
@@ -29,13 +28,7 @@ export interface PatchedAddress {
   postal_code?: string;
   /** Country for this address */
   country?: number;
-  /** Type of address (shipping or billing)
-
-* `shipping` - Shipping
-* `billing` - Billing */
-  address_type?: AddressTypeEnum;
-  readonly address_type_display?: string;
-  /** Whether this is the default address for this type */
+  /** Whether this is the default address */
   is_default?: boolean;
   /**
    * Optional label like 'Home', 'Office', etc.
