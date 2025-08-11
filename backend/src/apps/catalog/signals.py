@@ -1,3 +1,4 @@
+import logging
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from decimal import Decimal
@@ -40,9 +41,8 @@ def detect_product_changes(sender, instance, created, **kwargs):
 
     price_dropped = False
     if instance.price < previous_price:
-        diff = previous_price - instance.price
-        pct = (diff / previous_price) * 100
-        if pct >= 5 or diff >= Decimal("1.00"):
+        diff = instance.original_price - instance.price
+        if diff >= Decimal("0.01"):
             price_dropped = True
 
     if not (stock_became_available or price_dropped):
@@ -55,10 +55,9 @@ def detect_product_changes(sender, instance, created, **kwargs):
         pref = NotificationPreference.objects.get(
             user=user
         )
-        if not pref.push_token:
-            continue
 
         if stock_became_available and pref.stock_alerts_enabled:
+            print(f"Sending stock alert to {user.email}")
             send_wishlist_notification.delay(
                 user_id=user.id,
                 product_id=instance.id,
@@ -66,10 +65,11 @@ def detect_product_changes(sender, instance, created, **kwargs):
             )
 
         if price_dropped and pref.price_drop_alerts_enabled:
+            logging.critical(f"Sending price drop alert to {user.email}")
             send_wishlist_notification.delay(
                 user_id=user.id,
                 product_id=instance.id,
                 notification_type=NotificationType.PRICE_DROP,
-                previous_price=str(previous_price),
+                previous_price=str(instance.original_price),
                 current_price=str(instance.price),
             )

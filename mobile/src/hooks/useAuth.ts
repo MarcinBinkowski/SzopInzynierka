@@ -21,7 +21,6 @@ import { PostAllauthClientV1AuthLoginMutationBody } from "@/api/generated/auth/a
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
-import { useNotifications } from "@/hooks/useNotifications";
 
 export interface UseAuthResult {
   isLoading: boolean;
@@ -39,8 +38,6 @@ export function useAuth(): UseAuthResult {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
-
-  const notifications = useNotifications(isAuthenticated);
   
   useEffect(() => {
     (async () => {

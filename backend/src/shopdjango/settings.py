@@ -220,6 +220,7 @@ SPECTACULAR_SETTINGS = {
     "ENUM_NAME_OVERRIDES": {
         "CartStatusEnum": "apps.checkout.models.cart.Cart.CartStatus",
         "ProductStatusEnum": "apps.catalog.models.product.Product.ProductStatus",
+        "OrderStatusEnum": "apps.checkout.models.order.Order.OrderStatus",
     },
 }
 

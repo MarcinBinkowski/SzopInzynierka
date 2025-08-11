@@ -14,14 +14,6 @@ class NotificationPreference(TimestampedModel):
         help_text="User who owns these preferences"
     )
     
-    # Push notification settings
-    push_token = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        help_text="Expo push notification token"
-    )
-    
     # Notification types
     stock_alerts_enabled = models.BooleanField(
         default=False,

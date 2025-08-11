@@ -496,6 +496,50 @@ export const catalogManufacturersDestroyParams = zod.object({
 })
 
 /**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesListResponseItem = zod.object({
+  "id": zod.number(),
+  "stock_alerts_enabled": zod.boolean().optional().describe('Receive alerts when out-of-stock wishlist items become available'),
+  "price_drop_alerts_enabled": zod.boolean().optional().describe('Receive alerts when wishlist items go on sale'),
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
+}).describe('Serializer for NotificationPreference model.')
+export const catalogNotificationsPreferencesListResponse = zod.array(catalogNotificationsPreferencesListResponseItem)
+
+/**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesCreateBody = zod.object({
+  "stock_alerts_enabled": zod.boolean().optional().describe('Receive alerts when out-of-stock wishlist items become available'),
+  "price_drop_alerts_enabled": zod.boolean().optional().describe('Receive alerts when wishlist items go on sale')
+}).describe('Serializer for NotificationPreference model.')
+
+/**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesUpdateParams = zod.object({
+  "id": zod.coerce.string()
+})
+
+export const catalogNotificationsPreferencesUpdateBody = zod.object({
+  "stock_alerts_enabled": zod.boolean().optional().describe('Receive alerts when out-of-stock wishlist items become available'),
+  "price_drop_alerts_enabled": zod.boolean().optional().describe('Receive alerts when wishlist items go on sale')
+}).describe('Serializer for updating notification preferences.')
+
+export const catalogNotificationsPreferencesUpdateResponse = zod.object({
+  "stock_alerts_enabled": zod.boolean().optional().describe('Receive alerts when out-of-stock wishlist items become available'),
+  "price_drop_alerts_enabled": zod.boolean().optional().describe('Receive alerts when wishlist items go on sale')
+}).describe('Serializer for updating notification preferences.')
+
+/**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesDestroyParams = zod.object({
+  "id": zod.coerce.string()
+})
+
+/**
  * ViewSet for Product model with advanced CRUD operations.
  */
 export const catalogProductsListQueryParams = zod.object({

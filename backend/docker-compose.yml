@@ -36,6 +36,7 @@ services:
       DEBUG: "True"
       CELERY_BROKER_URL: redis://shopdjango-redis:6379/0
       CELERY_RESULT_BACKEND: redis://shopdjango-redis:6379/1
+      SIMULATOR_PUSH_RELAY_URL: http://host.docker.internal:5055
     ports:
       - "8000:8000"
     depends_on:
@@ -56,6 +57,7 @@ services:
       POSTGRES_PORT: 5432
       CELERY_BROKER_URL: redis://shopdjango-redis:6379/0
       CELERY_RESULT_BACKEND: redis://shopdjango-redis:6379/1
+      SIMULATOR_PUSH_RELAY_URL: http://host.docker.internal:5055
     depends_on:
       - db
       - redis

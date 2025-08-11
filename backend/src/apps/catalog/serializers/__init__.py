@@ -21,7 +21,6 @@ from apps.catalog.serializers.notification import (
     NotificationPreferenceSerializer,
     NotificationPreferenceUpdateSerializer,
     NotificationHistorySerializer,
-    PushTokenRegistrationSerializer,
 )
 
 __all__ = [
@@ -42,5 +41,4 @@ __all__ = [
     "NotificationPreferenceSerializer",
     "NotificationPreferenceUpdateSerializer", 
     "NotificationHistorySerializer",
-    "PushTokenRegistrationSerializer",
 ]

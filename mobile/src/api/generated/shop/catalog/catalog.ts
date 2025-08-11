@@ -35,6 +35,8 @@ import type {
   ManufacturerCreate,
   ManufacturerList,
   ManufacturerUpdate,
+  NotificationPreference,
+  NotificationPreferenceUpdate,
   PaginatedProductListList,
   PaginatedTagList,
   PatchedCategory,
@@ -1436,6 +1438,270 @@ const {mutation: mutationOptions} = options ?
       > => {
 
       const mutationOptions = getCatalogManufacturersDestroyMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesList = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<NotificationPreference[]>(
+      {url: `/api/catalog/notifications/preferences/`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getCatalogNotificationsPreferencesListQueryKey = () => {
+    return [`/api/catalog/notifications/preferences/`] as const;
+    }
+
+    
+export const getCatalogNotificationsPreferencesListQueryOptions = <TData = Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCatalogNotificationsPreferencesListQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>> = ({ signal }) => catalogNotificationsPreferencesList(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CatalogNotificationsPreferencesListQueryResult = NonNullable<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>>
+export type CatalogNotificationsPreferencesListQueryError = ErrorType<unknown>
+
+
+export function useCatalogNotificationsPreferencesList<TData = Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>,
+          TError,
+          Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCatalogNotificationsPreferencesList<TData = Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>,
+          TError,
+          Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCatalogNotificationsPreferencesList<TData = Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCatalogNotificationsPreferencesList<TData = Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCatalogNotificationsPreferencesListQueryOptions(options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesCreate = (
+    notificationPreference: BodyType<NonReadonly<NotificationPreference>>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<NotificationPreference>(
+      {url: `/api/catalog/notifications/preferences/`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: notificationPreference, signal
+    },
+      );
+    }
+  
+
+
+export const getCatalogNotificationsPreferencesCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesCreate>>, TError,{data: BodyType<NonReadonly<NotificationPreference>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesCreate>>, TError,{data: BodyType<NonReadonly<NotificationPreference>>}, TContext> => {
+
+const mutationKey = ['catalogNotificationsPreferencesCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogNotificationsPreferencesCreate>>, {data: BodyType<NonReadonly<NotificationPreference>>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  catalogNotificationsPreferencesCreate(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogNotificationsPreferencesCreateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogNotificationsPreferencesCreate>>>
+    export type CatalogNotificationsPreferencesCreateMutationBody = BodyType<NonReadonly<NotificationPreference>>
+    export type CatalogNotificationsPreferencesCreateMutationError = ErrorType<unknown>
+
+    export const useCatalogNotificationsPreferencesCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesCreate>>, TError,{data: BodyType<NonReadonly<NotificationPreference>>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogNotificationsPreferencesCreate>>,
+        TError,
+        {data: BodyType<NonReadonly<NotificationPreference>>},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogNotificationsPreferencesCreateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesUpdate = (
+    id: string,
+    notificationPreferenceUpdate: BodyType<NotificationPreferenceUpdate>,
+ ) => {
+      
+      
+      return shopInstance<NotificationPreferenceUpdate>(
+      {url: `/api/catalog/notifications/preferences/${id}/`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: notificationPreferenceUpdate
+    },
+      );
+    }
+  
+
+
+export const getCatalogNotificationsPreferencesUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesUpdate>>, TError,{id: string;data: BodyType<NotificationPreferenceUpdate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesUpdate>>, TError,{id: string;data: BodyType<NotificationPreferenceUpdate>}, TContext> => {
+
+const mutationKey = ['catalogNotificationsPreferencesUpdate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogNotificationsPreferencesUpdate>>, {id: string;data: BodyType<NotificationPreferenceUpdate>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  catalogNotificationsPreferencesUpdate(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogNotificationsPreferencesUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogNotificationsPreferencesUpdate>>>
+    export type CatalogNotificationsPreferencesUpdateMutationBody = BodyType<NotificationPreferenceUpdate>
+    export type CatalogNotificationsPreferencesUpdateMutationError = ErrorType<unknown>
+
+    export const useCatalogNotificationsPreferencesUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesUpdate>>, TError,{id: string;data: BodyType<NotificationPreferenceUpdate>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogNotificationsPreferencesUpdate>>,
+        TError,
+        {id: string;data: BodyType<NotificationPreferenceUpdate>},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogNotificationsPreferencesUpdateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesDestroy = (
+    id: string,
+ ) => {
+      
+      
+      return shopInstance<void>(
+      {url: `/api/catalog/notifications/preferences/${id}/`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getCatalogNotificationsPreferencesDestroyMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesDestroy>>, TError,{id: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesDestroy>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['catalogNotificationsPreferencesDestroy'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogNotificationsPreferencesDestroy>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  catalogNotificationsPreferencesDestroy(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogNotificationsPreferencesDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof catalogNotificationsPreferencesDestroy>>>
+    
+    export type CatalogNotificationsPreferencesDestroyMutationError = ErrorType<unknown>
+
+    export const useCatalogNotificationsPreferencesDestroy = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesDestroy>>, TError,{id: string}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogNotificationsPreferencesDestroy>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogNotificationsPreferencesDestroyMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

@@ -6,8 +6,20 @@ import { StripeProvider } from "@stripe/stripe-react-native";
 import { PaperProvider, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
 import { useColorScheme } from 'react-native';
 import { en, registerTranslation } from 'react-native-paper-dates';
+import { useEffect } from 'react';
+import * as Notifications from 'expo-notifications';
 
 registerTranslation('en', en);
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,6 +33,7 @@ const queryClient = new QueryClient({
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const theme = (colorScheme === 'dark') ? MD3DarkTheme : MD3LightTheme;
+  
   return (
     <QueryClientProvider client={queryClient}>
         <StripeProvider

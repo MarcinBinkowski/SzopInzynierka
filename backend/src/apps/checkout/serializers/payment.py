@@ -26,10 +26,9 @@ class CreateCheckoutSessionSerializer(serializers.Serializer):
         request = self.context.get('request')
         if request and request.user:
             try:
-                address = Address.objects.get(
+                Address.objects.get(
                     id=value,
-                    profile__user=request.user,
-                    address_type='shipping'
+                    profile__user=request.user
                 )
                 return value
             except Address.DoesNotExist:

@@ -5,6 +5,7 @@ import {
   Button,
   Card,
   useTheme,
+  Switch,
 } from 'react-native-paper';
 import { useAuth } from '@/hooks/useAuth';
 import { ScreenWrapper } from '@/components/layout/ScreenWrapper';
@@ -27,10 +28,15 @@ import {
   getProfileAddressesRetrieveQueryKey,
   getProfileAddressesListQueryKey
 } from '@/api/generated/shop/profile/profile';
+import { 
+  useCatalogNotificationsPreferencesMeRetrieve,
+  useCatalogNotificationsPreferencesPartialUpdate,
+} from '@/api/generated/shop/notifications/notifications';
 import type { PatchedProfileUpdate } from '@/api/generated/shop/schemas/patchedProfileUpdate';
 import type { AddressCreate } from '@/api/generated/shop/schemas/addressCreate';
 import type { PatchedAddressUpdate } from '@/api/generated/shop/schemas/patchedAddressUpdate';
 import type { AddressList } from '@/api/generated/shop/schemas/addressList';
+import type { PatchedNotificationPreferenceUpdate } from '@/api/generated/shop/schemas/patchedNotificationPreferenceUpdate';
 
 export default function ProfileScreen() {
   const { logout } = useAuth();
@@ -63,6 +69,13 @@ export default function ProfileScreen() {
     editingAddressId!, 
     { query: { enabled: !!editingAddressId } }
   );
+
+  // Fetch notification preferences
+  const { 
+    data: notificationPrefs, 
+    isLoading: notificationPrefsLoading, 
+    refetch: refetchNotificationPrefs 
+  } = useCatalogNotificationsPreferencesMeRetrieve();
 
   // Mutations
   const updateProfileMutation = useProfileProfilesMePartialUpdate({
@@ -130,6 +143,18 @@ export default function ProfileScreen() {
     },
   });
 
+  const updateNotificationPrefsMutation = useCatalogNotificationsPreferencesPartialUpdate({
+    mutation: {
+      onSuccess: () => {
+        refetchNotificationPrefs();
+        Alert.alert('Success', 'Notification preferences updated!');
+      },
+      onError: (error) => {
+        Alert.alert('Error', 'Failed to update notification preferences. Please try again.');
+      },
+    },
+  });
+
   const handleProfileSubmit = useCallback((data: PatchedProfileUpdate) => {
     updateProfileMutation.mutate({
       data,
@@ -175,6 +200,19 @@ export default function ProfileScreen() {
     setEditingAddressId(address.id);
   }, []);
 
+  const handleNotificationToggle = useCallback((key: 'stock_alerts_enabled' | 'price_drop_alerts_enabled', value: boolean) => {
+    if (!notificationPrefs) return;
+    
+    const updateData: PatchedNotificationPreferenceUpdate = {
+      [key]: value,
+    };
+    
+    updateNotificationPrefsMutation.mutate({
+      id: notificationPrefs.id.toString(),
+      data: updateData,
+    });
+  }, [notificationPrefs, updateNotificationPrefsMutation]);
+
   useEffect(() => {
     if (fullAddressData) {
       setEditingAddress(fullAddressData);
@@ -183,7 +221,7 @@ export default function ProfileScreen() {
     }
   }, [fullAddressData, editingAddressId]);
 
-  if (profileLoading) {
+  if (profileLoading || notificationPrefsLoading) {
     return <ScreenLoader />;
   }
 
@@ -227,6 +265,48 @@ export default function ProfileScreen() {
               <Text style={styles.label}>Date of Birth: </Text>
               {profile.date_of_birth || 'Not provided'}
             </Text>
+          </Card.Content>
+        </Card>
+
+        {/* Notification Preferences */}
+        <Card style={styles.card}>
+          <Card.Title title="Notification Preferences" />
+          <Card.Content>
+            {notificationPrefs ? (
+              <View style={styles.preferenceItem}>
+                <View style={styles.preferenceInfo}>
+                  <Text variant="bodyMedium">Stock Alerts</Text>
+                  <Text variant="bodySmall" style={styles.preferenceDescription}>
+                    Get notified when out-of-stock wishlist items become available
+                  </Text>
+                </View>
+                <Switch
+                  value={notificationPrefs.stock_alerts_enabled || false}
+                  onValueChange={(value) => handleNotificationToggle('stock_alerts_enabled', value)}
+                  disabled={updateNotificationPrefsMutation.isPending}
+                />
+              </View>
+            ) : (
+              <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
+                Loading notification preferences...
+              </Text>
+            )}
+            
+            {notificationPrefs && (
+              <View style={styles.preferenceItem}>
+                <View style={styles.preferenceInfo}>
+                  <Text variant="bodyMedium">Price Drop Alerts</Text>
+                  <Text variant="bodySmall" style={styles.preferenceDescription}>
+                    Get notified when wishlist items go on sale
+                  </Text>
+                </View>
+                <Switch
+                  value={notificationPrefs.price_drop_alerts_enabled || false}
+                  onValueChange={(value) => handleNotificationToggle('price_drop_alerts_enabled', value)}
+                  disabled={updateNotificationPrefsMutation.isPending}
+                />
+              </View>
+            )}
           </Card.Content>
         </Card>
 
@@ -328,6 +408,22 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: '600',
+  },
+  preferenceItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  preferenceInfo: {
+    flex: 1,
+    marginRight: 16,
+  },
+  preferenceDescription: {
+    opacity: 0.7,
+    marginTop: 4,
   },
   addressList: {
     gap: 16,

@@ -24,6 +24,7 @@ dependencies = [
     "stripe>=12.3.0",
     "python-dotenv>=1.1.1",
     "celery>=5.5.3",
+    "redis>=6.4.0",
 ]
 
 [dependency-groups]

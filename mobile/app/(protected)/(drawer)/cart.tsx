@@ -21,6 +21,7 @@ import { Alert } from 'react-native';
 import { useStripe } from '@stripe/stripe-react-native';
 import { useState } from 'react';
 import React from 'react';
+import { useRouter } from 'expo-router';
 
 export default function CartScreen() {
   const theme = useTheme();
@@ -28,6 +29,7 @@ export default function CartScreen() {
   const { data: addresses, isLoading: addressesLoading } = useProfileAddressesList();
   const { data: shippingMethods, isLoading: shippingMethodsLoading } = useCheckoutShippingMethodsList();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const router = useRouter();
 
   const [selectedAddressId, setSelectedAddressId] = useState<number>(0);
   const [selectedShippingMethodId, setSelectedShippingMethodId] = useState<number>(0);
@@ -107,9 +109,10 @@ export default function CartScreen() {
                   'Your payment has been processed successfully.',
                   [
                     {
-                      text: 'OK',
+                      text: 'View Orders',
                       onPress: () => {
                         refetchCartItems();
+                        router.push('/orders');
                       }
                     }
                   ]

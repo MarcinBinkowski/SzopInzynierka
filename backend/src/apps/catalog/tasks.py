@@ -1,22 +1,16 @@
 from __future__ import annotations
 
+import logging
 from decimal import Decimal
 from celery import shared_task
 from django.contrib.auth import get_user_model
-from django.utils import timezone
+from django.conf import settings
 
 from apps.catalog.models.product import Product
-from django.conf import settings
 from apps.catalog.models.notification import NotificationPreference, NotificationHistory, NotificationType
-from apps.catalog.services.notification_service import ExpoNotificationService
+from apps.catalog.services.notification_service import SimulatorNotificationService
 
-
-@shared_task(name="catalog.process_notifications")
-def process_notifications(limit: int = 100) -> dict:
-    # Kept for compatibility; not used in event-driven flow
-    from apps.catalog.services.notification_service import NotificationProcessor
-    processor = NotificationProcessor()
-    return processor.process_pending_notifications(limit=limit)
+logger = logging.getLogger(__name__)
 
 
 @shared_task(name="catalog.send_wishlist_notification")
@@ -28,11 +22,15 @@ def send_wishlist_notification(
     current_price: str | None = None,
 ) -> None:
     User = get_user_model()
-
     try:
         user = User.objects.get(pk=user_id)
         product = Product.objects.get(pk=product_id)
     except (User.DoesNotExist, Product.DoesNotExist):
+        return
+
+    # Check if simulator relay is configured
+    if not getattr(settings, 'SIMULATOR_PUSH_RELAY_URL', None):
+        logger.warning("SIMULATOR_PUSH_RELAY_URL not configured - skipping notification")
         return
 
     # Preferences check
@@ -41,9 +39,7 @@ def send_wishlist_notification(
     except NotificationPreference.DoesNotExist:
         return
 
-    if not pref.push_token and not getattr(settings, 'SIMULATOR_PUSH_RELAY_URL', None):
-        return
-
+    # Check user preferences
     if notification_type == NotificationType.STOCK_AVAILABLE and not pref.stock_alerts_enabled:
         return
 
@@ -62,10 +58,9 @@ def send_wishlist_notification(
         title = "🔥 Price Drop Alert!"
         if previous_price and current_price:
             try:
-                old_p = Decimal(previous_price)
                 new_p = Decimal(current_price)
-                savings = old_p - new_p
-                body = f"{product.name} is now ${new_p} (was ${old_p}). Save ${savings}!"
+                savings = Decimal(previous_price) - new_p
+                body = f"🔥{product.name} is now ${new_p} (was ${product.original_price}). Save ${savings}!💰💰💰"
             except Exception:
                 body = f"{product.name} is now on sale!"
         else:
@@ -77,25 +72,18 @@ def send_wishlist_notification(
         "product_name": product.name,
     }
 
-    # Send via Expo
-    service = ExpoNotificationService()
-    result = service.send_notification(
-        push_token=pref.push_token,
+    # Send via simulator service
+    service = SimulatorNotificationService()
+    service.send_notification(
         title=title,
         body=body,
         data=data,
     )
-
-    delivered = "error" not in result
-
-    # Record history
     NotificationHistory.objects.create(
         user=user,
         product=product,
         notification_type=notification_type,
         title=title,
         body=body,
-        delivered=delivered,
     )
-
     return

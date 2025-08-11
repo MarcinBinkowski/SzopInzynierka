@@ -12,7 +12,6 @@ class NotificationPreferenceSerializer(serializers.ModelSerializer):
         model = NotificationPreference
         fields = [
             "id",
-            "push_token",
             "stock_alerts_enabled",
             "price_drop_alerts_enabled",
             "created_at",
@@ -27,7 +26,6 @@ class NotificationPreferenceUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = NotificationPreference
         fields = [
-            "push_token",
             "stock_alerts_enabled", 
             "price_drop_alerts_enabled",
         ]
@@ -64,20 +62,3 @@ class NotificationHistorySerializer(serializers.ModelSerializer):
         if first_image:
             return first_image.image.url
         return None
-
-
-class PushTokenRegistrationSerializer(serializers.Serializer):
-    """Serializer for registering push tokens."""
-    
-    push_token = serializers.CharField(
-        max_length=255,
-        help_text="Expo push notification token"
-    )
-    
-    def validate_push_token(self, value):
-        """Validate the push token format."""
-        if not value.startswith(('ExponentPushToken[', 'ExpoPushToken[')):
-            raise serializers.ValidationError(
-                "Invalid Expo push token format. Token should start with 'ExponentPushToken[' or 'ExpoPushToken['"
-            )
-        return value

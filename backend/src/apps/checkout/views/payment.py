@@ -125,10 +125,8 @@ class ConfirmPaymentIntentView(APIView):
         payment_intent_id = serializer.validated_data['session_id']  # Reusing session_id field for payment_intent_id
         
         try:
-            # Retrieve the PaymentIntent from Stripe
             payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
             
-            # Verify the PaymentIntent belongs to this user
             if payment_intent.metadata.get('user_id') != str(request.user.id):
                 return Response(
                     {"error": "Invalid PaymentIntent for this user"}, 
@@ -160,11 +158,11 @@ class ConfirmPaymentIntentView(APIView):
                     
                     # Create order from cart
                     order = Order.create_from_cart(cart, payment)
-                    
-                    # Clear the cart
-                    cart.clear()
+                    logger.info(f"Successfully created order {order.order_number} from cart {cart.id}")
                     cart.status = Cart.CartStatus.CONVERTED
                     cart.save()
+                    cart.clear()
+                    logger.info(f"Successfully cleared cart {cart.id}")
                 
                 logger.info(f"PaymentIntent {payment_intent_id} confirmed and order {order.order_number} created for user {request.user.id}")
                 

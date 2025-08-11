@@ -30,10 +30,14 @@ import type {
   CartItemCreate,
   CheckoutCartsListParams,
   CheckoutItemsListParams,
+  CheckoutOrdersListParams,
   CheckoutSessionResponse,
   ConfirmPayment,
   CreateCheckoutSession,
+  OrderDetail,
+  OrdersListResponse,
   PaginatedCartListList,
+  PaginatedOrderList,
   PatchedCart,
   PatchedCartItem,
   PaymentConfirmationResponse,
@@ -1472,6 +1476,267 @@ const {mutation: mutationOptions} = options ?
       return useMutation(mutationOptions , queryClient);
     }
     /**
+ * ViewSet for user orders.
+ */
+export const checkoutOrdersList = (
+    params?: CheckoutOrdersListParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<PaginatedOrderList>(
+      {url: `/api/checkout/orders/`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getCheckoutOrdersListQueryKey = (params?: CheckoutOrdersListParams,) => {
+    return [`/api/checkout/orders/`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getCheckoutOrdersListQueryOptions = <TData = Awaited<ReturnType<typeof checkoutOrdersList>>, TError = ErrorType<unknown>>(params?: CheckoutOrdersListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersList>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCheckoutOrdersListQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkoutOrdersList>>> = ({ signal }) => checkoutOrdersList(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersList>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckoutOrdersListQueryResult = NonNullable<Awaited<ReturnType<typeof checkoutOrdersList>>>
+export type CheckoutOrdersListQueryError = ErrorType<unknown>
+
+
+export function useCheckoutOrdersList<TData = Awaited<ReturnType<typeof checkoutOrdersList>>, TError = ErrorType<unknown>>(
+ params: undefined |  CheckoutOrdersListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersList>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutOrdersList>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutOrdersList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutOrdersList<TData = Awaited<ReturnType<typeof checkoutOrdersList>>, TError = ErrorType<unknown>>(
+ params?: CheckoutOrdersListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersList>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutOrdersList>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutOrdersList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutOrdersList<TData = Awaited<ReturnType<typeof checkoutOrdersList>>, TError = ErrorType<unknown>>(
+ params?: CheckoutOrdersListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersList>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCheckoutOrdersList<TData = Awaited<ReturnType<typeof checkoutOrdersList>>, TError = ErrorType<unknown>>(
+ params?: CheckoutOrdersListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersList>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCheckoutOrdersListQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * Retrieve details of a specific order
+ * @summary Get order details
+ */
+export const checkoutOrdersRetrieve = (
+    id: string,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<OrderDetail>(
+      {url: `/api/checkout/orders/${id}/`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getCheckoutOrdersRetrieveQueryKey = (id: string,) => {
+    return [`/api/checkout/orders/${id}/`] as const;
+    }
+
+    
+export const getCheckoutOrdersRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof checkoutOrdersRetrieve>>, TError = ErrorType<unknown>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersRetrieve>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCheckoutOrdersRetrieveQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkoutOrdersRetrieve>>> = ({ signal }) => checkoutOrdersRetrieve(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckoutOrdersRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof checkoutOrdersRetrieve>>>
+export type CheckoutOrdersRetrieveQueryError = ErrorType<unknown>
+
+
+export function useCheckoutOrdersRetrieve<TData = Awaited<ReturnType<typeof checkoutOrdersRetrieve>>, TError = ErrorType<unknown>>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersRetrieve>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutOrdersRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutOrdersRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutOrdersRetrieve<TData = Awaited<ReturnType<typeof checkoutOrdersRetrieve>>, TError = ErrorType<unknown>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersRetrieve>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutOrdersRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutOrdersRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutOrdersRetrieve<TData = Awaited<ReturnType<typeof checkoutOrdersRetrieve>>, TError = ErrorType<unknown>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get order details
+ */
+
+export function useCheckoutOrdersRetrieve<TData = Awaited<ReturnType<typeof checkoutOrdersRetrieve>>, TError = ErrorType<unknown>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCheckoutOrdersRetrieveQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * Retrieve a list of orders for the current user
+ * @summary Get current user's orders
+ */
+export const checkoutOrdersMeRetrieve = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<OrdersListResponse>(
+      {url: `/api/checkout/orders/me/`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getCheckoutOrdersMeRetrieveQueryKey = () => {
+    return [`/api/checkout/orders/me/`] as const;
+    }
+
+    
+export const getCheckoutOrdersMeRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCheckoutOrdersMeRetrieveQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>> = ({ signal }) => checkoutOrdersMeRetrieve(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckoutOrdersMeRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>>
+export type CheckoutOrdersMeRetrieveQueryError = ErrorType<unknown>
+
+
+export function useCheckoutOrdersMeRetrieve<TData = Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutOrdersMeRetrieve<TData = Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutOrdersMeRetrieve<TData = Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get current user's orders
+ */
+
+export function useCheckoutOrdersMeRetrieve<TData = Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutOrdersMeRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCheckoutOrdersMeRetrieveQueryOptions(options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
  * ViewSet for ShippingMethod model - read-only for users.
  */
 export const checkoutShippingMethodsList = (

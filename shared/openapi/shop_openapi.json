@@ -24,8 +24,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -54,8 +54,8 @@ paths:
               $ref: '#/components/schemas/Category'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -77,8 +77,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -112,8 +112,8 @@ paths:
               $ref: '#/components/schemas/Category'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -145,8 +145,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedCategory'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -167,8 +167,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -186,8 +186,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -218,8 +218,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -248,8 +248,8 @@ paths:
               $ref: '#/components/schemas/ProductImage'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -271,8 +271,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -306,8 +306,8 @@ paths:
               $ref: '#/components/schemas/ProductImage'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -339,8 +339,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedProductImage'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -361,8 +361,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -392,8 +392,8 @@ paths:
               $ref: '#/components/schemas/ProductImage'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -425,8 +425,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -459,8 +459,8 @@ paths:
               $ref: '#/components/schemas/ManufacturerCreate'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -480,8 +480,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -512,8 +512,8 @@ paths:
               $ref: '#/components/schemas/ManufacturerUpdate'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -543,8 +543,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedManufacturer'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -563,11 +563,225 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
+  /api/catalog/notifications/history/:
+    get:
+      operationId: catalog_notifications_history_list
+      description: List notification history for current user
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - notifications
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNotificationHistoryList'
+          description: ''
+  /api/catalog/notifications/history/{id}/:
+    get:
+      operationId: catalog_notifications_history_retrieve
+      description: Get specific notification from history
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - notifications
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationPreference'
+          description: ''
+  /api/catalog/notifications/preferences/:
+    get:
+      operationId: catalog_notifications_preferences_list
+      description: ViewSet for managing user notification preferences.
+      tags:
+      - catalog
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NotificationPreference'
+          description: ''
+    post:
+      operationId: catalog_notifications_preferences_create
+      description: ViewSet for managing user notification preferences.
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationPreference'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NotificationPreference'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NotificationPreference'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationPreference'
+          description: ''
+  /api/catalog/notifications/preferences/{id}/:
+    get:
+      operationId: catalog_notifications_preferences_retrieve
+      description: Get current user's notification preferences
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - notifications
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationPreference'
+          description: ''
+    put:
+      operationId: catalog_notifications_preferences_update
+      description: ViewSet for managing user notification preferences.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationPreferenceUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NotificationPreferenceUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NotificationPreferenceUpdate'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationPreferenceUpdate'
+          description: ''
+    patch:
+      operationId: catalog_notifications_preferences_partial_update
+      description: Update notification preferences
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNotificationPreferenceUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNotificationPreferenceUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNotificationPreferenceUpdate'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationPreference'
+          description: ''
+    delete:
+      operationId: catalog_notifications_preferences_destroy
+      description: ViewSet for managing user notification preferences.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - catalog
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/catalog/notifications/preferences/me/:
+    get:
+      operationId: catalog_notifications_preferences_me_retrieve
+      description: Get current user's notification preferences
+      tags:
+      - notifications
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationPreference'
+          description: ''
   /api/catalog/products/:
     get:
       operationId: catalog_products_list
@@ -707,8 +921,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -735,8 +949,8 @@ paths:
               $ref: '#/components/schemas/ProductCreate'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -758,8 +972,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -793,8 +1007,8 @@ paths:
               $ref: '#/components/schemas/ProductDetail'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -826,8 +1040,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedProductDetail'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -848,8 +1062,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -867,8 +1081,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -884,8 +1098,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -926,8 +1140,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -954,8 +1168,8 @@ paths:
               $ref: '#/components/schemas/Tag'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -977,8 +1191,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -1012,8 +1226,8 @@ paths:
               $ref: '#/components/schemas/Tag'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1045,8 +1259,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedTag'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1067,8 +1281,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -1086,8 +1300,8 @@ paths:
       tags:
       - catalog
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       - {}
       responses:
         '200':
@@ -1103,8 +1317,8 @@ paths:
       tags:
       - wishlist
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1132,8 +1346,8 @@ paths:
               $ref: '#/components/schemas/WishlistItemCreate'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -1154,8 +1368,8 @@ paths:
       tags:
       - wishlist
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1187,8 +1401,8 @@ paths:
               $ref: '#/components/schemas/WishlistItem'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1219,8 +1433,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedWishlistItem'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1240,8 +1454,8 @@ paths:
       tags:
       - wishlist
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -1258,8 +1472,8 @@ paths:
       tags:
       - wishlist
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1283,8 +1497,8 @@ paths:
       tags:
       - wishlist
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1318,8 +1532,8 @@ paths:
       tags:
       - checkout
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1344,8 +1558,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Cart'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -1366,8 +1580,8 @@ paths:
       tags:
       - checkout
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1398,8 +1612,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Cart'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1430,8 +1644,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedCart'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1451,8 +1665,8 @@ paths:
       tags:
       - checkout
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -1480,8 +1694,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Cart'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1513,8 +1727,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Cart'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1546,8 +1760,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Cart'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1568,8 +1782,8 @@ paths:
       tags:
       - checkout
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1597,8 +1811,8 @@ paths:
               $ref: '#/components/schemas/ConfirmPayment'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1625,8 +1839,8 @@ paths:
               $ref: '#/components/schemas/CreateCheckoutSession'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1648,8 +1862,8 @@ paths:
       tags:
       - checkout
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1677,8 +1891,8 @@ paths:
               $ref: '#/components/schemas/CartItemCreate'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -1699,8 +1913,8 @@ paths:
       tags:
       - checkout
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1732,8 +1946,8 @@ paths:
               $ref: '#/components/schemas/CartItem'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1764,8 +1978,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedCartItem'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1785,8 +1999,8 @@ paths:
       tags:
       - checkout
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -1815,8 +2029,8 @@ paths:
               $ref: '#/components/schemas/CartItem'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1849,8 +2063,8 @@ paths:
               $ref: '#/components/schemas/CartItem'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1883,14 +2097,83 @@ paths:
               $ref: '#/components/schemas/CartItem'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CartItem'
+          description: ''
+  /api/checkout/orders/:
+    get:
+      operationId: checkout_orders_list
+      description: ViewSet for user orders.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderList'
+          description: ''
+  /api/checkout/orders/{id}/:
+    get:
+      operationId: checkout_orders_retrieve
+      description: Retrieve details of a specific order
+      summary: Get order details
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDetail'
+          description: ''
+  /api/checkout/orders/me/:
+    get:
+      operationId: checkout_orders_me_retrieve
+      description: Retrieve a list of orders for the current user
+      summary: Get current user's orders
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersListResponse'
           description: ''
   /api/checkout/shipping-methods/:
     get:
@@ -1899,8 +2182,8 @@ paths:
       tags:
       - checkout
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1924,8 +2207,8 @@ paths:
       tags:
       - checkout
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1957,8 +2240,8 @@ paths:
       tags:
       - geographic
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1991,8 +2274,8 @@ paths:
               $ref: '#/components/schemas/CountryCreate'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -2012,8 +2295,8 @@ paths:
       tags:
       - geographic
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2044,8 +2327,8 @@ paths:
               $ref: '#/components/schemas/CountryUpdate'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2075,8 +2358,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedCountryUpdate'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2095,8 +2378,8 @@ paths:
       tags:
       - geographic
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -2112,8 +2395,8 @@ paths:
       tags:
       - profile
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2148,8 +2431,8 @@ paths:
               $ref: '#/components/schemas/AddressCreate'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -2169,8 +2452,8 @@ paths:
       tags:
       - profile
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2201,8 +2484,8 @@ paths:
               $ref: '#/components/schemas/AddressUpdate'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2232,8 +2515,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedAddressUpdate'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2252,8 +2535,8 @@ paths:
       tags:
       - profile
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -2280,8 +2563,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedAddress'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2289,9 +2572,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Address'
           description: ''
-  /api/profile/addresses/billing/:
+  /api/profile/addresses/default/:
     get:
-      operationId: profile_addresses_billing_retrieve
+      operationId: profile_addresses_default_retrieve
+      description: Get the default address for the current user or specified profile.
       parameters:
       - in: path
         name: id
@@ -2301,71 +2585,8 @@ paths:
       tags:
       - profile
       security:
-      - tokenAuth: []
       - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Address'
-          description: ''
-  /api/profile/addresses/default_billing/:
-    get:
-      operationId: profile_addresses_default_billing_retrieve
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - profile
-      security:
       - tokenAuth: []
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Address'
-          description: ''
-  /api/profile/addresses/default_shipping/:
-    get:
-      operationId: profile_addresses_default_shipping_retrieve
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - profile
-      security:
-      - tokenAuth: []
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Address'
-          description: ''
-  /api/profile/addresses/shipping/:
-    get:
-      operationId: profile_addresses_shipping_retrieve
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - profile
-      security:
-      - tokenAuth: []
-      - cookieAuth: []
       responses:
         '200':
           content:
@@ -2385,8 +2606,8 @@ paths:
       tags:
       - profile
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2397,6 +2618,7 @@ paths:
   /api/profile/addresses/unset_default/:
     patch:
       operationId: profile_addresses_unset_default_partial_update
+      description: Unset the default address for the current user or specified profile.
       parameters:
       - in: path
         name: id
@@ -2417,8 +2639,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedAddress'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2462,8 +2684,8 @@ paths:
       tags:
       - profile
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2494,8 +2716,8 @@ paths:
               $ref: '#/components/schemas/ProfileCreate'
         required: true
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -2515,8 +2737,8 @@ paths:
       tags:
       - profile
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2546,8 +2768,8 @@ paths:
             schema:
               $ref: '#/components/schemas/ProfileUpdate'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2577,8 +2799,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedProfileUpdate'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2597,8 +2819,8 @@ paths:
       tags:
       - profile
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -2625,8 +2847,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Profile'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2646,8 +2868,8 @@ paths:
       tags:
       - profile
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2667,8 +2889,8 @@ paths:
       tags:
       - profile
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2688,8 +2910,8 @@ paths:
       tags:
       - profile
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2720,8 +2942,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedProfile'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2741,8 +2963,8 @@ paths:
       tags:
       - profile
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2772,8 +2994,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedProfile'
       security:
-      - tokenAuth: []
       - cookieAuth: []
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -2808,20 +3030,9 @@ components:
         country:
           type: integer
           description: Country for this address
-        address_type:
-          allOf:
-          - $ref: '#/components/schemas/AddressTypeEnum'
-          description: |-
-            Type of address (shipping or billing)
-
-            * `shipping` - Shipping
-            * `billing` - Billing
-        address_type_display:
-          type: string
-          readOnly: true
         is_default:
           type: boolean
-          description: Whether this is the default address for this type
+          description: Whether this is the default address
         label:
           type: string
           description: Optional label like 'Home', 'Office', etc.
@@ -2849,8 +3060,6 @@ components:
       required:
       - address
       - address_dict
-      - address_type
-      - address_type_display
       - city
       - country
       - created_at
@@ -2882,24 +3091,15 @@ components:
         country:
           type: integer
           description: Country for this address
-        address_type:
-          allOf:
-          - $ref: '#/components/schemas/AddressTypeEnum'
-          description: |-
-            Type of address (shipping or billing)
-
-            * `shipping` - Shipping
-            * `billing` - Billing
         is_default:
           type: boolean
-          description: Whether this is the default address for this type
+          description: Whether this is the default address
         label:
           type: string
           description: Optional label like 'Home', 'Office', etc.
           maxLength: 50
       required:
       - address
-      - address_type
       - city
       - country
       - postal_code
@@ -2913,17 +3113,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/ProfileMinimal'
           readOnly: true
-        address_type:
-          allOf:
-          - $ref: '#/components/schemas/AddressTypeEnum'
-          description: |-
-            Type of address (shipping or billing)
-
-            * `shipping` - Shipping
-            * `billing` - Billing
-        address_type_display:
-          type: string
-          readOnly: true
         full_address:
           type: string
           readOnly: true
@@ -2933,27 +3122,17 @@ components:
           maxLength: 50
         is_default:
           type: boolean
-          description: Whether this is the default address for this type
+          description: Whether this is the default address
         created_at:
           type: string
           format: date-time
           readOnly: true
           description: Timestamp when the record was created
       required:
-      - address_type
-      - address_type_display
       - created_at
       - full_address
       - id
       - profile
-    AddressTypeEnum:
-      enum:
-      - shipping
-      - billing
-      type: string
-      description: |-
-        * `shipping` - Shipping
-        * `billing` - Billing
     AddressUpdate:
       type: object
       properties:
@@ -2974,7 +3153,7 @@ components:
           description: Country for this address
         is_default:
           type: boolean
-          description: Whether this is the default address for this type
+          description: Whether this is the default address
         label:
           type: string
           description: Optional label like 'Home', 'Office', etc.
@@ -3450,6 +3629,258 @@ components:
           description: Whether this manufacturer is visible
       required:
       - name
+    NotificationHistory:
+      type: object
+      description: Serializer for NotificationHistory model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          type: integer
+          description: Product the notification was about
+        product_name:
+          type: string
+          readOnly: true
+        product_image:
+          type: string
+          readOnly: true
+        notification_type:
+          allOf:
+          - $ref: '#/components/schemas/NotificationTypeEnum'
+          description: |-
+            Type of notification sent
+
+            * `stock_available` - Stock Available
+            * `price_drop` - Price Drop
+        title:
+          type: string
+          description: Notification title
+          maxLength: 255
+        body:
+          type: string
+          description: Notification body text
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+      required:
+      - body
+      - created_at
+      - id
+      - notification_type
+      - product
+      - product_image
+      - product_name
+      - title
+    NotificationPreference:
+      type: object
+      description: Serializer for NotificationPreference model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        stock_alerts_enabled:
+          type: boolean
+          description: Receive alerts when out-of-stock wishlist items become available
+        price_drop_alerts_enabled:
+          type: boolean
+          description: Receive alerts when wishlist items go on sale
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - created_at
+      - id
+      - updated_at
+    NotificationPreferenceUpdate:
+      type: object
+      description: Serializer for updating notification preferences.
+      properties:
+        stock_alerts_enabled:
+          type: boolean
+          description: Receive alerts when out-of-stock wishlist items become available
+        price_drop_alerts_enabled:
+          type: boolean
+          description: Receive alerts when wishlist items go on sale
+    NotificationTypeEnum:
+      enum:
+      - stock_available
+      - price_drop
+      type: string
+      description: |-
+        * `stock_available` - Stock Available
+        * `price_drop` - Price Drop
+    Order:
+      type: object
+      description: Serializer for order list view.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order_number:
+          type: string
+          description: Unique order number
+          maxLength: 50
+        status:
+          allOf:
+          - $ref: '#/components/schemas/OrderStatusEnum'
+          description: |-
+            Current status of the order
+
+            * `pending` - Pending
+            * `confirmed` - Confirmed
+            * `shipped` - Shipped
+            * `delivered` - Delivered
+            * `cancelled` - Cancelled
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Subtotal of all items
+        shipping_cost:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Shipping cost
+        total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Total amount including shipping
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+      required:
+      - created_at
+      - id
+      - order_number
+      - subtotal
+      - total
+    OrderDetail:
+      type: object
+      description: Serializer for order detail view.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order_number:
+          type: string
+          description: Unique order number
+          maxLength: 50
+        status:
+          $ref: '#/components/schemas/OrderStatusEnum'
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Subtotal of all items
+        shipping_cost:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Total amount including shipping
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        notes:
+          type: string
+          description: Additional notes for the order
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+          readOnly: true
+        shipping_method:
+          allOf:
+          - $ref: '#/components/schemas/ShippingMethod'
+          readOnly: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - items
+      - order_number
+      - shipping_address
+      - shipping_cost
+      - shipping_method
+      - status
+      - subtotal
+      - total
+    OrderItem:
+      type: object
+      description: Serializer for order items.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          allOf:
+          - $ref: '#/components/schemas/ProductDetail'
+          readOnly: true
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Quantity ordered
+        unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Price per unit at time of order
+        total_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Total price for this item (quantity × unit_price)
+      required:
+      - id
+      - product
+      - quantity
+      - total_price
+      - unit_price
+    OrderStatusEnum:
+      enum:
+      - pending
+      - confirmed
+      - shipped
+      - delivered
+      - cancelled
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `confirmed` - Confirmed
+        * `shipped` - Shipped
+        * `delivered` - Delivered
+        * `cancelled` - Cancelled
+    OrdersListResponse:
+      type: object
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+      required:
+      - orders
     PaginatedCartListList:
       type: object
       required:
@@ -3473,6 +3904,52 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CartList'
+    PaginatedNotificationHistoryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotificationHistory'
+    PaginatedOrderList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
     PaginatedProductListList:
       type: object
       required:
@@ -3567,20 +4044,9 @@ components:
         country:
           type: integer
           description: Country for this address
-        address_type:
-          allOf:
-          - $ref: '#/components/schemas/AddressTypeEnum'
-          description: |-
-            Type of address (shipping or billing)
-
-            * `shipping` - Shipping
-            * `billing` - Billing
-        address_type_display:
-          type: string
-          readOnly: true
         is_default:
           type: boolean
-          description: Whether this is the default address for this type
+          description: Whether this is the default address
         label:
           type: string
           description: Optional label like 'Home', 'Office', etc.
@@ -3625,7 +4091,7 @@ components:
           description: Country for this address
         is_default:
           type: boolean
-          description: Whether this is the default address for this type
+          description: Whether this is the default address
         label:
           type: string
           description: Optional label like 'Home', 'Office', etc.
@@ -3821,6 +4287,16 @@ components:
           format: date-time
           readOnly: true
           description: Timestamp when the record was last updated
+    PatchedNotificationPreferenceUpdate:
+      type: object
+      description: Serializer for updating notification preferences.
+      properties:
+        stock_alerts_enabled:
+          type: boolean
+          description: Receive alerts when out-of-stock wishlist items become available
+        price_drop_alerts_enabled:
+          type: boolean
+          description: Receive alerts when wishlist items go on sale
     PatchedProductDetail:
       type: object
       description: Detailed serializer for product detail views.
