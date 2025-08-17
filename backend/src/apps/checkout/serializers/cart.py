@@ -6,6 +6,7 @@ from apps.catalog.models import Product
 from apps.catalog.serializers.product import ProductListSerializer
 from apps.profile.serializers.address import AddressSerializer
 from apps.checkout.serializers.shipping_method import ShippingMethodSerializer
+from apps.checkout.serializers.coupon import CouponSerializer
 
 
 class CartItemSerializer(serializers.ModelSerializer):
@@ -156,9 +157,11 @@ class CartSerializer(serializers.ModelSerializer):
     items = CartItemSerializer(many=True, read_only=True)
     shipping_address = AddressSerializer(read_only=True)
     shipping_method = ShippingMethodSerializer(read_only=True)
+    applied_coupon = CouponSerializer(read_only=True)
     item_count = serializers.SerializerMethodField()
     subtotal = serializers.SerializerMethodField()
     shipping_cost = serializers.SerializerMethodField()
+    coupon_discount = serializers.SerializerMethodField()
     total = serializers.SerializerMethodField()
 
     class Meta:
@@ -170,9 +173,11 @@ class CartSerializer(serializers.ModelSerializer):
             "items",
             "shipping_address",
             "shipping_method",
+            "applied_coupon",
             "item_count",
             "subtotal",
             "shipping_cost",
+            "coupon_discount",
             "total",
             "created_at",
             "updated_at",
@@ -183,6 +188,7 @@ class CartSerializer(serializers.ModelSerializer):
             "item_count",
             "subtotal",
             "shipping_cost",
+            "coupon_discount",
             "total",
             "created_at",
             "updated_at",
@@ -199,6 +205,10 @@ class CartSerializer(serializers.ModelSerializer):
     def get_shipping_cost(self, obj: Cart) -> Decimal:
         """Get shipping cost from selected shipping method."""
         return obj.shipping_cost
+
+    def get_coupon_discount(self, obj: Cart) -> Decimal:
+        """Get coupon discount amount."""
+        return obj.coupon_discount
 
     def get_total(self, obj: Cart) -> Decimal:
         """Get total including shipping."""

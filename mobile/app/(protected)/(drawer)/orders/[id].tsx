@@ -138,6 +138,12 @@ export default function OrderDetailScreen() {
               <Text variant="bodyMedium">Shipping:</Text>
               <Text variant="bodyMedium">${parseFloat(order.shipping_cost).toFixed(2)}</Text>
             </View>
+            {order.coupon_discount && parseFloat(order.coupon_discount) > 0 && (
+              <View style={styles.summaryRow}>
+                <Text variant="bodyMedium" style={{ color: theme.colors.primary }}>Coupon Discount:</Text>
+                <Text variant="bodyMedium" style={{ color: theme.colors.primary }}>-${parseFloat(order.coupon_discount).toFixed(2)}</Text>
+              </View>
+            )}
             <Divider style={styles.divider} />
             <View style={styles.summaryRow}>
               <Text variant="titleMedium" style={{ fontWeight: 'bold' }}>Total:</Text>

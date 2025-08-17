@@ -27,21 +27,21 @@ import type {
 import type {
   Address,
   AddressCreate,
+  AddressList,
   AddressUpdate,
-  PaginatedAddressListList,
   PaginatedProfileListList,
   PatchedAddress,
   PatchedAddressUpdate,
   PatchedProfile,
   PatchedProfileUpdate,
   Profile,
-  ProfileAddressesListParams,
   ProfileCreate,
   ProfileProfilesListParams,
   ProfileUpdate
 } from '.././schemas';
 
 import { shopInstance } from '../../../shop-mutator';
+import type { ErrorType , BodyType } from '../../../shop-mutator';
 
 // https://stackoverflow.com/questions/49579094/typescript-conditional-types-filter-out-readonly-properties-pick-only-requir/49579497#49579497
 type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <
@@ -74,34 +74,33 @@ type NonReadonly<T> = [T] extends [UnionToIntersection<T>] ? {
 
 
 export const profileAddressesList = (
-    params?: ProfileAddressesListParams,
+    
  signal?: AbortSignal
 ) => {
       
       
-      return shopInstance<PaginatedAddressListList>(
-      {url: `/api/profile/addresses/`, method: 'GET',
-        params, signal
+      return shopInstance<AddressList[]>(
+      {url: `/api/profile/addresses/`, method: 'GET', signal
     },
       );
     }
   
 
-export const getProfileAddressesListQueryKey = (params?: ProfileAddressesListParams,) => {
-    return [`/api/profile/addresses/`, ...(params ? [params]: [])] as const;
+export const getProfileAddressesListQueryKey = () => {
+    return [`/api/profile/addresses/`] as const;
     }
 
     
-export const getProfileAddressesListQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = unknown>(params?: ProfileAddressesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>>, }
+export const getProfileAddressesListQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesListQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesListQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesList>>> = ({ signal }) => profileAddressesList(params, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesList>>> = ({ signal }) => profileAddressesList(signal);
 
       
 
@@ -111,11 +110,11 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type ProfileAddressesListQueryResult = NonNullable<Awaited<ReturnType<typeof profileAddressesList>>>
-export type ProfileAddressesListQueryError = unknown
+export type ProfileAddressesListQueryError = ErrorType<unknown>
 
 
-export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = unknown>(
- params: undefined |  ProfileAddressesListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>> & Pick<
+export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileAddressesList>>,
           TError,
@@ -124,8 +123,8 @@ export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profil
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = unknown>(
- params?: ProfileAddressesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>> & Pick<
+export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileAddressesList>>,
           TError,
@@ -134,17 +133,17 @@ export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profil
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = unknown>(
- params?: ProfileAddressesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>>, }
+export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = unknown>(
- params?: ProfileAddressesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>>, }
+export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getProfileAddressesListQueryOptions(params,options)
+  const queryOptions = getProfileAddressesListQueryOptions(options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -159,7 +158,7 @@ export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profil
  * Create a new address. Profile field is optional - if not provided, uses current user's profile.
  */
 export const profileAddressesCreate = (
-    addressCreate: AddressCreate,
+    addressCreate: BodyType<AddressCreate>,
  signal?: AbortSignal
 ) => {
       
@@ -174,9 +173,9 @@ export const profileAddressesCreate = (
   
 
 
-export const getProfileAddressesCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesCreate>>, TError,{data: AddressCreate}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof profileAddressesCreate>>, TError,{data: AddressCreate}, TContext> => {
+export const getProfileAddressesCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesCreate>>, TError,{data: BodyType<AddressCreate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof profileAddressesCreate>>, TError,{data: BodyType<AddressCreate>}, TContext> => {
 
 const mutationKey = ['profileAddressesCreate'];
 const {mutation: mutationOptions} = options ?
@@ -188,7 +187,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileAddressesCreate>>, {data: AddressCreate}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileAddressesCreate>>, {data: BodyType<AddressCreate>}> = (props) => {
           const {data} = props ?? {};
 
           return  profileAddressesCreate(data,)
@@ -200,15 +199,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type ProfileAddressesCreateMutationResult = NonNullable<Awaited<ReturnType<typeof profileAddressesCreate>>>
-    export type ProfileAddressesCreateMutationBody = AddressCreate
-    export type ProfileAddressesCreateMutationError = unknown
+    export type ProfileAddressesCreateMutationBody = BodyType<AddressCreate>
+    export type ProfileAddressesCreateMutationError = ErrorType<unknown>
 
-    export const useProfileAddressesCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesCreate>>, TError,{data: AddressCreate}, TContext>, }
+    export const useProfileAddressesCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesCreate>>, TError,{data: BodyType<AddressCreate>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profileAddressesCreate>>,
         TError,
-        {data: AddressCreate},
+        {data: BodyType<AddressCreate>},
         TContext
       > => {
 
@@ -234,7 +233,7 @@ export const getProfileAddressesRetrieveQueryKey = (id: number,) => {
     }
 
     
-export const getProfileAddressesRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError, TData>>, }
+export const getProfileAddressesRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -253,10 +252,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type ProfileAddressesRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileAddressesRetrieve>>>
-export type ProfileAddressesRetrieveQueryError = unknown
+export type ProfileAddressesRetrieveQueryError = ErrorType<unknown>
 
 
-export function useProfileAddressesRetrieve<TData = Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError = unknown>(
+export function useProfileAddressesRetrieve<TData = Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileAddressesRetrieve>>,
@@ -266,7 +265,7 @@ export function useProfileAddressesRetrieve<TData = Awaited<ReturnType<typeof pr
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesRetrieve<TData = Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError = unknown>(
+export function useProfileAddressesRetrieve<TData = Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileAddressesRetrieve>>,
@@ -276,12 +275,12 @@ export function useProfileAddressesRetrieve<TData = Awaited<ReturnType<typeof pr
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesRetrieve<TData = Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError = unknown>(
+export function useProfileAddressesRetrieve<TData = Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useProfileAddressesRetrieve<TData = Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError = unknown>(
+export function useProfileAddressesRetrieve<TData = Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -299,7 +298,7 @@ export function useProfileAddressesRetrieve<TData = Awaited<ReturnType<typeof pr
 
 export const profileAddressesUpdate = (
     id: number,
-    addressUpdate: AddressUpdate,
+    addressUpdate: BodyType<AddressUpdate>,
  ) => {
       
       
@@ -313,9 +312,9 @@ export const profileAddressesUpdate = (
   
 
 
-export const getProfileAddressesUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesUpdate>>, TError,{id: number;data: AddressUpdate}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof profileAddressesUpdate>>, TError,{id: number;data: AddressUpdate}, TContext> => {
+export const getProfileAddressesUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesUpdate>>, TError,{id: number;data: BodyType<AddressUpdate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof profileAddressesUpdate>>, TError,{id: number;data: BodyType<AddressUpdate>}, TContext> => {
 
 const mutationKey = ['profileAddressesUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -327,7 +326,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileAddressesUpdate>>, {id: number;data: AddressUpdate}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileAddressesUpdate>>, {id: number;data: BodyType<AddressUpdate>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  profileAddressesUpdate(id,data,)
@@ -339,15 +338,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type ProfileAddressesUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof profileAddressesUpdate>>>
-    export type ProfileAddressesUpdateMutationBody = AddressUpdate
-    export type ProfileAddressesUpdateMutationError = unknown
+    export type ProfileAddressesUpdateMutationBody = BodyType<AddressUpdate>
+    export type ProfileAddressesUpdateMutationError = ErrorType<unknown>
 
-    export const useProfileAddressesUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesUpdate>>, TError,{id: number;data: AddressUpdate}, TContext>, }
+    export const useProfileAddressesUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesUpdate>>, TError,{id: number;data: BodyType<AddressUpdate>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profileAddressesUpdate>>,
         TError,
-        {id: number;data: AddressUpdate},
+        {id: number;data: BodyType<AddressUpdate>},
         TContext
       > => {
 
@@ -357,7 +356,7 @@ const {mutation: mutationOptions} = options ?
     }
     export const profileAddressesPartialUpdate = (
     id: number,
-    patchedAddressUpdate: PatchedAddressUpdate,
+    patchedAddressUpdate: BodyType<PatchedAddressUpdate>,
  ) => {
       
       
@@ -371,9 +370,9 @@ const {mutation: mutationOptions} = options ?
   
 
 
-export const getProfileAddressesPartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesPartialUpdate>>, TError,{id: number;data: PatchedAddressUpdate}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof profileAddressesPartialUpdate>>, TError,{id: number;data: PatchedAddressUpdate}, TContext> => {
+export const getProfileAddressesPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesPartialUpdate>>, TError,{id: number;data: BodyType<PatchedAddressUpdate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof profileAddressesPartialUpdate>>, TError,{id: number;data: BodyType<PatchedAddressUpdate>}, TContext> => {
 
 const mutationKey = ['profileAddressesPartialUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -385,7 +384,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileAddressesPartialUpdate>>, {id: number;data: PatchedAddressUpdate}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileAddressesPartialUpdate>>, {id: number;data: BodyType<PatchedAddressUpdate>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  profileAddressesPartialUpdate(id,data,)
@@ -397,15 +396,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type ProfileAddressesPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof profileAddressesPartialUpdate>>>
-    export type ProfileAddressesPartialUpdateMutationBody = PatchedAddressUpdate
-    export type ProfileAddressesPartialUpdateMutationError = unknown
+    export type ProfileAddressesPartialUpdateMutationBody = BodyType<PatchedAddressUpdate>
+    export type ProfileAddressesPartialUpdateMutationError = ErrorType<unknown>
 
-    export const useProfileAddressesPartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesPartialUpdate>>, TError,{id: number;data: PatchedAddressUpdate}, TContext>, }
+    export const useProfileAddressesPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesPartialUpdate>>, TError,{id: number;data: BodyType<PatchedAddressUpdate>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profileAddressesPartialUpdate>>,
         TError,
-        {id: number;data: PatchedAddressUpdate},
+        {id: number;data: BodyType<PatchedAddressUpdate>},
         TContext
       > => {
 
@@ -426,7 +425,7 @@ const {mutation: mutationOptions} = options ?
   
 
 
-export const getProfileAddressesDestroyMutationOptions = <TError = unknown,
+export const getProfileAddressesDestroyMutationOptions = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesDestroy>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof profileAddressesDestroy>>, TError,{id: number}, TContext> => {
 
@@ -453,9 +452,9 @@ const {mutation: mutationOptions} = options ?
 
     export type ProfileAddressesDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof profileAddressesDestroy>>>
     
-    export type ProfileAddressesDestroyMutationError = unknown
+    export type ProfileAddressesDestroyMutationError = ErrorType<unknown>
 
-    export const useProfileAddressesDestroy = <TError = unknown,
+    export const useProfileAddressesDestroy = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesDestroy>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profileAddressesDestroy>>,
@@ -470,7 +469,7 @@ const {mutation: mutationOptions} = options ?
     }
     export const profileAddressesSetDefaultPartialUpdate = (
     id: number,
-    patchedAddress: NonReadonly<PatchedAddress>,
+    patchedAddress: BodyType<NonReadonly<PatchedAddress>>,
  ) => {
       
       
@@ -484,9 +483,9 @@ const {mutation: mutationOptions} = options ?
   
 
 
-export const getProfileAddressesSetDefaultPartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesSetDefaultPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedAddress>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof profileAddressesSetDefaultPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedAddress>}, TContext> => {
+export const getProfileAddressesSetDefaultPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesSetDefaultPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedAddress>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof profileAddressesSetDefaultPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedAddress>>}, TContext> => {
 
 const mutationKey = ['profileAddressesSetDefaultPartialUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -498,7 +497,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileAddressesSetDefaultPartialUpdate>>, {id: number;data: NonReadonly<PatchedAddress>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileAddressesSetDefaultPartialUpdate>>, {id: number;data: BodyType<NonReadonly<PatchedAddress>>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  profileAddressesSetDefaultPartialUpdate(id,data,)
@@ -510,15 +509,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type ProfileAddressesSetDefaultPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof profileAddressesSetDefaultPartialUpdate>>>
-    export type ProfileAddressesSetDefaultPartialUpdateMutationBody = NonReadonly<PatchedAddress>
-    export type ProfileAddressesSetDefaultPartialUpdateMutationError = unknown
+    export type ProfileAddressesSetDefaultPartialUpdateMutationBody = BodyType<NonReadonly<PatchedAddress>>
+    export type ProfileAddressesSetDefaultPartialUpdateMutationError = ErrorType<unknown>
 
-    export const useProfileAddressesSetDefaultPartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesSetDefaultPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedAddress>}, TContext>, }
+    export const useProfileAddressesSetDefaultPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesSetDefaultPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedAddress>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profileAddressesSetDefaultPartialUpdate>>,
         TError,
-        {id: number;data: NonReadonly<PatchedAddress>},
+        {id: number;data: BodyType<NonReadonly<PatchedAddress>>},
         TContext
       > => {
 
@@ -526,320 +525,80 @@ const {mutation: mutationOptions} = options ?
 
       return useMutation(mutationOptions , queryClient);
     }
-    export const profileAddressesBillingRetrieve = (
+    /**
+ * Get the default address for the current user or specified profile.
+ */
+export const profileAddressesDefaultRetrieve = (
     
  signal?: AbortSignal
 ) => {
       
       
       return shopInstance<Address>(
-      {url: `/api/profile/addresses/billing/`, method: 'GET', signal
+      {url: `/api/profile/addresses/default/`, method: 'GET', signal
     },
       );
     }
   
 
-export const getProfileAddressesBillingRetrieveQueryKey = () => {
-    return [`/api/profile/addresses/billing/`] as const;
+export const getProfileAddressesDefaultRetrieveQueryKey = () => {
+    return [`/api/profile/addresses/default/`] as const;
     }
 
     
-export const getProfileAddressesBillingRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError, TData>>, }
+export const getProfileAddressesDefaultRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesBillingRetrieveQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesDefaultRetrieveQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>> = ({ signal }) => profileAddressesBillingRetrieve(signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>> = ({ signal }) => profileAddressesDefaultRetrieve(signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ProfileAddressesBillingRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>>
-export type ProfileAddressesBillingRetrieveQueryError = unknown
+export type ProfileAddressesDefaultRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>>
+export type ProfileAddressesDefaultRetrieveQueryError = ErrorType<unknown>
 
 
-export function useProfileAddressesBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError, TData>> & Pick<
+export function useProfileAddressesDefaultRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>,
+          Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>,
           TError,
-          Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>
+          Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>
         > , 'initialData'
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError, TData>> & Pick<
+export function useProfileAddressesDefaultRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>,
+          Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>,
           TError,
-          Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>
+          Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>
         > , 'initialData'
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError, TData>>, }
+export function useProfileAddressesDefaultRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useProfileAddressesBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesBillingRetrieve>>, TError, TData>>, }
+export function useProfileAddressesDefaultRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getProfileAddressesBillingRetrieveQueryOptions(options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const profileAddressesDefaultBillingRetrieve = (
-    
- signal?: AbortSignal
-) => {
-      
-      
-      return shopInstance<Address>(
-      {url: `/api/profile/addresses/default_billing/`, method: 'GET', signal
-    },
-      );
-    }
-  
-
-export const getProfileAddressesDefaultBillingRetrieveQueryKey = () => {
-    return [`/api/profile/addresses/default_billing/`] as const;
-    }
-
-    
-export const getProfileAddressesDefaultBillingRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError, TData>>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesDefaultBillingRetrieveQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>> = ({ signal }) => profileAddressesDefaultBillingRetrieve(signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ProfileAddressesDefaultBillingRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>>
-export type ProfileAddressesDefaultBillingRetrieveQueryError = unknown
-
-
-export function useProfileAddressesDefaultBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>,
-          TError,
-          Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesDefaultBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>,
-          TError,
-          Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesDefaultBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError, TData>>, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useProfileAddressesDefaultBillingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultBillingRetrieve>>, TError, TData>>, }
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getProfileAddressesDefaultBillingRetrieveQueryOptions(options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const profileAddressesDefaultShippingRetrieve = (
-    
- signal?: AbortSignal
-) => {
-      
-      
-      return shopInstance<Address>(
-      {url: `/api/profile/addresses/default_shipping/`, method: 'GET', signal
-    },
-      );
-    }
-  
-
-export const getProfileAddressesDefaultShippingRetrieveQueryKey = () => {
-    return [`/api/profile/addresses/default_shipping/`] as const;
-    }
-
-    
-export const getProfileAddressesDefaultShippingRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError, TData>>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesDefaultShippingRetrieveQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>> = ({ signal }) => profileAddressesDefaultShippingRetrieve(signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ProfileAddressesDefaultShippingRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>>
-export type ProfileAddressesDefaultShippingRetrieveQueryError = unknown
-
-
-export function useProfileAddressesDefaultShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>,
-          TError,
-          Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesDefaultShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>,
-          TError,
-          Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesDefaultShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError, TData>>, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useProfileAddressesDefaultShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesDefaultShippingRetrieve>>, TError, TData>>, }
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getProfileAddressesDefaultShippingRetrieveQueryOptions(options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const profileAddressesShippingRetrieve = (
-    
- signal?: AbortSignal
-) => {
-      
-      
-      return shopInstance<Address>(
-      {url: `/api/profile/addresses/shipping/`, method: 'GET', signal
-    },
-      );
-    }
-  
-
-export const getProfileAddressesShippingRetrieveQueryKey = () => {
-    return [`/api/profile/addresses/shipping/`] as const;
-    }
-
-    
-export const getProfileAddressesShippingRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError, TData>>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesShippingRetrieveQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>> = ({ signal }) => profileAddressesShippingRetrieve(signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ProfileAddressesShippingRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>>
-export type ProfileAddressesShippingRetrieveQueryError = unknown
-
-
-export function useProfileAddressesShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>,
-          TError,
-          Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>,
-          TError,
-          Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError, TData>>, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useProfileAddressesShippingRetrieve<TData = Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesShippingRetrieve>>, TError, TData>>, }
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getProfileAddressesShippingRetrieveQueryOptions(options)
+  const queryOptions = getProfileAddressesDefaultRetrieveQueryOptions(options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -868,7 +627,7 @@ export const getProfileAddressesSummaryRetrieveQueryKey = () => {
     }
 
     
-export const getProfileAddressesSummaryRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError, TData>>, }
+export const getProfileAddressesSummaryRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -887,10 +646,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type ProfileAddressesSummaryRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>>
-export type ProfileAddressesSummaryRetrieveQueryError = unknown
+export type ProfileAddressesSummaryRetrieveQueryError = ErrorType<unknown>
 
 
-export function useProfileAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError = unknown>(
+export function useProfileAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError = ErrorType<unknown>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>,
@@ -900,7 +659,7 @@ export function useProfileAddressesSummaryRetrieve<TData = Awaited<ReturnType<ty
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError = unknown>(
+export function useProfileAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>,
@@ -910,12 +669,12 @@ export function useProfileAddressesSummaryRetrieve<TData = Awaited<ReturnType<ty
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError = unknown>(
+export function useProfileAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useProfileAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError = unknown>(
+export function useProfileAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesSummaryRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -931,8 +690,11 @@ export function useProfileAddressesSummaryRetrieve<TData = Awaited<ReturnType<ty
 
 
 
+/**
+ * Unset the default address for the current user or specified profile.
+ */
 export const profileAddressesUnsetDefaultPartialUpdate = (
-    patchedAddress: NonReadonly<PatchedAddress>,
+    patchedAddress: BodyType<NonReadonly<PatchedAddress>>,
  ) => {
       
       
@@ -946,9 +708,9 @@ export const profileAddressesUnsetDefaultPartialUpdate = (
   
 
 
-export const getProfileAddressesUnsetDefaultPartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesUnsetDefaultPartialUpdate>>, TError,{data: NonReadonly<PatchedAddress>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof profileAddressesUnsetDefaultPartialUpdate>>, TError,{data: NonReadonly<PatchedAddress>}, TContext> => {
+export const getProfileAddressesUnsetDefaultPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesUnsetDefaultPartialUpdate>>, TError,{data: BodyType<NonReadonly<PatchedAddress>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof profileAddressesUnsetDefaultPartialUpdate>>, TError,{data: BodyType<NonReadonly<PatchedAddress>>}, TContext> => {
 
 const mutationKey = ['profileAddressesUnsetDefaultPartialUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -960,7 +722,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileAddressesUnsetDefaultPartialUpdate>>, {data: NonReadonly<PatchedAddress>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileAddressesUnsetDefaultPartialUpdate>>, {data: BodyType<NonReadonly<PatchedAddress>>}> = (props) => {
           const {data} = props ?? {};
 
           return  profileAddressesUnsetDefaultPartialUpdate(data,)
@@ -972,15 +734,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type ProfileAddressesUnsetDefaultPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof profileAddressesUnsetDefaultPartialUpdate>>>
-    export type ProfileAddressesUnsetDefaultPartialUpdateMutationBody = NonReadonly<PatchedAddress>
-    export type ProfileAddressesUnsetDefaultPartialUpdateMutationError = unknown
+    export type ProfileAddressesUnsetDefaultPartialUpdateMutationBody = BodyType<NonReadonly<PatchedAddress>>
+    export type ProfileAddressesUnsetDefaultPartialUpdateMutationError = ErrorType<unknown>
 
-    export const useProfileAddressesUnsetDefaultPartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesUnsetDefaultPartialUpdate>>, TError,{data: NonReadonly<PatchedAddress>}, TContext>, }
+    export const useProfileAddressesUnsetDefaultPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileAddressesUnsetDefaultPartialUpdate>>, TError,{data: BodyType<NonReadonly<PatchedAddress>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profileAddressesUnsetDefaultPartialUpdate>>,
         TError,
-        {data: NonReadonly<PatchedAddress>},
+        {data: BodyType<NonReadonly<PatchedAddress>>},
         TContext
       > => {
 
@@ -1007,7 +769,7 @@ export const getProfileProfilesListQueryKey = (params?: ProfileProfilesListParam
     }
 
     
-export const getProfileProfilesListQueryOptions = <TData = Awaited<ReturnType<typeof profileProfilesList>>, TError = unknown>(params?: ProfileProfilesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesList>>, TError, TData>>, }
+export const getProfileProfilesListQueryOptions = <TData = Awaited<ReturnType<typeof profileProfilesList>>, TError = ErrorType<unknown>>(params?: ProfileProfilesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesList>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1026,10 +788,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type ProfileProfilesListQueryResult = NonNullable<Awaited<ReturnType<typeof profileProfilesList>>>
-export type ProfileProfilesListQueryError = unknown
+export type ProfileProfilesListQueryError = ErrorType<unknown>
 
 
-export function useProfileProfilesList<TData = Awaited<ReturnType<typeof profileProfilesList>>, TError = unknown>(
+export function useProfileProfilesList<TData = Awaited<ReturnType<typeof profileProfilesList>>, TError = ErrorType<unknown>>(
  params: undefined |  ProfileProfilesListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesList>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileProfilesList>>,
@@ -1039,7 +801,7 @@ export function useProfileProfilesList<TData = Awaited<ReturnType<typeof profile
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileProfilesList<TData = Awaited<ReturnType<typeof profileProfilesList>>, TError = unknown>(
+export function useProfileProfilesList<TData = Awaited<ReturnType<typeof profileProfilesList>>, TError = ErrorType<unknown>>(
  params?: ProfileProfilesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesList>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileProfilesList>>,
@@ -1049,12 +811,12 @@ export function useProfileProfilesList<TData = Awaited<ReturnType<typeof profile
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileProfilesList<TData = Awaited<ReturnType<typeof profileProfilesList>>, TError = unknown>(
+export function useProfileProfilesList<TData = Awaited<ReturnType<typeof profileProfilesList>>, TError = ErrorType<unknown>>(
  params?: ProfileProfilesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesList>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useProfileProfilesList<TData = Awaited<ReturnType<typeof profileProfilesList>>, TError = unknown>(
+export function useProfileProfilesList<TData = Awaited<ReturnType<typeof profileProfilesList>>, TError = ErrorType<unknown>>(
  params?: ProfileProfilesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesList>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1071,7 +833,7 @@ export function useProfileProfilesList<TData = Awaited<ReturnType<typeof profile
 
 
 export const profileProfilesCreate = (
-    profileCreate: ProfileCreate,
+    profileCreate: BodyType<ProfileCreate>,
  signal?: AbortSignal
 ) => {
       
@@ -1086,9 +848,9 @@ export const profileProfilesCreate = (
   
 
 
-export const getProfileProfilesCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesCreate>>, TError,{data: ProfileCreate}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof profileProfilesCreate>>, TError,{data: ProfileCreate}, TContext> => {
+export const getProfileProfilesCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesCreate>>, TError,{data: BodyType<ProfileCreate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof profileProfilesCreate>>, TError,{data: BodyType<ProfileCreate>}, TContext> => {
 
 const mutationKey = ['profileProfilesCreate'];
 const {mutation: mutationOptions} = options ?
@@ -1100,7 +862,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileProfilesCreate>>, {data: ProfileCreate}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileProfilesCreate>>, {data: BodyType<ProfileCreate>}> = (props) => {
           const {data} = props ?? {};
 
           return  profileProfilesCreate(data,)
@@ -1112,15 +874,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type ProfileProfilesCreateMutationResult = NonNullable<Awaited<ReturnType<typeof profileProfilesCreate>>>
-    export type ProfileProfilesCreateMutationBody = ProfileCreate
-    export type ProfileProfilesCreateMutationError = unknown
+    export type ProfileProfilesCreateMutationBody = BodyType<ProfileCreate>
+    export type ProfileProfilesCreateMutationError = ErrorType<unknown>
 
-    export const useProfileProfilesCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesCreate>>, TError,{data: ProfileCreate}, TContext>, }
+    export const useProfileProfilesCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesCreate>>, TError,{data: BodyType<ProfileCreate>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profileProfilesCreate>>,
         TError,
-        {data: ProfileCreate},
+        {data: BodyType<ProfileCreate>},
         TContext
       > => {
 
@@ -1146,7 +908,7 @@ export const getProfileProfilesRetrieveQueryKey = (id: number,) => {
     }
 
     
-export const getProfileProfilesRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError, TData>>, }
+export const getProfileProfilesRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1165,10 +927,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type ProfileProfilesRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileProfilesRetrieve>>>
-export type ProfileProfilesRetrieveQueryError = unknown
+export type ProfileProfilesRetrieveQueryError = ErrorType<unknown>
 
 
-export function useProfileProfilesRetrieve<TData = Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError = unknown>(
+export function useProfileProfilesRetrieve<TData = Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileProfilesRetrieve>>,
@@ -1178,7 +940,7 @@ export function useProfileProfilesRetrieve<TData = Awaited<ReturnType<typeof pro
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileProfilesRetrieve<TData = Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError = unknown>(
+export function useProfileProfilesRetrieve<TData = Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileProfilesRetrieve>>,
@@ -1188,12 +950,12 @@ export function useProfileProfilesRetrieve<TData = Awaited<ReturnType<typeof pro
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileProfilesRetrieve<TData = Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError = unknown>(
+export function useProfileProfilesRetrieve<TData = Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useProfileProfilesRetrieve<TData = Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError = unknown>(
+export function useProfileProfilesRetrieve<TData = Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1211,7 +973,7 @@ export function useProfileProfilesRetrieve<TData = Awaited<ReturnType<typeof pro
 
 export const profileProfilesUpdate = (
     id: number,
-    profileUpdate: ProfileUpdate,
+    profileUpdate: BodyType<ProfileUpdate>,
  ) => {
       
       
@@ -1225,9 +987,9 @@ export const profileProfilesUpdate = (
   
 
 
-export const getProfileProfilesUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesUpdate>>, TError,{id: number;data: ProfileUpdate}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof profileProfilesUpdate>>, TError,{id: number;data: ProfileUpdate}, TContext> => {
+export const getProfileProfilesUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesUpdate>>, TError,{id: number;data: BodyType<ProfileUpdate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof profileProfilesUpdate>>, TError,{id: number;data: BodyType<ProfileUpdate>}, TContext> => {
 
 const mutationKey = ['profileProfilesUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -1239,7 +1001,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileProfilesUpdate>>, {id: number;data: ProfileUpdate}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileProfilesUpdate>>, {id: number;data: BodyType<ProfileUpdate>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  profileProfilesUpdate(id,data,)
@@ -1251,15 +1013,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type ProfileProfilesUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof profileProfilesUpdate>>>
-    export type ProfileProfilesUpdateMutationBody = ProfileUpdate
-    export type ProfileProfilesUpdateMutationError = unknown
+    export type ProfileProfilesUpdateMutationBody = BodyType<ProfileUpdate>
+    export type ProfileProfilesUpdateMutationError = ErrorType<unknown>
 
-    export const useProfileProfilesUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesUpdate>>, TError,{id: number;data: ProfileUpdate}, TContext>, }
+    export const useProfileProfilesUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesUpdate>>, TError,{id: number;data: BodyType<ProfileUpdate>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profileProfilesUpdate>>,
         TError,
-        {id: number;data: ProfileUpdate},
+        {id: number;data: BodyType<ProfileUpdate>},
         TContext
       > => {
 
@@ -1269,7 +1031,7 @@ const {mutation: mutationOptions} = options ?
     }
     export const profileProfilesPartialUpdate = (
     id: number,
-    patchedProfileUpdate: PatchedProfileUpdate,
+    patchedProfileUpdate: BodyType<PatchedProfileUpdate>,
  ) => {
       
       
@@ -1283,9 +1045,9 @@ const {mutation: mutationOptions} = options ?
   
 
 
-export const getProfileProfilesPartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesPartialUpdate>>, TError,{id: number;data: PatchedProfileUpdate}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof profileProfilesPartialUpdate>>, TError,{id: number;data: PatchedProfileUpdate}, TContext> => {
+export const getProfileProfilesPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesPartialUpdate>>, TError,{id: number;data: BodyType<PatchedProfileUpdate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof profileProfilesPartialUpdate>>, TError,{id: number;data: BodyType<PatchedProfileUpdate>}, TContext> => {
 
 const mutationKey = ['profileProfilesPartialUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -1297,7 +1059,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileProfilesPartialUpdate>>, {id: number;data: PatchedProfileUpdate}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileProfilesPartialUpdate>>, {id: number;data: BodyType<PatchedProfileUpdate>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  profileProfilesPartialUpdate(id,data,)
@@ -1309,15 +1071,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type ProfileProfilesPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof profileProfilesPartialUpdate>>>
-    export type ProfileProfilesPartialUpdateMutationBody = PatchedProfileUpdate
-    export type ProfileProfilesPartialUpdateMutationError = unknown
+    export type ProfileProfilesPartialUpdateMutationBody = BodyType<PatchedProfileUpdate>
+    export type ProfileProfilesPartialUpdateMutationError = ErrorType<unknown>
 
-    export const useProfileProfilesPartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesPartialUpdate>>, TError,{id: number;data: PatchedProfileUpdate}, TContext>, }
+    export const useProfileProfilesPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesPartialUpdate>>, TError,{id: number;data: BodyType<PatchedProfileUpdate>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profileProfilesPartialUpdate>>,
         TError,
-        {id: number;data: PatchedProfileUpdate},
+        {id: number;data: BodyType<PatchedProfileUpdate>},
         TContext
       > => {
 
@@ -1338,7 +1100,7 @@ const {mutation: mutationOptions} = options ?
   
 
 
-export const getProfileProfilesDestroyMutationOptions = <TError = unknown,
+export const getProfileProfilesDestroyMutationOptions = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesDestroy>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof profileProfilesDestroy>>, TError,{id: number}, TContext> => {
 
@@ -1365,9 +1127,9 @@ const {mutation: mutationOptions} = options ?
 
     export type ProfileProfilesDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof profileProfilesDestroy>>>
     
-    export type ProfileProfilesDestroyMutationError = unknown
+    export type ProfileProfilesDestroyMutationError = ErrorType<unknown>
 
-    export const useProfileProfilesDestroy = <TError = unknown,
+    export const useProfileProfilesDestroy = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesDestroy>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profileProfilesDestroy>>,
@@ -1382,7 +1144,7 @@ const {mutation: mutationOptions} = options ?
     }
     export const profileProfilesUpdateCompletionStatusCreate = (
     id: number,
-    profile: NonReadonly<Profile>,
+    profile: BodyType<NonReadonly<Profile>>,
  signal?: AbortSignal
 ) => {
       
@@ -1397,9 +1159,9 @@ const {mutation: mutationOptions} = options ?
   
 
 
-export const getProfileProfilesUpdateCompletionStatusCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesUpdateCompletionStatusCreate>>, TError,{id: number;data: NonReadonly<Profile>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof profileProfilesUpdateCompletionStatusCreate>>, TError,{id: number;data: NonReadonly<Profile>}, TContext> => {
+export const getProfileProfilesUpdateCompletionStatusCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesUpdateCompletionStatusCreate>>, TError,{id: number;data: BodyType<NonReadonly<Profile>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof profileProfilesUpdateCompletionStatusCreate>>, TError,{id: number;data: BodyType<NonReadonly<Profile>>}, TContext> => {
 
 const mutationKey = ['profileProfilesUpdateCompletionStatusCreate'];
 const {mutation: mutationOptions} = options ?
@@ -1411,7 +1173,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileProfilesUpdateCompletionStatusCreate>>, {id: number;data: NonReadonly<Profile>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileProfilesUpdateCompletionStatusCreate>>, {id: number;data: BodyType<NonReadonly<Profile>>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  profileProfilesUpdateCompletionStatusCreate(id,data,)
@@ -1423,15 +1185,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type ProfileProfilesUpdateCompletionStatusCreateMutationResult = NonNullable<Awaited<ReturnType<typeof profileProfilesUpdateCompletionStatusCreate>>>
-    export type ProfileProfilesUpdateCompletionStatusCreateMutationBody = NonReadonly<Profile>
-    export type ProfileProfilesUpdateCompletionStatusCreateMutationError = unknown
+    export type ProfileProfilesUpdateCompletionStatusCreateMutationBody = BodyType<NonReadonly<Profile>>
+    export type ProfileProfilesUpdateCompletionStatusCreateMutationError = ErrorType<unknown>
 
-    export const useProfileProfilesUpdateCompletionStatusCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesUpdateCompletionStatusCreate>>, TError,{id: number;data: NonReadonly<Profile>}, TContext>, }
+    export const useProfileProfilesUpdateCompletionStatusCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesUpdateCompletionStatusCreate>>, TError,{id: number;data: BodyType<NonReadonly<Profile>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profileProfilesUpdateCompletionStatusCreate>>,
         TError,
-        {id: number;data: NonReadonly<Profile>},
+        {id: number;data: BodyType<NonReadonly<Profile>>},
         TContext
       > => {
 
@@ -1457,7 +1219,7 @@ export const getProfileProfilesAddressesSummaryRetrieveQueryKey = () => {
     }
 
     
-export const getProfileProfilesAddressesSummaryRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError, TData>>, }
+export const getProfileProfilesAddressesSummaryRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1476,10 +1238,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type ProfileProfilesAddressesSummaryRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>>
-export type ProfileProfilesAddressesSummaryRetrieveQueryError = unknown
+export type ProfileProfilesAddressesSummaryRetrieveQueryError = ErrorType<unknown>
 
 
-export function useProfileProfilesAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError = unknown>(
+export function useProfileProfilesAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError = ErrorType<unknown>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>,
@@ -1489,7 +1251,7 @@ export function useProfileProfilesAddressesSummaryRetrieve<TData = Awaited<Retur
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileProfilesAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError = unknown>(
+export function useProfileProfilesAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>,
@@ -1499,12 +1261,12 @@ export function useProfileProfilesAddressesSummaryRetrieve<TData = Awaited<Retur
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileProfilesAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError = unknown>(
+export function useProfileProfilesAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useProfileProfilesAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError = unknown>(
+export function useProfileProfilesAddressesSummaryRetrieve<TData = Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesAddressesSummaryRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1538,7 +1300,7 @@ export const getProfileProfilesCheckoutStatusRetrieveQueryKey = () => {
     }
 
     
-export const getProfileProfilesCheckoutStatusRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError, TData>>, }
+export const getProfileProfilesCheckoutStatusRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1557,10 +1319,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type ProfileProfilesCheckoutStatusRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>>
-export type ProfileProfilesCheckoutStatusRetrieveQueryError = unknown
+export type ProfileProfilesCheckoutStatusRetrieveQueryError = ErrorType<unknown>
 
 
-export function useProfileProfilesCheckoutStatusRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError = unknown>(
+export function useProfileProfilesCheckoutStatusRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError = ErrorType<unknown>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>,
@@ -1570,7 +1332,7 @@ export function useProfileProfilesCheckoutStatusRetrieve<TData = Awaited<ReturnT
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileProfilesCheckoutStatusRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError = unknown>(
+export function useProfileProfilesCheckoutStatusRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>,
@@ -1580,12 +1342,12 @@ export function useProfileProfilesCheckoutStatusRetrieve<TData = Awaited<ReturnT
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileProfilesCheckoutStatusRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError = unknown>(
+export function useProfileProfilesCheckoutStatusRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useProfileProfilesCheckoutStatusRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError = unknown>(
+export function useProfileProfilesCheckoutStatusRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesCheckoutStatusRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1619,7 +1381,7 @@ export const getProfileProfilesCompletionRequirementsRetrieveQueryKey = () => {
     }
 
     
-export const getProfileProfilesCompletionRequirementsRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError, TData>>, }
+export const getProfileProfilesCompletionRequirementsRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1638,10 +1400,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type ProfileProfilesCompletionRequirementsRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>>
-export type ProfileProfilesCompletionRequirementsRetrieveQueryError = unknown
+export type ProfileProfilesCompletionRequirementsRetrieveQueryError = ErrorType<unknown>
 
 
-export function useProfileProfilesCompletionRequirementsRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError = unknown>(
+export function useProfileProfilesCompletionRequirementsRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError = ErrorType<unknown>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>,
@@ -1651,7 +1413,7 @@ export function useProfileProfilesCompletionRequirementsRetrieve<TData = Awaited
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileProfilesCompletionRequirementsRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError = unknown>(
+export function useProfileProfilesCompletionRequirementsRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>,
@@ -1661,12 +1423,12 @@ export function useProfileProfilesCompletionRequirementsRetrieve<TData = Awaited
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileProfilesCompletionRequirementsRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError = unknown>(
+export function useProfileProfilesCompletionRequirementsRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useProfileProfilesCompletionRequirementsRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError = unknown>(
+export function useProfileProfilesCompletionRequirementsRetrieve<TData = Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesCompletionRequirementsRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1683,7 +1445,7 @@ export function useProfileProfilesCompletionRequirementsRetrieve<TData = Awaited
 
 
 export const profileProfilesMarkCompletedPartialUpdate = (
-    patchedProfile: NonReadonly<PatchedProfile>,
+    patchedProfile: BodyType<NonReadonly<PatchedProfile>>,
  ) => {
       
       
@@ -1697,9 +1459,9 @@ export const profileProfilesMarkCompletedPartialUpdate = (
   
 
 
-export const getProfileProfilesMarkCompletedPartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesMarkCompletedPartialUpdate>>, TError,{data: NonReadonly<PatchedProfile>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof profileProfilesMarkCompletedPartialUpdate>>, TError,{data: NonReadonly<PatchedProfile>}, TContext> => {
+export const getProfileProfilesMarkCompletedPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesMarkCompletedPartialUpdate>>, TError,{data: BodyType<NonReadonly<PatchedProfile>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof profileProfilesMarkCompletedPartialUpdate>>, TError,{data: BodyType<NonReadonly<PatchedProfile>>}, TContext> => {
 
 const mutationKey = ['profileProfilesMarkCompletedPartialUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -1711,7 +1473,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileProfilesMarkCompletedPartialUpdate>>, {data: NonReadonly<PatchedProfile>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileProfilesMarkCompletedPartialUpdate>>, {data: BodyType<NonReadonly<PatchedProfile>>}> = (props) => {
           const {data} = props ?? {};
 
           return  profileProfilesMarkCompletedPartialUpdate(data,)
@@ -1723,15 +1485,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type ProfileProfilesMarkCompletedPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof profileProfilesMarkCompletedPartialUpdate>>>
-    export type ProfileProfilesMarkCompletedPartialUpdateMutationBody = NonReadonly<PatchedProfile>
-    export type ProfileProfilesMarkCompletedPartialUpdateMutationError = unknown
+    export type ProfileProfilesMarkCompletedPartialUpdateMutationBody = BodyType<NonReadonly<PatchedProfile>>
+    export type ProfileProfilesMarkCompletedPartialUpdateMutationError = ErrorType<unknown>
 
-    export const useProfileProfilesMarkCompletedPartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesMarkCompletedPartialUpdate>>, TError,{data: NonReadonly<PatchedProfile>}, TContext>, }
+    export const useProfileProfilesMarkCompletedPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesMarkCompletedPartialUpdate>>, TError,{data: BodyType<NonReadonly<PatchedProfile>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profileProfilesMarkCompletedPartialUpdate>>,
         TError,
-        {data: NonReadonly<PatchedProfile>},
+        {data: BodyType<NonReadonly<PatchedProfile>>},
         TContext
       > => {
 
@@ -1757,7 +1519,7 @@ export const getProfileProfilesMeRetrieveQueryKey = () => {
     }
 
     
-export const getProfileProfilesMeRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError, TData>>, }
+export const getProfileProfilesMeRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1776,10 +1538,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type ProfileProfilesMeRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof profileProfilesMeRetrieve>>>
-export type ProfileProfilesMeRetrieveQueryError = unknown
+export type ProfileProfilesMeRetrieveQueryError = ErrorType<unknown>
 
 
-export function useProfileProfilesMeRetrieve<TData = Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError = unknown>(
+export function useProfileProfilesMeRetrieve<TData = Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError = ErrorType<unknown>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileProfilesMeRetrieve>>,
@@ -1789,7 +1551,7 @@ export function useProfileProfilesMeRetrieve<TData = Awaited<ReturnType<typeof p
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileProfilesMeRetrieve<TData = Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError = unknown>(
+export function useProfileProfilesMeRetrieve<TData = Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileProfilesMeRetrieve>>,
@@ -1799,12 +1561,12 @@ export function useProfileProfilesMeRetrieve<TData = Awaited<ReturnType<typeof p
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProfileProfilesMeRetrieve<TData = Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError = unknown>(
+export function useProfileProfilesMeRetrieve<TData = Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useProfileProfilesMeRetrieve<TData = Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError = unknown>(
+export function useProfileProfilesMeRetrieve<TData = Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileProfilesMeRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1821,7 +1583,7 @@ export function useProfileProfilesMeRetrieve<TData = Awaited<ReturnType<typeof p
 
 
 export const profileProfilesMePartialUpdate = (
-    patchedProfile: NonReadonly<PatchedProfile>,
+    patchedProfile: BodyType<NonReadonly<PatchedProfile>>,
  ) => {
       
       
@@ -1835,9 +1597,9 @@ export const profileProfilesMePartialUpdate = (
   
 
 
-export const getProfileProfilesMePartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesMePartialUpdate>>, TError,{data: NonReadonly<PatchedProfile>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof profileProfilesMePartialUpdate>>, TError,{data: NonReadonly<PatchedProfile>}, TContext> => {
+export const getProfileProfilesMePartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesMePartialUpdate>>, TError,{data: BodyType<NonReadonly<PatchedProfile>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof profileProfilesMePartialUpdate>>, TError,{data: BodyType<NonReadonly<PatchedProfile>>}, TContext> => {
 
 const mutationKey = ['profileProfilesMePartialUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -1849,7 +1611,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileProfilesMePartialUpdate>>, {data: NonReadonly<PatchedProfile>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof profileProfilesMePartialUpdate>>, {data: BodyType<NonReadonly<PatchedProfile>>}> = (props) => {
           const {data} = props ?? {};
 
           return  profileProfilesMePartialUpdate(data,)
@@ -1861,15 +1623,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type ProfileProfilesMePartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof profileProfilesMePartialUpdate>>>
-    export type ProfileProfilesMePartialUpdateMutationBody = NonReadonly<PatchedProfile>
-    export type ProfileProfilesMePartialUpdateMutationError = unknown
+    export type ProfileProfilesMePartialUpdateMutationBody = BodyType<NonReadonly<PatchedProfile>>
+    export type ProfileProfilesMePartialUpdateMutationError = ErrorType<unknown>
 
-    export const useProfileProfilesMePartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesMePartialUpdate>>, TError,{data: NonReadonly<PatchedProfile>}, TContext>, }
+    export const useProfileProfilesMePartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profileProfilesMePartialUpdate>>, TError,{data: BodyType<NonReadonly<PatchedProfile>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profileProfilesMePartialUpdate>>,
         TError,
-        {data: NonReadonly<PatchedProfile>},
+        {data: BodyType<NonReadonly<PatchedProfile>>},
         TContext
       > => {
 

@@ -65,22 +65,23 @@ shopClient.interceptors.response.use(
       await SecureStore.deleteItemAsync('session_token');
       router.replace('/login');
       Alert.alert('Please re-authenticate to continue');
-    } else if (status === 404) {
-      Alert.alert('Resource not found');
-    } else if (status === 403) {
-      Alert.alert('You do not have permission to access this resource.');
-    } else if (status === 410) {
-      await SecureStore.deleteItemAsync('session_token');
-      Alert.alert('Session expired');
-    } else if (status === 409) {
-      Alert.alert('Conflict - please try again');
-    } else if (status && status >= 400 && status < 500) {
-      const message =
-        (error.response?.data as any)?.detail ||
-        (error.response?.data as any)?.message ||
-        'An error occurred';
-      Alert.alert(message);
-    } else {
+      
+    // } else if (status === 404) {
+    //   Alert.alert('Resource not found');
+    // } else if (status === 403) {
+    //   Alert.alert('You do not have permission to access this resource.');
+    // } else if (status === 410) {
+    //   await SecureStore.deleteItemAsync('session_token');
+    //   Alert.alert('Session expired');
+    // } else if (status === 409) {
+    //   Alert.alert('Conflict - please try again');
+    // } else if (status && status >= 400 && status < 500) {
+    //   const message =
+    //     (error.response?.data as any)?.detail ||
+    //     (error.response?.data as any)?.message ||
+    //     'An error occurred';
+    //   Alert.alert(message);
+    } else if (status && status >= 500){
       console.error("error", error);
       Alert.alert('Something went wrong');
     }

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { toast } from 'sonner';
+import { useAuthStore } from '@/stores/authStore';
 
 // const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
 const BASE_URL = 'http://localhost:8000';
@@ -40,16 +41,17 @@ authClient.interceptors.response.use(
     const status = error.response?.status;
 
     if (status === 401) {
-      toast.error('Authentication required');
-      window.location.href = '/login';
+      console.log('401 error caught in auth-mutator:', error.config?.url);
+      useAuthStore.getState().clearSession();
+
     } else if (status === 403) {
       toast.error('CSRF token missing or invalid');
     } else if (status === 422) {
       toast.error('Please check your input');
-    }
-    else {
+    } else if (status && status >= 400) {
       toast.error('Something went wrong');
     }
+    // Don't show any error message for network errors or undefined status
     return Promise.reject(error);
   }
 );

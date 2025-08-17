@@ -14,6 +14,11 @@ export interface ProductImage {
   /** Product image */
   image: string;
   /**
+   * Get full URL of the image.
+   * @nullable
+   */
+  readonly image_url: string | null;
+  /**
    * Alternative text for the image
    * @maxLength 255
    */

@@ -27,7 +27,9 @@ export const useAuth = () => {
   
   // Use Orval-generated hooks directly
   const sessionQuery = useGetAllauthClientV1AuthSession('browser', {
-    query: {},
+    query: {
+      retry: false, // Don't retry failed requests
+    },
   })
 
   // Handle successful session fetch
@@ -36,6 +38,13 @@ export const useAuth = () => {
       setSession(sessionQuery.data)
     }
   }, [sessionQuery.data, setSession])
+
+  // Handle authentication errors
+  useEffect(() => {
+    if (sessionQuery.error && sessionQuery.error.status === 401) {
+      clearSession();
+    }
+  }, [sessionQuery.error, clearSession]);
 
   const loginMutation = usePostAllauthClientV1AuthLogin({
     mutation: {

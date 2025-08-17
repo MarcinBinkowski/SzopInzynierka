@@ -27,13 +27,14 @@ import type {
 import type {
   Country,
   CountryCreate,
+  CountryList,
   CountryUpdate,
   GeographicCountriesListParams,
-  PaginatedCountryListList,
   PatchedCountryUpdate
 } from '.././schemas';
 
 import { shopInstance } from '../../../shop-mutator';
+import type { ErrorType , BodyType } from '../../../shop-mutator';
 
 
 
@@ -44,7 +45,7 @@ export const geographicCountriesList = (
 ) => {
       
       
-      return shopInstance<PaginatedCountryListList>(
+      return shopInstance<CountryList[]>(
       {url: `/api/geographic/countries/`, method: 'GET',
         params, signal
     },
@@ -57,7 +58,7 @@ export const getGeographicCountriesListQueryKey = (params?: GeographicCountriesL
     }
 
     
-export const getGeographicCountriesListQueryOptions = <TData = Awaited<ReturnType<typeof geographicCountriesList>>, TError = unknown>(params?: GeographicCountriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof geographicCountriesList>>, TError, TData>>, }
+export const getGeographicCountriesListQueryOptions = <TData = Awaited<ReturnType<typeof geographicCountriesList>>, TError = ErrorType<unknown>>(params?: GeographicCountriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof geographicCountriesList>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -76,10 +77,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GeographicCountriesListQueryResult = NonNullable<Awaited<ReturnType<typeof geographicCountriesList>>>
-export type GeographicCountriesListQueryError = unknown
+export type GeographicCountriesListQueryError = ErrorType<unknown>
 
 
-export function useGeographicCountriesList<TData = Awaited<ReturnType<typeof geographicCountriesList>>, TError = unknown>(
+export function useGeographicCountriesList<TData = Awaited<ReturnType<typeof geographicCountriesList>>, TError = ErrorType<unknown>>(
  params: undefined |  GeographicCountriesListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof geographicCountriesList>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof geographicCountriesList>>,
@@ -89,7 +90,7 @@ export function useGeographicCountriesList<TData = Awaited<ReturnType<typeof geo
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGeographicCountriesList<TData = Awaited<ReturnType<typeof geographicCountriesList>>, TError = unknown>(
+export function useGeographicCountriesList<TData = Awaited<ReturnType<typeof geographicCountriesList>>, TError = ErrorType<unknown>>(
  params?: GeographicCountriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof geographicCountriesList>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof geographicCountriesList>>,
@@ -99,12 +100,12 @@ export function useGeographicCountriesList<TData = Awaited<ReturnType<typeof geo
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGeographicCountriesList<TData = Awaited<ReturnType<typeof geographicCountriesList>>, TError = unknown>(
+export function useGeographicCountriesList<TData = Awaited<ReturnType<typeof geographicCountriesList>>, TError = ErrorType<unknown>>(
  params?: GeographicCountriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof geographicCountriesList>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGeographicCountriesList<TData = Awaited<ReturnType<typeof geographicCountriesList>>, TError = unknown>(
+export function useGeographicCountriesList<TData = Awaited<ReturnType<typeof geographicCountriesList>>, TError = ErrorType<unknown>>(
  params?: GeographicCountriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof geographicCountriesList>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -121,7 +122,7 @@ export function useGeographicCountriesList<TData = Awaited<ReturnType<typeof geo
 
 
 export const geographicCountriesCreate = (
-    countryCreate: CountryCreate,
+    countryCreate: BodyType<CountryCreate>,
  signal?: AbortSignal
 ) => {
       
@@ -136,9 +137,9 @@ export const geographicCountriesCreate = (
   
 
 
-export const getGeographicCountriesCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesCreate>>, TError,{data: CountryCreate}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesCreate>>, TError,{data: CountryCreate}, TContext> => {
+export const getGeographicCountriesCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesCreate>>, TError,{data: BodyType<CountryCreate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesCreate>>, TError,{data: BodyType<CountryCreate>}, TContext> => {
 
 const mutationKey = ['geographicCountriesCreate'];
 const {mutation: mutationOptions} = options ?
@@ -150,7 +151,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof geographicCountriesCreate>>, {data: CountryCreate}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof geographicCountriesCreate>>, {data: BodyType<CountryCreate>}> = (props) => {
           const {data} = props ?? {};
 
           return  geographicCountriesCreate(data,)
@@ -162,15 +163,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type GeographicCountriesCreateMutationResult = NonNullable<Awaited<ReturnType<typeof geographicCountriesCreate>>>
-    export type GeographicCountriesCreateMutationBody = CountryCreate
-    export type GeographicCountriesCreateMutationError = unknown
+    export type GeographicCountriesCreateMutationBody = BodyType<CountryCreate>
+    export type GeographicCountriesCreateMutationError = ErrorType<unknown>
 
-    export const useGeographicCountriesCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesCreate>>, TError,{data: CountryCreate}, TContext>, }
+    export const useGeographicCountriesCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesCreate>>, TError,{data: BodyType<CountryCreate>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof geographicCountriesCreate>>,
         TError,
-        {data: CountryCreate},
+        {data: BodyType<CountryCreate>},
         TContext
       > => {
 
@@ -196,7 +197,7 @@ export const getGeographicCountriesRetrieveQueryKey = (id: number,) => {
     }
 
     
-export const getGeographicCountriesRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError, TData>>, }
+export const getGeographicCountriesRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -215,10 +216,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GeographicCountriesRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof geographicCountriesRetrieve>>>
-export type GeographicCountriesRetrieveQueryError = unknown
+export type GeographicCountriesRetrieveQueryError = ErrorType<unknown>
 
 
-export function useGeographicCountriesRetrieve<TData = Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError = unknown>(
+export function useGeographicCountriesRetrieve<TData = Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof geographicCountriesRetrieve>>,
@@ -228,7 +229,7 @@ export function useGeographicCountriesRetrieve<TData = Awaited<ReturnType<typeof
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGeographicCountriesRetrieve<TData = Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError = unknown>(
+export function useGeographicCountriesRetrieve<TData = Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof geographicCountriesRetrieve>>,
@@ -238,12 +239,12 @@ export function useGeographicCountriesRetrieve<TData = Awaited<ReturnType<typeof
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGeographicCountriesRetrieve<TData = Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError = unknown>(
+export function useGeographicCountriesRetrieve<TData = Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGeographicCountriesRetrieve<TData = Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError = unknown>(
+export function useGeographicCountriesRetrieve<TData = Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof geographicCountriesRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -261,7 +262,7 @@ export function useGeographicCountriesRetrieve<TData = Awaited<ReturnType<typeof
 
 export const geographicCountriesUpdate = (
     id: number,
-    countryUpdate: CountryUpdate,
+    countryUpdate: BodyType<CountryUpdate>,
  ) => {
       
       
@@ -275,9 +276,9 @@ export const geographicCountriesUpdate = (
   
 
 
-export const getGeographicCountriesUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesUpdate>>, TError,{id: number;data: CountryUpdate}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesUpdate>>, TError,{id: number;data: CountryUpdate}, TContext> => {
+export const getGeographicCountriesUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesUpdate>>, TError,{id: number;data: BodyType<CountryUpdate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesUpdate>>, TError,{id: number;data: BodyType<CountryUpdate>}, TContext> => {
 
 const mutationKey = ['geographicCountriesUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -289,7 +290,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof geographicCountriesUpdate>>, {id: number;data: CountryUpdate}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof geographicCountriesUpdate>>, {id: number;data: BodyType<CountryUpdate>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  geographicCountriesUpdate(id,data,)
@@ -301,15 +302,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type GeographicCountriesUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof geographicCountriesUpdate>>>
-    export type GeographicCountriesUpdateMutationBody = CountryUpdate
-    export type GeographicCountriesUpdateMutationError = unknown
+    export type GeographicCountriesUpdateMutationBody = BodyType<CountryUpdate>
+    export type GeographicCountriesUpdateMutationError = ErrorType<unknown>
 
-    export const useGeographicCountriesUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesUpdate>>, TError,{id: number;data: CountryUpdate}, TContext>, }
+    export const useGeographicCountriesUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesUpdate>>, TError,{id: number;data: BodyType<CountryUpdate>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof geographicCountriesUpdate>>,
         TError,
-        {id: number;data: CountryUpdate},
+        {id: number;data: BodyType<CountryUpdate>},
         TContext
       > => {
 
@@ -319,7 +320,7 @@ const {mutation: mutationOptions} = options ?
     }
     export const geographicCountriesPartialUpdate = (
     id: number,
-    patchedCountryUpdate: PatchedCountryUpdate,
+    patchedCountryUpdate: BodyType<PatchedCountryUpdate>,
  ) => {
       
       
@@ -333,9 +334,9 @@ const {mutation: mutationOptions} = options ?
   
 
 
-export const getGeographicCountriesPartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesPartialUpdate>>, TError,{id: number;data: PatchedCountryUpdate}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesPartialUpdate>>, TError,{id: number;data: PatchedCountryUpdate}, TContext> => {
+export const getGeographicCountriesPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesPartialUpdate>>, TError,{id: number;data: BodyType<PatchedCountryUpdate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesPartialUpdate>>, TError,{id: number;data: BodyType<PatchedCountryUpdate>}, TContext> => {
 
 const mutationKey = ['geographicCountriesPartialUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -347,7 +348,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof geographicCountriesPartialUpdate>>, {id: number;data: PatchedCountryUpdate}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof geographicCountriesPartialUpdate>>, {id: number;data: BodyType<PatchedCountryUpdate>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  geographicCountriesPartialUpdate(id,data,)
@@ -359,15 +360,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type GeographicCountriesPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof geographicCountriesPartialUpdate>>>
-    export type GeographicCountriesPartialUpdateMutationBody = PatchedCountryUpdate
-    export type GeographicCountriesPartialUpdateMutationError = unknown
+    export type GeographicCountriesPartialUpdateMutationBody = BodyType<PatchedCountryUpdate>
+    export type GeographicCountriesPartialUpdateMutationError = ErrorType<unknown>
 
-    export const useGeographicCountriesPartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesPartialUpdate>>, TError,{id: number;data: PatchedCountryUpdate}, TContext>, }
+    export const useGeographicCountriesPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesPartialUpdate>>, TError,{id: number;data: BodyType<PatchedCountryUpdate>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof geographicCountriesPartialUpdate>>,
         TError,
-        {id: number;data: PatchedCountryUpdate},
+        {id: number;data: BodyType<PatchedCountryUpdate>},
         TContext
       > => {
 
@@ -388,7 +389,7 @@ const {mutation: mutationOptions} = options ?
   
 
 
-export const getGeographicCountriesDestroyMutationOptions = <TError = unknown,
+export const getGeographicCountriesDestroyMutationOptions = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesDestroy>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesDestroy>>, TError,{id: number}, TContext> => {
 
@@ -415,9 +416,9 @@ const {mutation: mutationOptions} = options ?
 
     export type GeographicCountriesDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof geographicCountriesDestroy>>>
     
-    export type GeographicCountriesDestroyMutationError = unknown
+    export type GeographicCountriesDestroyMutationError = ErrorType<unknown>
 
-    export const useGeographicCountriesDestroy = <TError = unknown,
+    export const useGeographicCountriesDestroy = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof geographicCountriesDestroy>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof geographicCountriesDestroy>>,

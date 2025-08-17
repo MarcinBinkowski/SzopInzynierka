@@ -15,32 +15,26 @@ import {
  */
 export const catalogCategoriesListQueryParams = zod.object({
   "ordering": zod.coerce.string().optional().describe('Which field to use when ordering the results.'),
-  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
-  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.'),
   "search": zod.coerce.string().optional().describe('A search term.')
 })
 
-export const catalogCategoriesListResponseResultsItemNameMax = 100;
-export const catalogCategoriesListResponseResultsItemSlugMax = 100;
+export const catalogCategoriesListResponseNameMax = 100;
+export const catalogCategoriesListResponseSlugMax = 100;
 
-export const catalogCategoriesListResponseResultsItemSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
+export const catalogCategoriesListResponseSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 
 
-export const catalogCategoriesListResponse = zod.object({
-  "count": zod.number(),
-  "next": zod.string().url().nullish(),
-  "previous": zod.string().url().nullish(),
-  "results": zod.array(zod.object({
+export const catalogCategoriesListResponseItem = zod.object({
   "id": zod.number(),
-  "name": zod.string().max(catalogCategoriesListResponseResultsItemNameMax).describe('Category name'),
-  "slug": zod.string().max(catalogCategoriesListResponseResultsItemSlugMax).regex(catalogCategoriesListResponseResultsItemSlugRegExp).describe('URL-friendly version of the name'),
+  "name": zod.string().max(catalogCategoriesListResponseNameMax).describe('Category name'),
+  "slug": zod.string().max(catalogCategoriesListResponseSlugMax).regex(catalogCategoriesListResponseSlugRegExp).describe('URL-friendly version of the name'),
   "description": zod.string().optional().describe('Category description'),
   "is_active": zod.boolean().optional().describe('Whether this category is visible'),
   "active_product_count": zod.number(),
   "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
   "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for Category model.'))
-})
+}).describe('Serializer for Category model.')
+export const catalogCategoriesListResponse = zod.array(catalogCategoriesListResponseItem)
 
 /**
  * ViewSet for Category model with CRUD operations.
@@ -193,31 +187,26 @@ export const catalogCategoriesProductsRetrieveResponse = zod.object({
 export const catalogImagesListQueryParams = zod.object({
   "is_primary": zod.coerce.boolean().optional(),
   "ordering": zod.coerce.string().optional().describe('Which field to use when ordering the results.'),
-  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
-  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.'),
   "product": zod.coerce.number().optional()
 })
 
-export const catalogImagesListResponseResultsItemAltTextMax = 255;
-export const catalogImagesListResponseResultsItemSortOrderMin = 0;
+export const catalogImagesListResponseAltTextMax = 255;
+export const catalogImagesListResponseSortOrderMin = 0;
 
-export const catalogImagesListResponseResultsItemSortOrderMax = 2147483647;
+export const catalogImagesListResponseSortOrderMax = 2147483647;
 
 
-export const catalogImagesListResponse = zod.object({
-  "count": zod.number(),
-  "next": zod.string().url().nullish(),
-  "previous": zod.string().url().nullish(),
-  "results": zod.array(zod.object({
+export const catalogImagesListResponseItem = zod.object({
   "id": zod.number(),
   "image": zod.string().url().describe('Product image'),
-  "alt_text": zod.string().max(catalogImagesListResponseResultsItemAltTextMax).optional().describe('Alternative text for the image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
+  "alt_text": zod.string().max(catalogImagesListResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(catalogImagesListResponseResultsItemSortOrderMin).max(catalogImagesListResponseResultsItemSortOrderMax).optional().describe('Display order of images'),
+  "sort_order": zod.number().min(catalogImagesListResponseSortOrderMin).max(catalogImagesListResponseSortOrderMax).optional().describe('Display order of images'),
   "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
   "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.'))
-})
+}).describe('Serializer for ProductImage model.')
+export const catalogImagesListResponse = zod.array(catalogImagesListResponseItem)
 
 /**
  * ViewSet for ProductImage model with CRUD operations.
@@ -251,6 +240,7 @@ export const catalogImagesRetrieveResponseSortOrderMax = 2147483647;
 export const catalogImagesRetrieveResponse = zod.object({
   "id": zod.number(),
   "image": zod.string().url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogImagesRetrieveResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesRetrieveResponseSortOrderMin).max(catalogImagesRetrieveResponseSortOrderMax).optional().describe('Display order of images'),
@@ -287,6 +277,7 @@ export const catalogImagesUpdateResponseSortOrderMax = 2147483647;
 export const catalogImagesUpdateResponse = zod.object({
   "id": zod.number(),
   "image": zod.string().url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogImagesUpdateResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesUpdateResponseSortOrderMin).max(catalogImagesUpdateResponseSortOrderMax).optional().describe('Display order of images'),
@@ -323,6 +314,7 @@ export const catalogImagesPartialUpdateResponseSortOrderMax = 2147483647;
 export const catalogImagesPartialUpdateResponse = zod.object({
   "id": zod.number(),
   "image": zod.string().url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogImagesPartialUpdateResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesPartialUpdateResponseSortOrderMin).max(catalogImagesPartialUpdateResponseSortOrderMax).optional().describe('Display order of images'),
@@ -366,6 +358,7 @@ export const catalogImagesSetPrimaryCreateResponseSortOrderMax = 2147483647;
 export const catalogImagesSetPrimaryCreateResponse = zod.object({
   "id": zod.number(),
   "image": zod.string().url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogImagesSetPrimaryCreateResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesSetPrimaryCreateResponseSortOrderMin).max(catalogImagesSetPrimaryCreateResponseSortOrderMax).optional().describe('Display order of images'),
@@ -379,28 +372,22 @@ export const catalogManufacturersListParams = zod.object({
 
 export const catalogManufacturersListQueryParams = zod.object({
   "ordering": zod.coerce.string().optional().describe('Which field to use when ordering the results.'),
-  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
-  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.'),
   "search": zod.coerce.string().optional().describe('A search term.')
 })
 
-export const catalogManufacturersListResponseResultsItemNameMax = 100;
-export const catalogManufacturersListResponseResultsItemSlugMax = 100;
+export const catalogManufacturersListResponseNameMax = 100;
+export const catalogManufacturersListResponseSlugMax = 100;
 
-export const catalogManufacturersListResponseResultsItemSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
+export const catalogManufacturersListResponseSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
 
 
-export const catalogManufacturersListResponse = zod.object({
-  "count": zod.number(),
-  "next": zod.string().url().nullish(),
-  "previous": zod.string().url().nullish(),
-  "results": zod.array(zod.object({
+export const catalogManufacturersListResponseItem = zod.object({
   "id": zod.number(),
-  "name": zod.string().max(catalogManufacturersListResponseResultsItemNameMax).describe('Manufacturer name'),
-  "slug": zod.string().max(catalogManufacturersListResponseResultsItemSlugMax).regex(catalogManufacturersListResponseResultsItemSlugRegExp).describe('URL-friendly version of the name'),
+  "name": zod.string().max(catalogManufacturersListResponseNameMax).describe('Manufacturer name'),
+  "slug": zod.string().max(catalogManufacturersListResponseSlugMax).regex(catalogManufacturersListResponseSlugRegExp).describe('URL-friendly version of the name'),
   "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible')
-}).describe('Simplified manufacturer serializer for list views.'))
-})
+}).describe('Simplified manufacturer serializer for list views.')
+export const catalogManufacturersListResponse = zod.array(catalogManufacturersListResponseItem)
 
 export const catalogManufacturersCreateParams = zod.object({
   "id": zod.coerce.number()
@@ -509,6 +496,50 @@ export const catalogManufacturersDestroyParams = zod.object({
 })
 
 /**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesListResponseItem = zod.object({
+  "id": zod.number(),
+  "stock_alerts_enabled": zod.boolean().optional().describe('Receive alerts when out-of-stock wishlist items become available'),
+  "price_drop_alerts_enabled": zod.boolean().optional().describe('Receive alerts when wishlist items go on sale'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+}).describe('Serializer for NotificationPreference model.')
+export const catalogNotificationsPreferencesListResponse = zod.array(catalogNotificationsPreferencesListResponseItem)
+
+/**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesCreateBody = zod.object({
+  "stock_alerts_enabled": zod.boolean().optional().describe('Receive alerts when out-of-stock wishlist items become available'),
+  "price_drop_alerts_enabled": zod.boolean().optional().describe('Receive alerts when wishlist items go on sale')
+}).describe('Serializer for NotificationPreference model.')
+
+/**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesUpdateParams = zod.object({
+  "id": zod.coerce.string()
+})
+
+export const catalogNotificationsPreferencesUpdateBody = zod.object({
+  "stock_alerts_enabled": zod.boolean().optional().describe('Receive alerts when out-of-stock wishlist items become available'),
+  "price_drop_alerts_enabled": zod.boolean().optional().describe('Receive alerts when wishlist items go on sale')
+}).describe('Serializer for updating notification preferences.')
+
+export const catalogNotificationsPreferencesUpdateResponse = zod.object({
+  "stock_alerts_enabled": zod.boolean().optional().describe('Receive alerts when out-of-stock wishlist items become available'),
+  "price_drop_alerts_enabled": zod.boolean().optional().describe('Receive alerts when wishlist items go on sale')
+}).describe('Serializer for updating notification preferences.')
+
+/**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesDestroyParams = zod.object({
+  "id": zod.coerce.string()
+})
+
+/**
  * ViewSet for Product model with advanced CRUD operations.
  */
 export const catalogProductsListQueryParams = zod.object({
@@ -572,7 +603,7 @@ export const catalogProductsListResponse = zod.object({
   "short_description": zod.string().max(catalogProductsListResponseResultsItemShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.string().regex(catalogProductsListResponseResultsItemPriceRegExp).describe('Product price'),
   "original_price": zod.string().regex(catalogProductsListResponseResultsItemOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsListResponseResultsItemSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsListResponseResultsItemStockQuantityMin).max(catalogProductsListResponseResultsItemStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -686,7 +717,7 @@ export const catalogProductsRetrieveResponse = zod.object({
   "short_description": zod.string().max(catalogProductsRetrieveResponseShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.string().regex(catalogProductsRetrieveResponsePriceRegExp).describe('Product price'),
   "original_price": zod.string().regex(catalogProductsRetrieveResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsRetrieveResponseSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsRetrieveResponseStockQuantityMin).max(catalogProductsRetrieveResponseStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -731,6 +762,7 @@ export const catalogProductsRetrieveResponse = zod.object({
   "images": zod.array(zod.object({
   "id": zod.number(),
   "image": zod.string().url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogProductsRetrieveResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsRetrieveResponseImagesItemSortOrderMin).max(catalogProductsRetrieveResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
@@ -817,7 +849,7 @@ export const catalogProductsUpdateResponse = zod.object({
   "short_description": zod.string().max(catalogProductsUpdateResponseShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.string().regex(catalogProductsUpdateResponsePriceRegExp).describe('Product price'),
   "original_price": zod.string().regex(catalogProductsUpdateResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsUpdateResponseSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsUpdateResponseStockQuantityMin).max(catalogProductsUpdateResponseStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -862,6 +894,7 @@ export const catalogProductsUpdateResponse = zod.object({
   "images": zod.array(zod.object({
   "id": zod.number(),
   "image": zod.string().url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogProductsUpdateResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsUpdateResponseImagesItemSortOrderMin).max(catalogProductsUpdateResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
@@ -948,7 +981,7 @@ export const catalogProductsPartialUpdateResponse = zod.object({
   "short_description": zod.string().max(catalogProductsPartialUpdateResponseShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.string().regex(catalogProductsPartialUpdateResponsePriceRegExp).describe('Product price'),
   "original_price": zod.string().regex(catalogProductsPartialUpdateResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsPartialUpdateResponseSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsPartialUpdateResponseStockQuantityMin).max(catalogProductsPartialUpdateResponseStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -993,6 +1026,7 @@ export const catalogProductsPartialUpdateResponse = zod.object({
   "images": zod.array(zod.object({
   "id": zod.number(),
   "image": zod.string().url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogProductsPartialUpdateResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsPartialUpdateResponseImagesItemSortOrderMin).max(catalogProductsPartialUpdateResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
@@ -1009,137 +1043,6 @@ export const catalogProductsPartialUpdateResponse = zod.object({
 export const catalogProductsDestroyParams = zod.object({
   "id": zod.coerce.number().describe('A unique integer value identifying this product.')
 })
-
-/**
- * Add product to user's wishlist.
- */
-export const catalogProductsAddToWishlistCreateParams = zod.object({
-  "id": zod.coerce.number().describe('A unique integer value identifying this product.')
-})
-
-export const catalogProductsAddToWishlistCreateBodyNameMax = 200;
-export const catalogProductsAddToWishlistCreateBodySlugMax = 200;
-
-export const catalogProductsAddToWishlistCreateBodySlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
-export const catalogProductsAddToWishlistCreateBodyShortDescriptionMax = 500;
-export const catalogProductsAddToWishlistCreateBodyPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
-export const catalogProductsAddToWishlistCreateBodyOriginalPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
-export const catalogProductsAddToWishlistCreateBodySkuMax = 100;
-export const catalogProductsAddToWishlistCreateBodyStockQuantityMin = 0;
-
-export const catalogProductsAddToWishlistCreateBodyStockQuantityMax = 2147483647;
-
-
-export const catalogProductsAddToWishlistCreateBody = zod.object({
-  "name": zod.string().max(catalogProductsAddToWishlistCreateBodyNameMax).describe('Product name'),
-  "slug": zod.string().max(catalogProductsAddToWishlistCreateBodySlugMax).regex(catalogProductsAddToWishlistCreateBodySlugRegExp).describe('URL-friendly version of the name'),
-  "description": zod.string().describe('Detailed product description'),
-  "short_description": zod.string().max(catalogProductsAddToWishlistCreateBodyShortDescriptionMax).optional().describe('Short description for listings'),
-  "price": zod.string().regex(catalogProductsAddToWishlistCreateBodyPriceRegExp).describe('Product price'),
-  "original_price": zod.string().regex(catalogProductsAddToWishlistCreateBodyOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "sku": zod.string().max(catalogProductsAddToWishlistCreateBodySkuMax).describe('Unique product identifier'),
-  "stock_quantity": zod.number().min(catalogProductsAddToWishlistCreateBodyStockQuantityMin).max(catalogProductsAddToWishlistCreateBodyStockQuantityMax).optional().describe('Available quantity in stock'),
-  "category_id": zod.number(),
-  "manufacturer_id": zod.number().nullish(),
-  "tag_ids": zod.array(zod.number()).optional(),
-  "status": zod.enum(['draft', 'active', 'inactive', 'out_of_stock']).describe('* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock').optional().describe('Product status\n\n* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock'),
-  "is_visible": zod.boolean().optional().describe('Is product visible to the users'),
-  "sale_start": zod.string().datetime({}).nullish(),
-  "sale_end": zod.string().datetime({}).nullish()
-}).describe('Detailed serializer for product detail views.')
-
-export const catalogProductsAddToWishlistCreateResponseNameMax = 200;
-export const catalogProductsAddToWishlistCreateResponseSlugMax = 200;
-
-export const catalogProductsAddToWishlistCreateResponseSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
-export const catalogProductsAddToWishlistCreateResponseShortDescriptionMax = 500;
-export const catalogProductsAddToWishlistCreateResponsePriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
-export const catalogProductsAddToWishlistCreateResponseOriginalPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
-export const catalogProductsAddToWishlistCreateResponseSkuMax = 100;
-export const catalogProductsAddToWishlistCreateResponseStockQuantityMin = 0;
-
-export const catalogProductsAddToWishlistCreateResponseStockQuantityMax = 2147483647;
-export const catalogProductsAddToWishlistCreateResponseCategoryNameMax = 100;
-export const catalogProductsAddToWishlistCreateResponseCategorySlugMax = 100;
-
-export const catalogProductsAddToWishlistCreateResponseCategorySlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
-export const catalogProductsAddToWishlistCreateResponseManufacturerNameMax = 100;
-export const catalogProductsAddToWishlistCreateResponseManufacturerSlugMax = 100;
-
-export const catalogProductsAddToWishlistCreateResponseManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
-export const catalogProductsAddToWishlistCreateResponseManufacturerWebsiteMax = 200;
-export const catalogProductsAddToWishlistCreateResponseTagsItemNameMax = 50;
-export const catalogProductsAddToWishlistCreateResponseTagsItemSlugMax = 50;
-
-export const catalogProductsAddToWishlistCreateResponseTagsItemSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
-export const catalogProductsAddToWishlistCreateResponseImagesItemAltTextMax = 255;
-export const catalogProductsAddToWishlistCreateResponseImagesItemSortOrderMin = 0;
-
-export const catalogProductsAddToWishlistCreateResponseImagesItemSortOrderMax = 2147483647;
-
-
-export const catalogProductsAddToWishlistCreateResponse = zod.object({
-  "id": zod.number(),
-  "name": zod.string().max(catalogProductsAddToWishlistCreateResponseNameMax).describe('Product name'),
-  "slug": zod.string().max(catalogProductsAddToWishlistCreateResponseSlugMax).regex(catalogProductsAddToWishlistCreateResponseSlugRegExp).describe('URL-friendly version of the name'),
-  "description": zod.string().describe('Detailed product description'),
-  "short_description": zod.string().max(catalogProductsAddToWishlistCreateResponseShortDescriptionMax).optional().describe('Short description for listings'),
-  "price": zod.string().regex(catalogProductsAddToWishlistCreateResponsePriceRegExp).describe('Product price'),
-  "original_price": zod.string().regex(catalogProductsAddToWishlistCreateResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
-  "discount_percentage": zod.number().describe('Calculate discount percentage.'),
-  "sku": zod.string().max(catalogProductsAddToWishlistCreateResponseSkuMax).describe('Unique product identifier'),
-  "stock_quantity": zod.number().min(catalogProductsAddToWishlistCreateResponseStockQuantityMin).max(catalogProductsAddToWishlistCreateResponseStockQuantityMax).optional().describe('Available quantity in stock'),
-  "category": zod.object({
-  "id": zod.number(),
-  "name": zod.string().max(catalogProductsAddToWishlistCreateResponseCategoryNameMax).describe('Category name'),
-  "slug": zod.string().max(catalogProductsAddToWishlistCreateResponseCategorySlugMax).regex(catalogProductsAddToWishlistCreateResponseCategorySlugRegExp).describe('URL-friendly version of the name'),
-  "description": zod.string().optional().describe('Category description'),
-  "is_active": zod.boolean().optional().describe('Whether this category is visible'),
-  "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for Category model.'),
-  "category_id": zod.number(),
-  "manufacturer": zod.object({
-  "id": zod.number(),
-  "name": zod.string().max(catalogProductsAddToWishlistCreateResponseManufacturerNameMax).describe('Manufacturer name'),
-  "slug": zod.string().max(catalogProductsAddToWishlistCreateResponseManufacturerSlugMax).regex(catalogProductsAddToWishlistCreateResponseManufacturerSlugRegExp).describe('URL-friendly version of the name'),
-  "description": zod.string().optional().describe('Manufacturer description'),
-  "website": zod.string().url().max(catalogProductsAddToWishlistCreateResponseManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
-  "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible'),
-  "active_product_count": zod.number(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for Manufacturer model.'),
-  "manufacturer_id": zod.number().nullish(),
-  "tags": zod.array(zod.object({
-  "id": zod.number(),
-  "name": zod.string().max(catalogProductsAddToWishlistCreateResponseTagsItemNameMax).describe('Tag name'),
-  "slug": zod.string().max(catalogProductsAddToWishlistCreateResponseTagsItemSlugMax).regex(catalogProductsAddToWishlistCreateResponseTagsItemSlugRegExp).describe('URL-friendly version of the name'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for Tag model.')),
-  "tag_ids": zod.array(zod.number()).optional(),
-  "status": zod.enum(['draft', 'active', 'inactive', 'out_of_stock']).describe('* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock').optional().describe('Product status\n\n* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock'),
-  "is_visible": zod.boolean().optional().describe('Is product visible to the users'),
-  "sale_start": zod.string().datetime({}).nullish(),
-  "sale_end": zod.string().datetime({}).nullish(),
-  "is_on_sale": zod.boolean(),
-  "is_in_stock": zod.boolean().describe('Check if product is in stock.'),
-  "is_available": zod.boolean().describe('Check if product is available for purchase.'),
-  "images": zod.array(zod.object({
-  "id": zod.number(),
-  "image": zod.string().url().describe('Product image'),
-  "alt_text": zod.string().max(catalogProductsAddToWishlistCreateResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
-  "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(catalogProductsAddToWishlistCreateResponseImagesItemSortOrderMin).max(catalogProductsAddToWishlistCreateResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Serializer for ProductImage model.')),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
-}).describe('Detailed serializer for product detail views.')
 
 /**
  * Get related products based on category and tags.
@@ -1186,7 +1089,7 @@ export const catalogProductsRelatedRetrieveResponse = zod.object({
   "short_description": zod.string().max(catalogProductsRelatedRetrieveResponseShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.string().regex(catalogProductsRelatedRetrieveResponsePriceRegExp).describe('Product price'),
   "original_price": zod.string().regex(catalogProductsRelatedRetrieveResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsRelatedRetrieveResponseSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsRelatedRetrieveResponseStockQuantityMin).max(catalogProductsRelatedRetrieveResponseStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -1231,6 +1134,7 @@ export const catalogProductsRelatedRetrieveResponse = zod.object({
   "images": zod.array(zod.object({
   "id": zod.number(),
   "image": zod.string().url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogProductsRelatedRetrieveResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsRelatedRetrieveResponseImagesItemSortOrderMin).max(catalogProductsRelatedRetrieveResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
@@ -1282,7 +1186,7 @@ export const catalogProductsOnSaleRetrieveResponse = zod.object({
   "short_description": zod.string().max(catalogProductsOnSaleRetrieveResponseShortDescriptionMax).optional().describe('Short description for listings'),
   "price": zod.string().regex(catalogProductsOnSaleRetrieveResponsePriceRegExp).describe('Product price'),
   "original_price": zod.string().regex(catalogProductsOnSaleRetrieveResponseOriginalPriceRegExp).describe('Original price for showing discounts'),
-  "current_price": zod.number(),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
   "discount_percentage": zod.number().describe('Calculate discount percentage.'),
   "sku": zod.string().max(catalogProductsOnSaleRetrieveResponseSkuMax).describe('Unique product identifier'),
   "stock_quantity": zod.number().min(catalogProductsOnSaleRetrieveResponseStockQuantityMin).max(catalogProductsOnSaleRetrieveResponseStockQuantityMax).optional().describe('Available quantity in stock'),
@@ -1327,6 +1231,7 @@ export const catalogProductsOnSaleRetrieveResponse = zod.object({
   "images": zod.array(zod.object({
   "id": zod.number(),
   "image": zod.string().url().describe('Product image'),
+  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
   "alt_text": zod.string().max(catalogProductsOnSaleRetrieveResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsOnSaleRetrieveResponseImagesItemSortOrderMin).max(catalogProductsOnSaleRetrieveResponseImagesItemSortOrderMax).optional().describe('Display order of images'),

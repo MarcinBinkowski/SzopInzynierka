@@ -14,37 +14,26 @@ export const profileAddressesListParams = zod.object({
   "id": zod.coerce.number()
 })
 
-export const profileAddressesListQueryParams = zod.object({
-  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
-  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.')
-})
-
-export const profileAddressesListResponseResultsItemProfileFirstNameMax = 150;
-export const profileAddressesListResponseResultsItemProfileLastNameMax = 150;
-export const profileAddressesListResponseResultsItemLabelMax = 50;
+export const profileAddressesListResponseProfileFirstNameMax = 150;
+export const profileAddressesListResponseProfileLastNameMax = 150;
+export const profileAddressesListResponseLabelMax = 50;
 
 
-export const profileAddressesListResponse = zod.object({
-  "count": zod.number(),
-  "next": zod.string().url().nullish(),
-  "previous": zod.string().url().nullish(),
-  "results": zod.array(zod.object({
+export const profileAddressesListResponseItem = zod.object({
   "id": zod.number(),
   "profile": zod.object({
   "id": zod.number(),
   "user_email": zod.string(),
   "display_name": zod.string(),
-  "first_name": zod.string().max(profileAddressesListResponseResultsItemProfileFirstNameMax).optional().describe('User\'s first name'),
-  "last_name": zod.string().max(profileAddressesListResponseResultsItemProfileLastNameMax).optional().describe('User\'s last name')
+  "first_name": zod.string().max(profileAddressesListResponseProfileFirstNameMax).optional().describe('User\'s first name'),
+  "last_name": zod.string().max(profileAddressesListResponseProfileLastNameMax).optional().describe('User\'s last name')
 }).describe('Minimal profile serializer for address responses.'),
-  "address_type": zod.enum(['shipping', 'billing']).describe('* `shipping` - Shipping\n* `billing` - Billing').describe('Type of address (shipping or billing)\n\n* `shipping` - Shipping\n* `billing` - Billing'),
-  "address_type_display": zod.string(),
   "full_address": zod.string(),
-  "label": zod.string().max(profileAddressesListResponseResultsItemLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
+  "label": zod.string().max(profileAddressesListResponseLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
   "created_at": zod.string().datetime({}).describe('Timestamp when the record was created')
-}))
 })
+export const profileAddressesListResponse = zod.array(profileAddressesListResponseItem)
 
 /**
  * Create a new address. Profile field is optional - if not provided, uses current user's profile.
@@ -65,8 +54,7 @@ export const profileAddressesCreateBody = zod.object({
   "city": zod.string().max(profileAddressesCreateBodyCityMax).describe('City name'),
   "postal_code": zod.string().max(profileAddressesCreateBodyPostalCodeMax).describe('ZIP code or postal code'),
   "country": zod.number().describe('Country for this address'),
-  "address_type": zod.enum(['shipping', 'billing']).describe('* `shipping` - Shipping\n* `billing` - Billing').describe('Type of address (shipping or billing)\n\n* `shipping` - Shipping\n* `billing` - Billing'),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
   "label": zod.string().max(profileAddressesCreateBodyLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.')
 })
 
@@ -95,9 +83,7 @@ export const profileAddressesRetrieveResponse = zod.object({
   "city": zod.string().max(profileAddressesRetrieveResponseCityMax).describe('City name'),
   "postal_code": zod.string().max(profileAddressesRetrieveResponsePostalCodeMax).describe('ZIP code or postal code'),
   "country": zod.number().describe('Country for this address'),
-  "address_type": zod.enum(['shipping', 'billing']).describe('* `shipping` - Shipping\n* `billing` - Billing').describe('Type of address (shipping or billing)\n\n* `shipping` - Shipping\n* `billing` - Billing'),
-  "address_type_display": zod.string(),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
   "label": zod.string().max(profileAddressesRetrieveResponseLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
   "full_address": zod.string(),
   "address_dict": zod.record(zod.string(), zod.any()),
@@ -121,7 +107,7 @@ export const profileAddressesUpdateBody = zod.object({
   "city": zod.string().max(profileAddressesUpdateBodyCityMax).describe('City name'),
   "postal_code": zod.string().max(profileAddressesUpdateBodyPostalCodeMax).describe('ZIP code or postal code'),
   "country": zod.number().describe('Country for this address'),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
   "label": zod.string().max(profileAddressesUpdateBodyLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.')
 })
 
@@ -136,7 +122,7 @@ export const profileAddressesUpdateResponse = zod.object({
   "city": zod.string().max(profileAddressesUpdateResponseCityMax).describe('City name'),
   "postal_code": zod.string().max(profileAddressesUpdateResponsePostalCodeMax).describe('ZIP code or postal code'),
   "country": zod.number().describe('Country for this address'),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
   "label": zod.string().max(profileAddressesUpdateResponseLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.')
 })
 
@@ -155,7 +141,7 @@ export const profileAddressesPartialUpdateBody = zod.object({
   "city": zod.string().max(profileAddressesPartialUpdateBodyCityMax).optional().describe('City name'),
   "postal_code": zod.string().max(profileAddressesPartialUpdateBodyPostalCodeMax).optional().describe('ZIP code or postal code'),
   "country": zod.number().optional().describe('Country for this address'),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
   "label": zod.string().max(profileAddressesPartialUpdateBodyLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.')
 })
 
@@ -170,7 +156,7 @@ export const profileAddressesPartialUpdateResponse = zod.object({
   "city": zod.string().max(profileAddressesPartialUpdateResponseCityMax).describe('City name'),
   "postal_code": zod.string().max(profileAddressesPartialUpdateResponsePostalCodeMax).describe('ZIP code or postal code'),
   "country": zod.number().describe('Country for this address'),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
   "label": zod.string().max(profileAddressesPartialUpdateResponseLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.')
 })
 
@@ -193,8 +179,7 @@ export const profileAddressesSetDefaultPartialUpdateBody = zod.object({
   "city": zod.string().max(profileAddressesSetDefaultPartialUpdateBodyCityMax).optional().describe('City name'),
   "postal_code": zod.string().max(profileAddressesSetDefaultPartialUpdateBodyPostalCodeMax).optional().describe('ZIP code or postal code'),
   "country": zod.number().optional().describe('Country for this address'),
-  "address_type": zod.enum(['shipping', 'billing']).describe('* `shipping` - Shipping\n* `billing` - Billing').optional().describe('Type of address (shipping or billing)\n\n* `shipping` - Shipping\n* `billing` - Billing'),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
   "label": zod.string().max(profileAddressesSetDefaultPartialUpdateBodyLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.')
 })
 
@@ -219,9 +204,7 @@ export const profileAddressesSetDefaultPartialUpdateResponse = zod.object({
   "city": zod.string().max(profileAddressesSetDefaultPartialUpdateResponseCityMax).describe('City name'),
   "postal_code": zod.string().max(profileAddressesSetDefaultPartialUpdateResponsePostalCodeMax).describe('ZIP code or postal code'),
   "country": zod.number().describe('Country for this address'),
-  "address_type": zod.enum(['shipping', 'billing']).describe('* `shipping` - Shipping\n* `billing` - Billing').describe('Type of address (shipping or billing)\n\n* `shipping` - Shipping\n* `billing` - Billing'),
-  "address_type_display": zod.string(),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
   "label": zod.string().max(profileAddressesSetDefaultPartialUpdateResponseLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
   "full_address": zod.string(),
   "address_dict": zod.record(zod.string(), zod.any()),
@@ -230,143 +213,36 @@ export const profileAddressesSetDefaultPartialUpdateResponse = zod.object({
   "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
 })
 
-export const profileAddressesBillingRetrieveParams = zod.object({
+/**
+ * Get the default address for the current user or specified profile.
+ */
+export const profileAddressesDefaultRetrieveParams = zod.object({
   "id": zod.coerce.number()
 })
 
-export const profileAddressesBillingRetrieveResponseProfileFirstNameMax = 150;
-export const profileAddressesBillingRetrieveResponseProfileLastNameMax = 150;
-export const profileAddressesBillingRetrieveResponseAddressMax = 255;
-export const profileAddressesBillingRetrieveResponseCityMax = 100;
-export const profileAddressesBillingRetrieveResponsePostalCodeMax = 20;
-export const profileAddressesBillingRetrieveResponseLabelMax = 50;
+export const profileAddressesDefaultRetrieveResponseProfileFirstNameMax = 150;
+export const profileAddressesDefaultRetrieveResponseProfileLastNameMax = 150;
+export const profileAddressesDefaultRetrieveResponseAddressMax = 255;
+export const profileAddressesDefaultRetrieveResponseCityMax = 100;
+export const profileAddressesDefaultRetrieveResponsePostalCodeMax = 20;
+export const profileAddressesDefaultRetrieveResponseLabelMax = 50;
 
 
-export const profileAddressesBillingRetrieveResponse = zod.object({
+export const profileAddressesDefaultRetrieveResponse = zod.object({
   "id": zod.number(),
   "profile": zod.object({
   "id": zod.number(),
   "user_email": zod.string(),
   "display_name": zod.string(),
-  "first_name": zod.string().max(profileAddressesBillingRetrieveResponseProfileFirstNameMax).optional().describe('User\'s first name'),
-  "last_name": zod.string().max(profileAddressesBillingRetrieveResponseProfileLastNameMax).optional().describe('User\'s last name')
+  "first_name": zod.string().max(profileAddressesDefaultRetrieveResponseProfileFirstNameMax).optional().describe('User\'s first name'),
+  "last_name": zod.string().max(profileAddressesDefaultRetrieveResponseProfileLastNameMax).optional().describe('User\'s last name')
 }).describe('Minimal profile serializer for address responses.'),
-  "address": zod.string().max(profileAddressesBillingRetrieveResponseAddressMax).describe('Street address, apartment, unit, etc.'),
-  "city": zod.string().max(profileAddressesBillingRetrieveResponseCityMax).describe('City name'),
-  "postal_code": zod.string().max(profileAddressesBillingRetrieveResponsePostalCodeMax).describe('ZIP code or postal code'),
+  "address": zod.string().max(profileAddressesDefaultRetrieveResponseAddressMax).describe('Street address, apartment, unit, etc.'),
+  "city": zod.string().max(profileAddressesDefaultRetrieveResponseCityMax).describe('City name'),
+  "postal_code": zod.string().max(profileAddressesDefaultRetrieveResponsePostalCodeMax).describe('ZIP code or postal code'),
   "country": zod.number().describe('Country for this address'),
-  "address_type": zod.enum(['shipping', 'billing']).describe('* `shipping` - Shipping\n* `billing` - Billing').describe('Type of address (shipping or billing)\n\n* `shipping` - Shipping\n* `billing` - Billing'),
-  "address_type_display": zod.string(),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
-  "label": zod.string().max(profileAddressesBillingRetrieveResponseLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
-  "full_address": zod.string(),
-  "address_dict": zod.record(zod.string(), zod.any()),
-  "is_complete": zod.boolean(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
-})
-
-export const profileAddressesDefaultBillingRetrieveParams = zod.object({
-  "id": zod.coerce.number()
-})
-
-export const profileAddressesDefaultBillingRetrieveResponseProfileFirstNameMax = 150;
-export const profileAddressesDefaultBillingRetrieveResponseProfileLastNameMax = 150;
-export const profileAddressesDefaultBillingRetrieveResponseAddressMax = 255;
-export const profileAddressesDefaultBillingRetrieveResponseCityMax = 100;
-export const profileAddressesDefaultBillingRetrieveResponsePostalCodeMax = 20;
-export const profileAddressesDefaultBillingRetrieveResponseLabelMax = 50;
-
-
-export const profileAddressesDefaultBillingRetrieveResponse = zod.object({
-  "id": zod.number(),
-  "profile": zod.object({
-  "id": zod.number(),
-  "user_email": zod.string(),
-  "display_name": zod.string(),
-  "first_name": zod.string().max(profileAddressesDefaultBillingRetrieveResponseProfileFirstNameMax).optional().describe('User\'s first name'),
-  "last_name": zod.string().max(profileAddressesDefaultBillingRetrieveResponseProfileLastNameMax).optional().describe('User\'s last name')
-}).describe('Minimal profile serializer for address responses.'),
-  "address": zod.string().max(profileAddressesDefaultBillingRetrieveResponseAddressMax).describe('Street address, apartment, unit, etc.'),
-  "city": zod.string().max(profileAddressesDefaultBillingRetrieveResponseCityMax).describe('City name'),
-  "postal_code": zod.string().max(profileAddressesDefaultBillingRetrieveResponsePostalCodeMax).describe('ZIP code or postal code'),
-  "country": zod.number().describe('Country for this address'),
-  "address_type": zod.enum(['shipping', 'billing']).describe('* `shipping` - Shipping\n* `billing` - Billing').describe('Type of address (shipping or billing)\n\n* `shipping` - Shipping\n* `billing` - Billing'),
-  "address_type_display": zod.string(),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
-  "label": zod.string().max(profileAddressesDefaultBillingRetrieveResponseLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
-  "full_address": zod.string(),
-  "address_dict": zod.record(zod.string(), zod.any()),
-  "is_complete": zod.boolean(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
-})
-
-export const profileAddressesDefaultShippingRetrieveParams = zod.object({
-  "id": zod.coerce.number()
-})
-
-export const profileAddressesDefaultShippingRetrieveResponseProfileFirstNameMax = 150;
-export const profileAddressesDefaultShippingRetrieveResponseProfileLastNameMax = 150;
-export const profileAddressesDefaultShippingRetrieveResponseAddressMax = 255;
-export const profileAddressesDefaultShippingRetrieveResponseCityMax = 100;
-export const profileAddressesDefaultShippingRetrieveResponsePostalCodeMax = 20;
-export const profileAddressesDefaultShippingRetrieveResponseLabelMax = 50;
-
-
-export const profileAddressesDefaultShippingRetrieveResponse = zod.object({
-  "id": zod.number(),
-  "profile": zod.object({
-  "id": zod.number(),
-  "user_email": zod.string(),
-  "display_name": zod.string(),
-  "first_name": zod.string().max(profileAddressesDefaultShippingRetrieveResponseProfileFirstNameMax).optional().describe('User\'s first name'),
-  "last_name": zod.string().max(profileAddressesDefaultShippingRetrieveResponseProfileLastNameMax).optional().describe('User\'s last name')
-}).describe('Minimal profile serializer for address responses.'),
-  "address": zod.string().max(profileAddressesDefaultShippingRetrieveResponseAddressMax).describe('Street address, apartment, unit, etc.'),
-  "city": zod.string().max(profileAddressesDefaultShippingRetrieveResponseCityMax).describe('City name'),
-  "postal_code": zod.string().max(profileAddressesDefaultShippingRetrieveResponsePostalCodeMax).describe('ZIP code or postal code'),
-  "country": zod.number().describe('Country for this address'),
-  "address_type": zod.enum(['shipping', 'billing']).describe('* `shipping` - Shipping\n* `billing` - Billing').describe('Type of address (shipping or billing)\n\n* `shipping` - Shipping\n* `billing` - Billing'),
-  "address_type_display": zod.string(),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
-  "label": zod.string().max(profileAddressesDefaultShippingRetrieveResponseLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
-  "full_address": zod.string(),
-  "address_dict": zod.record(zod.string(), zod.any()),
-  "is_complete": zod.boolean(),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
-  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
-})
-
-export const profileAddressesShippingRetrieveParams = zod.object({
-  "id": zod.coerce.number()
-})
-
-export const profileAddressesShippingRetrieveResponseProfileFirstNameMax = 150;
-export const profileAddressesShippingRetrieveResponseProfileLastNameMax = 150;
-export const profileAddressesShippingRetrieveResponseAddressMax = 255;
-export const profileAddressesShippingRetrieveResponseCityMax = 100;
-export const profileAddressesShippingRetrieveResponsePostalCodeMax = 20;
-export const profileAddressesShippingRetrieveResponseLabelMax = 50;
-
-
-export const profileAddressesShippingRetrieveResponse = zod.object({
-  "id": zod.number(),
-  "profile": zod.object({
-  "id": zod.number(),
-  "user_email": zod.string(),
-  "display_name": zod.string(),
-  "first_name": zod.string().max(profileAddressesShippingRetrieveResponseProfileFirstNameMax).optional().describe('User\'s first name'),
-  "last_name": zod.string().max(profileAddressesShippingRetrieveResponseProfileLastNameMax).optional().describe('User\'s last name')
-}).describe('Minimal profile serializer for address responses.'),
-  "address": zod.string().max(profileAddressesShippingRetrieveResponseAddressMax).describe('Street address, apartment, unit, etc.'),
-  "city": zod.string().max(profileAddressesShippingRetrieveResponseCityMax).describe('City name'),
-  "postal_code": zod.string().max(profileAddressesShippingRetrieveResponsePostalCodeMax).describe('ZIP code or postal code'),
-  "country": zod.number().describe('Country for this address'),
-  "address_type": zod.enum(['shipping', 'billing']).describe('* `shipping` - Shipping\n* `billing` - Billing').describe('Type of address (shipping or billing)\n\n* `shipping` - Shipping\n* `billing` - Billing'),
-  "address_type_display": zod.string(),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
-  "label": zod.string().max(profileAddressesShippingRetrieveResponseLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
+  "label": zod.string().max(profileAddressesDefaultRetrieveResponseLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
   "full_address": zod.string(),
   "address_dict": zod.record(zod.string(), zod.any()),
   "is_complete": zod.boolean(),
@@ -399,9 +275,7 @@ export const profileAddressesSummaryRetrieveResponse = zod.object({
   "city": zod.string().max(profileAddressesSummaryRetrieveResponseCityMax).describe('City name'),
   "postal_code": zod.string().max(profileAddressesSummaryRetrieveResponsePostalCodeMax).describe('ZIP code or postal code'),
   "country": zod.number().describe('Country for this address'),
-  "address_type": zod.enum(['shipping', 'billing']).describe('* `shipping` - Shipping\n* `billing` - Billing').describe('Type of address (shipping or billing)\n\n* `shipping` - Shipping\n* `billing` - Billing'),
-  "address_type_display": zod.string(),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
   "label": zod.string().max(profileAddressesSummaryRetrieveResponseLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
   "full_address": zod.string(),
   "address_dict": zod.record(zod.string(), zod.any()),
@@ -410,6 +284,9 @@ export const profileAddressesSummaryRetrieveResponse = zod.object({
   "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
 })
 
+/**
+ * Unset the default address for the current user or specified profile.
+ */
 export const profileAddressesUnsetDefaultPartialUpdateParams = zod.object({
   "id": zod.coerce.number()
 })
@@ -425,8 +302,7 @@ export const profileAddressesUnsetDefaultPartialUpdateBody = zod.object({
   "city": zod.string().max(profileAddressesUnsetDefaultPartialUpdateBodyCityMax).optional().describe('City name'),
   "postal_code": zod.string().max(profileAddressesUnsetDefaultPartialUpdateBodyPostalCodeMax).optional().describe('ZIP code or postal code'),
   "country": zod.number().optional().describe('Country for this address'),
-  "address_type": zod.enum(['shipping', 'billing']).describe('* `shipping` - Shipping\n* `billing` - Billing').optional().describe('Type of address (shipping or billing)\n\n* `shipping` - Shipping\n* `billing` - Billing'),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
   "label": zod.string().max(profileAddressesUnsetDefaultPartialUpdateBodyLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.')
 })
 
@@ -451,9 +327,7 @@ export const profileAddressesUnsetDefaultPartialUpdateResponse = zod.object({
   "city": zod.string().max(profileAddressesUnsetDefaultPartialUpdateResponseCityMax).describe('City name'),
   "postal_code": zod.string().max(profileAddressesUnsetDefaultPartialUpdateResponsePostalCodeMax).describe('ZIP code or postal code'),
   "country": zod.number().describe('Country for this address'),
-  "address_type": zod.enum(['shipping', 'billing']).describe('* `shipping` - Shipping\n* `billing` - Billing').describe('Type of address (shipping or billing)\n\n* `shipping` - Shipping\n* `billing` - Billing'),
-  "address_type_display": zod.string(),
-  "is_default": zod.boolean().optional().describe('Whether this is the default address for this type'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
   "label": zod.string().max(profileAddressesUnsetDefaultPartialUpdateResponseLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
   "full_address": zod.string(),
   "address_dict": zod.record(zod.string(), zod.any()),

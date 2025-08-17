@@ -5,7 +5,6 @@ import { useCatalogManufacturersRetrieve, useCatalogManufacturersUpdate } from "
 import { catalogManufacturersUpdateBody } from "@/api/generated/shop/catalog/catalog.zod"
 import { ManufacturerForm } from "@/components/manufacturers/ManufacturerForm"
 import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
 import { Spinner } from "@/components/customui/spinner"
 import { Button } from "@/components/ui/button"
@@ -17,7 +16,7 @@ function EditManufacturerPage() {
   const navigate = useNavigate()
   const { manufacturerId } = useParams({ from: '/_authenticated/catalog/manufacturers/$manufacturerId/edit' })
   const updateMutation = useCatalogManufacturersUpdate()
-  const queryClient = useQueryClient()
+
 
   const { data: manufacturer, isLoading, error } = useCatalogManufacturersRetrieve(
     parseInt(manufacturerId),
@@ -37,8 +36,6 @@ function EditManufacturerPage() {
         id: parseInt(manufacturerId), 
         data: validatedData 
       })
-      
-      queryClient.invalidateQueries({ queryKey: ["/api/catalog/manufacturers/"] })
       
       toast.success("Manufacturer updated successfully")
       navigate({ to: "/catalog/manufacturers" })

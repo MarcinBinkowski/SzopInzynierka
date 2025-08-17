@@ -8,7 +8,7 @@
 import type { Category } from './category';
 import type { Manufacturer } from './manufacturer';
 import type { Tag } from './tag';
-import type { StatusEnum } from './statusEnum';
+import type { ProductStatusEnum } from './productStatusEnum';
 import type { ProductImage } from './productImage';
 
 /**
@@ -44,7 +44,8 @@ export interface PatchedProductDetail {
    * @pattern ^-?\d{0,8}(?:\.\d{0,2})?$
    */
   original_price?: string;
-  readonly current_price?: number;
+  /** Get current price as formatted decimal string. */
+  readonly current_price?: string;
   /** Calculate discount percentage. */
   readonly discount_percentage?: number;
   /**
@@ -71,7 +72,7 @@ export interface PatchedProductDetail {
 * `active` - Active
 * `inactive` - Inactive
 * `out_of_stock` - Out of Stock */
-  status?: StatusEnum;
+  status?: ProductStatusEnum;
   /** Is product visible to the users */
   is_visible?: boolean;
   /** @nullable */

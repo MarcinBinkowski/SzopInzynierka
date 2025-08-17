@@ -17,7 +17,6 @@ class Order(TimestampedModel):
         CONFIRMED = "confirmed", "Confirmed"
         SHIPPED = "shipped", "Shipped"
         DELIVERED = "delivered", "Delivered"
-        CANCELLED = "cancelled", "Cancelled"
 
     user = models.ForeignKey(
         User,
@@ -76,6 +75,20 @@ class Order(TimestampedModel):
         related_name='orders',
         help_text="Shipping method used for this order",
     )
+    applied_coupon = models.ForeignKey(
+        'Coupon',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='orders',
+        help_text="Applied coupon to this order",
+    )
+    coupon_discount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=Decimal("0.00"),
+        help_text="Discount amount from applied coupon",
+    )
     
     # Additional info
     notes = models.TextField(
@@ -117,6 +130,8 @@ class Order(TimestampedModel):
             payment=payment,
             shipping_address=cart.shipping_address,
             shipping_method=cart.shipping_method,
+            applied_coupon=cart.applied_coupon,
+            coupon_discount=cart.coupon_discount,
             status=cls.OrderStatus.CONFIRMED,
         )
         
@@ -128,6 +143,18 @@ class Order(TimestampedModel):
                 quantity=cart_item.quantity,
                 unit_price=cart_item.unit_price,
                 total_price=cart_item.total_price,
+            )
+        
+        # Create coupon redemption if coupon was applied
+        if cart.applied_coupon:
+            from apps.checkout.models.coupon import CouponRedemption
+            CouponRedemption.objects.create(
+                user=cart.user,
+                coupon=cart.applied_coupon,
+                order=order,
+                discount_amount=cart.coupon_discount,
+                original_total=cart.total_before_coupon,
+                final_total=cart.total,
             )
         
         return order 

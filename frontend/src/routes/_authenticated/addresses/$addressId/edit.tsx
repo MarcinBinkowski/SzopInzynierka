@@ -6,7 +6,6 @@ import { profileAddressesUpdateBody } from "@/api/generated/shop/profile/profile
 import { AddressForm } from "@/components/addresses/AddressForm"
 import { Spinner } from "@/components/customui/spinner"
 import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
 
 // Use the generated Zod schema types
@@ -16,7 +15,6 @@ function EditAddressPage() {
   const navigate = useNavigate()
   const { addressId } = useParams({ from: "/_authenticated/addresses/$addressId/edit" })
   const updateMutation = useProfileAddressesUpdate()
-  const queryClient = useQueryClient()
   
   const { data: address, isLoading, error } = useProfileAddressesRetrieve(Number(addressId))
 
@@ -30,8 +28,6 @@ function EditAddressPage() {
         data: validatedData 
       })
       
-      queryClient.invalidateQueries({ queryKey: ["/api/profile/addresses/"] })
-      queryClient.invalidateQueries({ queryKey: [`/api/profile/addresses/${Number(addressId)}/`] })
       
       toast.success("Address updated successfully")
       navigate({ to: "/addresses" })

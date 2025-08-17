@@ -5,7 +5,6 @@ import { useGeographicCountriesCreate } from "@/api/generated/shop/geographic/ge
 import { geographicCountriesCreateBody } from "@/api/generated/shop/geographic/geographic.zod"
 import { CountryForm } from "@/components/countries/CountryForm"
 import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
 
 // Use the generated Zod schema types
@@ -14,7 +13,6 @@ type CountryFormData = z.infer<typeof geographicCountriesCreateBody>
 function NewCountryPage() {
   const navigate = useNavigate()
   const createMutation = useGeographicCountriesCreate()
-  const queryClient = useQueryClient()
 
   const handleSubmit = async (formData: CountryFormData) => {
     try {
@@ -22,8 +20,6 @@ function NewCountryPage() {
       const validatedData = geographicCountriesCreateBody.parse(formData)
       
       await createMutation.mutateAsync({ data: validatedData })
-      
-      queryClient.invalidateQueries({ queryKey: ["/api/geographic/countries/"] })
       
       toast.success("Country created successfully")
       navigate({ to: "/countries" })

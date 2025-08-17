@@ -5,7 +5,6 @@ import { useCatalogCategoriesCreate } from "@/api/generated/shop/catalog/catalog
 import { catalogCategoriesCreateBody } from "@/api/generated/shop/catalog/catalog.zod"
 import { CategoryForm } from "@/components/categories/CategoryForm"
 import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
 
 // Use the generated Zod schema types
@@ -14,7 +13,7 @@ type CategoryFormData = z.infer<typeof catalogCategoriesCreateBody>
 function NewCategoryPage() {
   const navigate = useNavigate()
   const createMutation = useCatalogCategoriesCreate()
-  const queryClient = useQueryClient()
+
 
   const handleSubmit = async (formData: CategoryFormData) => {
     try {
@@ -23,7 +22,6 @@ function NewCategoryPage() {
       
       await createMutation.mutateAsync({ data: validatedData })
       
-      queryClient.invalidateQueries({ queryKey: ["/api/catalog/categories/"] })
       
       toast.success("Category created successfully")
       navigate({ to: "/catalog/categories" })

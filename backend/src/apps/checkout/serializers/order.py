@@ -3,6 +3,7 @@ from apps.checkout.models.order import Order, OrderItem
 from apps.catalog.serializers.product import ProductDetailSerializer
 from apps.profile.serializers.address import AddressSerializer
 from apps.checkout.serializers.shipping_method import ShippingMethodSerializer
+from apps.checkout.serializers.coupon import CouponSerializer
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -24,7 +25,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = [
             'id', 'order_number', 'status', 'subtotal', 
-            'shipping_cost', 'total', 'created_at'
+            'shipping_cost', 'coupon_discount', 'total', 'created_at'
         ]
 
 
@@ -34,6 +35,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True, read_only=True)
     shipping_address = AddressSerializer(read_only=True)
     shipping_method = ShippingMethodSerializer(read_only=True)
+    applied_coupon = CouponSerializer(read_only=True)
     status = serializers.ChoiceField(choices=Order.OrderStatus.choices)
     shipping_cost = serializers.DecimalField(max_digits=10, decimal_places=2)
     
@@ -41,6 +43,6 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         model = Order
         fields = [
             'id', 'order_number', 'status', 'subtotal', 
-            'shipping_cost', 'total', 'created_at', 'notes',
-            'shipping_address', 'shipping_method', 'items'
+            'shipping_cost', 'coupon_discount', 'total', 'created_at', 'notes',
+            'shipping_address', 'shipping_method', 'applied_coupon', 'items'
         ] 

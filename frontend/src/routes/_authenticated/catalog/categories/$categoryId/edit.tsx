@@ -6,7 +6,6 @@ import { catalogCategoriesUpdateBody } from "@/api/generated/shop/catalog/catalo
 import { CategoryForm } from "@/components/categories/CategoryForm"
 import { Spinner } from "@/components/customui/spinner"
 import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
 
 // Use the generated Zod schema types
@@ -16,7 +15,6 @@ function EditCategoryPage() {
   const navigate = useNavigate()
   const { categoryId } = useParams({ from: "/_authenticated/catalog/categories/$categoryId/edit" })
   const updateMutation = useCatalogCategoriesUpdate()
-  const queryClient = useQueryClient()
   
   const { data: category, isLoading, error } = useCatalogCategoriesRetrieve(Number(categoryId))
 
@@ -29,8 +27,6 @@ function EditCategoryPage() {
         data: validatedData 
       })
       
-      queryClient.invalidateQueries({ queryKey: ["/api/catalog/categories/"] })
-      queryClient.invalidateQueries({ queryKey: [`/api/catalog/categories/${Number(categoryId)}/`] })
       
       toast.success("Category updated successfully")
       navigate({ to: "/catalog/categories" })

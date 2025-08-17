@@ -36,6 +36,11 @@ export interface Order {
    */
   shipping_cost?: string;
   /**
+   * Discount amount from applied coupon
+   * @pattern ^-?\d{0,8}(?:\.\d{0,2})?$
+   */
+  coupon_discount?: string;
+  /**
    * Total amount including shipping
    * @pattern ^-?\d{0,8}(?:\.\d{0,2})?$
    */

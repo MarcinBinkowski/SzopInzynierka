@@ -29,17 +29,25 @@ import type {
   CartItem,
   CartItemCreate,
   CheckoutCartsListParams,
+  CheckoutCouponsActiveListParams,
+  CheckoutCouponsListParams,
   CheckoutItemsListParams,
   CheckoutOrdersListParams,
   CheckoutSessionResponse,
   ConfirmPayment,
+  Coupon,
+  CouponRemoveResponse,
+  CouponValidationRequest,
+  CouponValidationResponse,
   CreateCheckoutSession,
   OrderDetail,
   OrdersListResponse,
   PaginatedCartListList,
+  PaginatedCouponList,
   PaginatedOrderList,
   PatchedCart,
   PatchedCartItem,
+  PatchedCoupon,
   PaymentConfirmationResponse,
   ShippingMethod
 } from '.././schemas';
@@ -758,6 +766,90 @@ export function useCheckoutCartsSummaryRetrieve<TData = Awaited<ReturnType<typeo
 
 
 /**
+ * Get current user's active cart.
+ */
+export const checkoutCartsCurrentRetrieve = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<Cart>(
+      {url: `/api/checkout/carts/current/`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getCheckoutCartsCurrentRetrieveQueryKey = () => {
+    return [`/api/checkout/carts/current/`] as const;
+    }
+
+    
+export const getCheckoutCartsCurrentRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCheckoutCartsCurrentRetrieveQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>> = ({ signal }) => checkoutCartsCurrentRetrieve(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckoutCartsCurrentRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>>
+export type CheckoutCartsCurrentRetrieveQueryError = ErrorType<unknown>
+
+
+export function useCheckoutCartsCurrentRetrieve<TData = Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutCartsCurrentRetrieve<TData = Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutCartsCurrentRetrieve<TData = Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCheckoutCartsCurrentRetrieve<TData = Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCartsCurrentRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCheckoutCartsCurrentRetrieveQueryOptions(options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
  * Confirm PaymentIntent and create order after successful PaymentSheet payment.
  */
 export const checkoutConfirmPaymentIntentCreate = (
@@ -815,6 +907,633 @@ const {mutation: mutationOptions} = options ?
       > => {
 
       const mutationOptions = getCheckoutConfirmPaymentIntentCreateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * Full CRUD ViewSet for coupon management.
+ */
+export const checkoutCouponsList = (
+    params?: CheckoutCouponsListParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<PaginatedCouponList>(
+      {url: `/api/checkout/coupons/`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getCheckoutCouponsListQueryKey = (params?: CheckoutCouponsListParams,) => {
+    return [`/api/checkout/coupons/`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getCheckoutCouponsListQueryOptions = <TData = Awaited<ReturnType<typeof checkoutCouponsList>>, TError = ErrorType<unknown>>(params?: CheckoutCouponsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsList>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCheckoutCouponsListQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkoutCouponsList>>> = ({ signal }) => checkoutCouponsList(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsList>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckoutCouponsListQueryResult = NonNullable<Awaited<ReturnType<typeof checkoutCouponsList>>>
+export type CheckoutCouponsListQueryError = ErrorType<unknown>
+
+
+export function useCheckoutCouponsList<TData = Awaited<ReturnType<typeof checkoutCouponsList>>, TError = ErrorType<unknown>>(
+ params: undefined |  CheckoutCouponsListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsList>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutCouponsList>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutCouponsList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutCouponsList<TData = Awaited<ReturnType<typeof checkoutCouponsList>>, TError = ErrorType<unknown>>(
+ params?: CheckoutCouponsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsList>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutCouponsList>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutCouponsList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutCouponsList<TData = Awaited<ReturnType<typeof checkoutCouponsList>>, TError = ErrorType<unknown>>(
+ params?: CheckoutCouponsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsList>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCheckoutCouponsList<TData = Awaited<ReturnType<typeof checkoutCouponsList>>, TError = ErrorType<unknown>>(
+ params?: CheckoutCouponsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsList>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCheckoutCouponsListQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * Full CRUD ViewSet for coupon management.
+ */
+export const checkoutCouponsCreate = (
+    coupon: BodyType<NonReadonly<Coupon>>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<Coupon>(
+      {url: `/api/checkout/coupons/`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: coupon, signal
+    },
+      );
+    }
+  
+
+
+export const getCheckoutCouponsCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsCreate>>, TError,{data: BodyType<NonReadonly<Coupon>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsCreate>>, TError,{data: BodyType<NonReadonly<Coupon>>}, TContext> => {
+
+const mutationKey = ['checkoutCouponsCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof checkoutCouponsCreate>>, {data: BodyType<NonReadonly<Coupon>>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  checkoutCouponsCreate(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CheckoutCouponsCreateMutationResult = NonNullable<Awaited<ReturnType<typeof checkoutCouponsCreate>>>
+    export type CheckoutCouponsCreateMutationBody = BodyType<NonReadonly<Coupon>>
+    export type CheckoutCouponsCreateMutationError = ErrorType<unknown>
+
+    export const useCheckoutCouponsCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsCreate>>, TError,{data: BodyType<NonReadonly<Coupon>>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof checkoutCouponsCreate>>,
+        TError,
+        {data: BodyType<NonReadonly<Coupon>>},
+        TContext
+      > => {
+
+      const mutationOptions = getCheckoutCouponsCreateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * Full CRUD ViewSet for coupon management.
+ */
+export const checkoutCouponsRetrieve = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<Coupon>(
+      {url: `/api/checkout/coupons/${id}/`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getCheckoutCouponsRetrieveQueryKey = (id: number,) => {
+    return [`/api/checkout/coupons/${id}/`] as const;
+    }
+
+    
+export const getCheckoutCouponsRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof checkoutCouponsRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsRetrieve>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCheckoutCouponsRetrieveQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkoutCouponsRetrieve>>> = ({ signal }) => checkoutCouponsRetrieve(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckoutCouponsRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof checkoutCouponsRetrieve>>>
+export type CheckoutCouponsRetrieveQueryError = ErrorType<unknown>
+
+
+export function useCheckoutCouponsRetrieve<TData = Awaited<ReturnType<typeof checkoutCouponsRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsRetrieve>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutCouponsRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutCouponsRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutCouponsRetrieve<TData = Awaited<ReturnType<typeof checkoutCouponsRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsRetrieve>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutCouponsRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutCouponsRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutCouponsRetrieve<TData = Awaited<ReturnType<typeof checkoutCouponsRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCheckoutCouponsRetrieve<TData = Awaited<ReturnType<typeof checkoutCouponsRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCheckoutCouponsRetrieveQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * Full CRUD ViewSet for coupon management.
+ */
+export const checkoutCouponsUpdate = (
+    id: number,
+    coupon: BodyType<NonReadonly<Coupon>>,
+ ) => {
+      
+      
+      return shopInstance<Coupon>(
+      {url: `/api/checkout/coupons/${id}/`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: coupon
+    },
+      );
+    }
+  
+
+
+export const getCheckoutCouponsUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsUpdate>>, TError,{id: number;data: BodyType<NonReadonly<Coupon>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsUpdate>>, TError,{id: number;data: BodyType<NonReadonly<Coupon>>}, TContext> => {
+
+const mutationKey = ['checkoutCouponsUpdate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof checkoutCouponsUpdate>>, {id: number;data: BodyType<NonReadonly<Coupon>>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  checkoutCouponsUpdate(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CheckoutCouponsUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof checkoutCouponsUpdate>>>
+    export type CheckoutCouponsUpdateMutationBody = BodyType<NonReadonly<Coupon>>
+    export type CheckoutCouponsUpdateMutationError = ErrorType<unknown>
+
+    export const useCheckoutCouponsUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsUpdate>>, TError,{id: number;data: BodyType<NonReadonly<Coupon>>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof checkoutCouponsUpdate>>,
+        TError,
+        {id: number;data: BodyType<NonReadonly<Coupon>>},
+        TContext
+      > => {
+
+      const mutationOptions = getCheckoutCouponsUpdateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * Full CRUD ViewSet for coupon management.
+ */
+export const checkoutCouponsPartialUpdate = (
+    id: number,
+    patchedCoupon: BodyType<NonReadonly<PatchedCoupon>>,
+ ) => {
+      
+      
+      return shopInstance<Coupon>(
+      {url: `/api/checkout/coupons/${id}/`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: patchedCoupon
+    },
+      );
+    }
+  
+
+
+export const getCheckoutCouponsPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedCoupon>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedCoupon>>}, TContext> => {
+
+const mutationKey = ['checkoutCouponsPartialUpdate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof checkoutCouponsPartialUpdate>>, {id: number;data: BodyType<NonReadonly<PatchedCoupon>>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  checkoutCouponsPartialUpdate(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CheckoutCouponsPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof checkoutCouponsPartialUpdate>>>
+    export type CheckoutCouponsPartialUpdateMutationBody = BodyType<NonReadonly<PatchedCoupon>>
+    export type CheckoutCouponsPartialUpdateMutationError = ErrorType<unknown>
+
+    export const useCheckoutCouponsPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedCoupon>>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof checkoutCouponsPartialUpdate>>,
+        TError,
+        {id: number;data: BodyType<NonReadonly<PatchedCoupon>>},
+        TContext
+      > => {
+
+      const mutationOptions = getCheckoutCouponsPartialUpdateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * Full CRUD ViewSet for coupon management.
+ */
+export const checkoutCouponsDestroy = (
+    id: number,
+ ) => {
+      
+      
+      return shopInstance<void>(
+      {url: `/api/checkout/coupons/${id}/`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getCheckoutCouponsDestroyMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsDestroy>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsDestroy>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['checkoutCouponsDestroy'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof checkoutCouponsDestroy>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  checkoutCouponsDestroy(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CheckoutCouponsDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof checkoutCouponsDestroy>>>
+    
+    export type CheckoutCouponsDestroyMutationError = ErrorType<unknown>
+
+    export const useCheckoutCouponsDestroy = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsDestroy>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof checkoutCouponsDestroy>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getCheckoutCouponsDestroyMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * Get list of active coupons for users
+ * @summary Get active coupons
+ */
+export const checkoutCouponsActiveList = (
+    params?: CheckoutCouponsActiveListParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<PaginatedCouponList>(
+      {url: `/api/checkout/coupons/active/`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getCheckoutCouponsActiveListQueryKey = (params?: CheckoutCouponsActiveListParams,) => {
+    return [`/api/checkout/coupons/active/`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getCheckoutCouponsActiveListQueryOptions = <TData = Awaited<ReturnType<typeof checkoutCouponsActiveList>>, TError = ErrorType<unknown>>(params?: CheckoutCouponsActiveListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsActiveList>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCheckoutCouponsActiveListQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkoutCouponsActiveList>>> = ({ signal }) => checkoutCouponsActiveList(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsActiveList>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckoutCouponsActiveListQueryResult = NonNullable<Awaited<ReturnType<typeof checkoutCouponsActiveList>>>
+export type CheckoutCouponsActiveListQueryError = ErrorType<unknown>
+
+
+export function useCheckoutCouponsActiveList<TData = Awaited<ReturnType<typeof checkoutCouponsActiveList>>, TError = ErrorType<unknown>>(
+ params: undefined |  CheckoutCouponsActiveListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsActiveList>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutCouponsActiveList>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutCouponsActiveList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutCouponsActiveList<TData = Awaited<ReturnType<typeof checkoutCouponsActiveList>>, TError = ErrorType<unknown>>(
+ params?: CheckoutCouponsActiveListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsActiveList>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof checkoutCouponsActiveList>>,
+          TError,
+          Awaited<ReturnType<typeof checkoutCouponsActiveList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckoutCouponsActiveList<TData = Awaited<ReturnType<typeof checkoutCouponsActiveList>>, TError = ErrorType<unknown>>(
+ params?: CheckoutCouponsActiveListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsActiveList>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get active coupons
+ */
+
+export function useCheckoutCouponsActiveList<TData = Awaited<ReturnType<typeof checkoutCouponsActiveList>>, TError = ErrorType<unknown>>(
+ params?: CheckoutCouponsActiveListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutCouponsActiveList>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCheckoutCouponsActiveListQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * Remove applied coupon from cart
+ * @summary Remove coupon from cart
+ */
+export const checkoutCouponsRemoveCreate = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<CouponRemoveResponse>(
+      {url: `/api/checkout/coupons/remove/`, method: 'POST', signal
+    },
+      );
+    }
+  
+
+
+export const getCheckoutCouponsRemoveCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsRemoveCreate>>, TError,void, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsRemoveCreate>>, TError,void, TContext> => {
+
+const mutationKey = ['checkoutCouponsRemoveCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof checkoutCouponsRemoveCreate>>, void> = () => {
+          
+
+          return  checkoutCouponsRemoveCreate()
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CheckoutCouponsRemoveCreateMutationResult = NonNullable<Awaited<ReturnType<typeof checkoutCouponsRemoveCreate>>>
+    
+    export type CheckoutCouponsRemoveCreateMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Remove coupon from cart
+ */
+export const useCheckoutCouponsRemoveCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsRemoveCreate>>, TError,void, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof checkoutCouponsRemoveCreate>>,
+        TError,
+        void,
+        TContext
+      > => {
+
+      const mutationOptions = getCheckoutCouponsRemoveCreateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * Validate and apply coupon to cart
+ * @summary Validate and apply coupon
+ */
+export const checkoutCouponsValidateCreate = (
+    couponValidationRequest: BodyType<CouponValidationRequest>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<CouponValidationResponse>(
+      {url: `/api/checkout/coupons/validate/`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: couponValidationRequest, signal
+    },
+      );
+    }
+  
+
+
+export const getCheckoutCouponsValidateCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsValidateCreate>>, TError,{data: BodyType<CouponValidationRequest>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsValidateCreate>>, TError,{data: BodyType<CouponValidationRequest>}, TContext> => {
+
+const mutationKey = ['checkoutCouponsValidateCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof checkoutCouponsValidateCreate>>, {data: BodyType<CouponValidationRequest>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  checkoutCouponsValidateCreate(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CheckoutCouponsValidateCreateMutationResult = NonNullable<Awaited<ReturnType<typeof checkoutCouponsValidateCreate>>>
+    export type CheckoutCouponsValidateCreateMutationBody = BodyType<CouponValidationRequest>
+    export type CheckoutCouponsValidateCreateMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Validate and apply coupon
+ */
+export const useCheckoutCouponsValidateCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutCouponsValidateCreate>>, TError,{data: BodyType<CouponValidationRequest>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof checkoutCouponsValidateCreate>>,
+        TError,
+        {data: BodyType<CouponValidationRequest>},
+        TContext
+      > => {
+
+      const mutationOptions = getCheckoutCouponsValidateCreateMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

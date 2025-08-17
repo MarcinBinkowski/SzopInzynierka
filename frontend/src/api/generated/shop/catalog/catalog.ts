@@ -33,10 +33,10 @@ import type {
   Category,
   Manufacturer,
   ManufacturerCreate,
+  ManufacturerList,
   ManufacturerUpdate,
-  PaginatedCategoryList,
-  PaginatedManufacturerListList,
-  PaginatedProductImageList,
+  NotificationPreference,
+  NotificationPreferenceUpdate,
   PaginatedProductListList,
   PaginatedTagList,
   PatchedCategory,
@@ -51,6 +51,7 @@ import type {
 } from '.././schemas';
 
 import { shopInstance } from '../../../shop-mutator';
+import type { ErrorType , BodyType } from '../../../shop-mutator';
 
 // https://stackoverflow.com/questions/49579094/typescript-conditional-types-filter-out-readonly-properties-pick-only-requir/49579497#49579497
 type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <
@@ -91,7 +92,7 @@ export const catalogCategoriesList = (
 ) => {
       
       
-      return shopInstance<PaginatedCategoryList>(
+      return shopInstance<Category[]>(
       {url: `/api/catalog/categories/`, method: 'GET',
         params, signal
     },
@@ -104,7 +105,7 @@ export const getCatalogCategoriesListQueryKey = (params?: CatalogCategoriesListP
     }
 
     
-export const getCatalogCategoriesListQueryOptions = <TData = Awaited<ReturnType<typeof catalogCategoriesList>>, TError = unknown>(params?: CatalogCategoriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesList>>, TError, TData>>, }
+export const getCatalogCategoriesListQueryOptions = <TData = Awaited<ReturnType<typeof catalogCategoriesList>>, TError = ErrorType<unknown>>(params?: CatalogCategoriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesList>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -123,10 +124,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogCategoriesListQueryResult = NonNullable<Awaited<ReturnType<typeof catalogCategoriesList>>>
-export type CatalogCategoriesListQueryError = unknown
+export type CatalogCategoriesListQueryError = ErrorType<unknown>
 
 
-export function useCatalogCategoriesList<TData = Awaited<ReturnType<typeof catalogCategoriesList>>, TError = unknown>(
+export function useCatalogCategoriesList<TData = Awaited<ReturnType<typeof catalogCategoriesList>>, TError = ErrorType<unknown>>(
  params: undefined |  CatalogCategoriesListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesList>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogCategoriesList>>,
@@ -136,7 +137,7 @@ export function useCatalogCategoriesList<TData = Awaited<ReturnType<typeof catal
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogCategoriesList<TData = Awaited<ReturnType<typeof catalogCategoriesList>>, TError = unknown>(
+export function useCatalogCategoriesList<TData = Awaited<ReturnType<typeof catalogCategoriesList>>, TError = ErrorType<unknown>>(
  params?: CatalogCategoriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesList>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogCategoriesList>>,
@@ -146,12 +147,12 @@ export function useCatalogCategoriesList<TData = Awaited<ReturnType<typeof catal
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogCategoriesList<TData = Awaited<ReturnType<typeof catalogCategoriesList>>, TError = unknown>(
+export function useCatalogCategoriesList<TData = Awaited<ReturnType<typeof catalogCategoriesList>>, TError = ErrorType<unknown>>(
  params?: CatalogCategoriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesList>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogCategoriesList<TData = Awaited<ReturnType<typeof catalogCategoriesList>>, TError = unknown>(
+export function useCatalogCategoriesList<TData = Awaited<ReturnType<typeof catalogCategoriesList>>, TError = ErrorType<unknown>>(
  params?: CatalogCategoriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesList>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -171,7 +172,7 @@ export function useCatalogCategoriesList<TData = Awaited<ReturnType<typeof catal
  * ViewSet for Category model with CRUD operations.
  */
 export const catalogCategoriesCreate = (
-    category: NonReadonly<Category>,
+    category: BodyType<NonReadonly<Category>>,
  signal?: AbortSignal
 ) => {
       
@@ -186,9 +187,9 @@ export const catalogCategoriesCreate = (
   
 
 
-export const getCatalogCategoriesCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesCreate>>, TError,{data: NonReadonly<Category>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesCreate>>, TError,{data: NonReadonly<Category>}, TContext> => {
+export const getCatalogCategoriesCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesCreate>>, TError,{data: BodyType<NonReadonly<Category>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesCreate>>, TError,{data: BodyType<NonReadonly<Category>>}, TContext> => {
 
 const mutationKey = ['catalogCategoriesCreate'];
 const {mutation: mutationOptions} = options ?
@@ -200,7 +201,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogCategoriesCreate>>, {data: NonReadonly<Category>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogCategoriesCreate>>, {data: BodyType<NonReadonly<Category>>}> = (props) => {
           const {data} = props ?? {};
 
           return  catalogCategoriesCreate(data,)
@@ -212,15 +213,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogCategoriesCreateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogCategoriesCreate>>>
-    export type CatalogCategoriesCreateMutationBody = NonReadonly<Category>
-    export type CatalogCategoriesCreateMutationError = unknown
+    export type CatalogCategoriesCreateMutationBody = BodyType<NonReadonly<Category>>
+    export type CatalogCategoriesCreateMutationError = ErrorType<unknown>
 
-    export const useCatalogCategoriesCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesCreate>>, TError,{data: NonReadonly<Category>}, TContext>, }
+    export const useCatalogCategoriesCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesCreate>>, TError,{data: BodyType<NonReadonly<Category>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogCategoriesCreate>>,
         TError,
-        {data: NonReadonly<Category>},
+        {data: BodyType<NonReadonly<Category>>},
         TContext
       > => {
 
@@ -249,7 +250,7 @@ export const getCatalogCategoriesRetrieveQueryKey = (id: number,) => {
     }
 
     
-export const getCatalogCategoriesRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError, TData>>, }
+export const getCatalogCategoriesRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -268,10 +269,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogCategoriesRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof catalogCategoriesRetrieve>>>
-export type CatalogCategoriesRetrieveQueryError = unknown
+export type CatalogCategoriesRetrieveQueryError = ErrorType<unknown>
 
 
-export function useCatalogCategoriesRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError = unknown>(
+export function useCatalogCategoriesRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogCategoriesRetrieve>>,
@@ -281,7 +282,7 @@ export function useCatalogCategoriesRetrieve<TData = Awaited<ReturnType<typeof c
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogCategoriesRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError = unknown>(
+export function useCatalogCategoriesRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogCategoriesRetrieve>>,
@@ -291,12 +292,12 @@ export function useCatalogCategoriesRetrieve<TData = Awaited<ReturnType<typeof c
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogCategoriesRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError = unknown>(
+export function useCatalogCategoriesRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogCategoriesRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError = unknown>(
+export function useCatalogCategoriesRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -317,7 +318,7 @@ export function useCatalogCategoriesRetrieve<TData = Awaited<ReturnType<typeof c
  */
 export const catalogCategoriesUpdate = (
     id: number,
-    category: NonReadonly<Category>,
+    category: BodyType<NonReadonly<Category>>,
  ) => {
       
       
@@ -331,9 +332,9 @@ export const catalogCategoriesUpdate = (
   
 
 
-export const getCatalogCategoriesUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesUpdate>>, TError,{id: number;data: NonReadonly<Category>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesUpdate>>, TError,{id: number;data: NonReadonly<Category>}, TContext> => {
+export const getCatalogCategoriesUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesUpdate>>, TError,{id: number;data: BodyType<NonReadonly<Category>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesUpdate>>, TError,{id: number;data: BodyType<NonReadonly<Category>>}, TContext> => {
 
 const mutationKey = ['catalogCategoriesUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -345,7 +346,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogCategoriesUpdate>>, {id: number;data: NonReadonly<Category>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogCategoriesUpdate>>, {id: number;data: BodyType<NonReadonly<Category>>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  catalogCategoriesUpdate(id,data,)
@@ -357,15 +358,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogCategoriesUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogCategoriesUpdate>>>
-    export type CatalogCategoriesUpdateMutationBody = NonReadonly<Category>
-    export type CatalogCategoriesUpdateMutationError = unknown
+    export type CatalogCategoriesUpdateMutationBody = BodyType<NonReadonly<Category>>
+    export type CatalogCategoriesUpdateMutationError = ErrorType<unknown>
 
-    export const useCatalogCategoriesUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesUpdate>>, TError,{id: number;data: NonReadonly<Category>}, TContext>, }
+    export const useCatalogCategoriesUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesUpdate>>, TError,{id: number;data: BodyType<NonReadonly<Category>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogCategoriesUpdate>>,
         TError,
-        {id: number;data: NonReadonly<Category>},
+        {id: number;data: BodyType<NonReadonly<Category>>},
         TContext
       > => {
 
@@ -378,7 +379,7 @@ const {mutation: mutationOptions} = options ?
  */
 export const catalogCategoriesPartialUpdate = (
     id: number,
-    patchedCategory: NonReadonly<PatchedCategory>,
+    patchedCategory: BodyType<NonReadonly<PatchedCategory>>,
  ) => {
       
       
@@ -392,9 +393,9 @@ export const catalogCategoriesPartialUpdate = (
   
 
 
-export const getCatalogCategoriesPartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedCategory>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedCategory>}, TContext> => {
+export const getCatalogCategoriesPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedCategory>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedCategory>>}, TContext> => {
 
 const mutationKey = ['catalogCategoriesPartialUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -406,7 +407,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogCategoriesPartialUpdate>>, {id: number;data: NonReadonly<PatchedCategory>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogCategoriesPartialUpdate>>, {id: number;data: BodyType<NonReadonly<PatchedCategory>>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  catalogCategoriesPartialUpdate(id,data,)
@@ -418,15 +419,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogCategoriesPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogCategoriesPartialUpdate>>>
-    export type CatalogCategoriesPartialUpdateMutationBody = NonReadonly<PatchedCategory>
-    export type CatalogCategoriesPartialUpdateMutationError = unknown
+    export type CatalogCategoriesPartialUpdateMutationBody = BodyType<NonReadonly<PatchedCategory>>
+    export type CatalogCategoriesPartialUpdateMutationError = ErrorType<unknown>
 
-    export const useCatalogCategoriesPartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedCategory>}, TContext>, }
+    export const useCatalogCategoriesPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedCategory>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogCategoriesPartialUpdate>>,
         TError,
-        {id: number;data: NonReadonly<PatchedCategory>},
+        {id: number;data: BodyType<NonReadonly<PatchedCategory>>},
         TContext
       > => {
 
@@ -450,7 +451,7 @@ export const catalogCategoriesDestroy = (
   
 
 
-export const getCatalogCategoriesDestroyMutationOptions = <TError = unknown,
+export const getCatalogCategoriesDestroyMutationOptions = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesDestroy>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesDestroy>>, TError,{id: number}, TContext> => {
 
@@ -477,9 +478,9 @@ const {mutation: mutationOptions} = options ?
 
     export type CatalogCategoriesDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof catalogCategoriesDestroy>>>
     
-    export type CatalogCategoriesDestroyMutationError = unknown
+    export type CatalogCategoriesDestroyMutationError = ErrorType<unknown>
 
-    export const useCatalogCategoriesDestroy = <TError = unknown,
+    export const useCatalogCategoriesDestroy = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogCategoriesDestroy>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogCategoriesDestroy>>,
@@ -513,7 +514,7 @@ export const getCatalogCategoriesProductsRetrieveQueryKey = (id: number,) => {
     }
 
     
-export const getCatalogCategoriesProductsRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError, TData>>, }
+export const getCatalogCategoriesProductsRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -532,10 +533,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogCategoriesProductsRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>>
-export type CatalogCategoriesProductsRetrieveQueryError = unknown
+export type CatalogCategoriesProductsRetrieveQueryError = ErrorType<unknown>
 
 
-export function useCatalogCategoriesProductsRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError = unknown>(
+export function useCatalogCategoriesProductsRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>,
@@ -545,7 +546,7 @@ export function useCatalogCategoriesProductsRetrieve<TData = Awaited<ReturnType<
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogCategoriesProductsRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError = unknown>(
+export function useCatalogCategoriesProductsRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>,
@@ -555,12 +556,12 @@ export function useCatalogCategoriesProductsRetrieve<TData = Awaited<ReturnType<
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogCategoriesProductsRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError = unknown>(
+export function useCatalogCategoriesProductsRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogCategoriesProductsRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError = unknown>(
+export function useCatalogCategoriesProductsRetrieve<TData = Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogCategoriesProductsRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -585,7 +586,7 @@ export const catalogImagesList = (
 ) => {
       
       
-      return shopInstance<PaginatedProductImageList>(
+      return shopInstance<ProductImage[]>(
       {url: `/api/catalog/images/`, method: 'GET',
         params, signal
     },
@@ -598,7 +599,7 @@ export const getCatalogImagesListQueryKey = (params?: CatalogImagesListParams,) 
     }
 
     
-export const getCatalogImagesListQueryOptions = <TData = Awaited<ReturnType<typeof catalogImagesList>>, TError = unknown>(params?: CatalogImagesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogImagesList>>, TError, TData>>, }
+export const getCatalogImagesListQueryOptions = <TData = Awaited<ReturnType<typeof catalogImagesList>>, TError = ErrorType<unknown>>(params?: CatalogImagesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogImagesList>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -617,10 +618,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogImagesListQueryResult = NonNullable<Awaited<ReturnType<typeof catalogImagesList>>>
-export type CatalogImagesListQueryError = unknown
+export type CatalogImagesListQueryError = ErrorType<unknown>
 
 
-export function useCatalogImagesList<TData = Awaited<ReturnType<typeof catalogImagesList>>, TError = unknown>(
+export function useCatalogImagesList<TData = Awaited<ReturnType<typeof catalogImagesList>>, TError = ErrorType<unknown>>(
  params: undefined |  CatalogImagesListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogImagesList>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogImagesList>>,
@@ -630,7 +631,7 @@ export function useCatalogImagesList<TData = Awaited<ReturnType<typeof catalogIm
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogImagesList<TData = Awaited<ReturnType<typeof catalogImagesList>>, TError = unknown>(
+export function useCatalogImagesList<TData = Awaited<ReturnType<typeof catalogImagesList>>, TError = ErrorType<unknown>>(
  params?: CatalogImagesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogImagesList>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogImagesList>>,
@@ -640,12 +641,12 @@ export function useCatalogImagesList<TData = Awaited<ReturnType<typeof catalogIm
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogImagesList<TData = Awaited<ReturnType<typeof catalogImagesList>>, TError = unknown>(
+export function useCatalogImagesList<TData = Awaited<ReturnType<typeof catalogImagesList>>, TError = ErrorType<unknown>>(
  params?: CatalogImagesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogImagesList>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogImagesList<TData = Awaited<ReturnType<typeof catalogImagesList>>, TError = unknown>(
+export function useCatalogImagesList<TData = Awaited<ReturnType<typeof catalogImagesList>>, TError = ErrorType<unknown>>(
  params?: CatalogImagesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogImagesList>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -665,7 +666,7 @@ export function useCatalogImagesList<TData = Awaited<ReturnType<typeof catalogIm
  * ViewSet for ProductImage model with CRUD operations.
  */
 export const catalogImagesCreate = (
-    productImage: NonReadonly<ProductImage>,
+    productImage: BodyType<NonReadonly<ProductImage>>,
  signal?: AbortSignal
 ) => {
       
@@ -680,9 +681,9 @@ export const catalogImagesCreate = (
   
 
 
-export const getCatalogImagesCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesCreate>>, TError,{data: NonReadonly<ProductImage>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogImagesCreate>>, TError,{data: NonReadonly<ProductImage>}, TContext> => {
+export const getCatalogImagesCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesCreate>>, TError,{data: BodyType<NonReadonly<ProductImage>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogImagesCreate>>, TError,{data: BodyType<NonReadonly<ProductImage>>}, TContext> => {
 
 const mutationKey = ['catalogImagesCreate'];
 const {mutation: mutationOptions} = options ?
@@ -694,7 +695,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogImagesCreate>>, {data: NonReadonly<ProductImage>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogImagesCreate>>, {data: BodyType<NonReadonly<ProductImage>>}> = (props) => {
           const {data} = props ?? {};
 
           return  catalogImagesCreate(data,)
@@ -706,15 +707,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogImagesCreateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogImagesCreate>>>
-    export type CatalogImagesCreateMutationBody = NonReadonly<ProductImage>
-    export type CatalogImagesCreateMutationError = unknown
+    export type CatalogImagesCreateMutationBody = BodyType<NonReadonly<ProductImage>>
+    export type CatalogImagesCreateMutationError = ErrorType<unknown>
 
-    export const useCatalogImagesCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesCreate>>, TError,{data: NonReadonly<ProductImage>}, TContext>, }
+    export const useCatalogImagesCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesCreate>>, TError,{data: BodyType<NonReadonly<ProductImage>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogImagesCreate>>,
         TError,
-        {data: NonReadonly<ProductImage>},
+        {data: BodyType<NonReadonly<ProductImage>>},
         TContext
       > => {
 
@@ -743,7 +744,7 @@ export const getCatalogImagesRetrieveQueryKey = (id: number,) => {
     }
 
     
-export const getCatalogImagesRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError, TData>>, }
+export const getCatalogImagesRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -762,10 +763,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogImagesRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof catalogImagesRetrieve>>>
-export type CatalogImagesRetrieveQueryError = unknown
+export type CatalogImagesRetrieveQueryError = ErrorType<unknown>
 
 
-export function useCatalogImagesRetrieve<TData = Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError = unknown>(
+export function useCatalogImagesRetrieve<TData = Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogImagesRetrieve>>,
@@ -775,7 +776,7 @@ export function useCatalogImagesRetrieve<TData = Awaited<ReturnType<typeof catal
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogImagesRetrieve<TData = Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError = unknown>(
+export function useCatalogImagesRetrieve<TData = Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogImagesRetrieve>>,
@@ -785,12 +786,12 @@ export function useCatalogImagesRetrieve<TData = Awaited<ReturnType<typeof catal
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogImagesRetrieve<TData = Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError = unknown>(
+export function useCatalogImagesRetrieve<TData = Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogImagesRetrieve<TData = Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError = unknown>(
+export function useCatalogImagesRetrieve<TData = Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogImagesRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -811,7 +812,7 @@ export function useCatalogImagesRetrieve<TData = Awaited<ReturnType<typeof catal
  */
 export const catalogImagesUpdate = (
     id: number,
-    productImage: NonReadonly<ProductImage>,
+    productImage: BodyType<NonReadonly<ProductImage>>,
  ) => {
       
       
@@ -825,9 +826,9 @@ export const catalogImagesUpdate = (
   
 
 
-export const getCatalogImagesUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesUpdate>>, TError,{id: number;data: NonReadonly<ProductImage>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogImagesUpdate>>, TError,{id: number;data: NonReadonly<ProductImage>}, TContext> => {
+export const getCatalogImagesUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesUpdate>>, TError,{id: number;data: BodyType<NonReadonly<ProductImage>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogImagesUpdate>>, TError,{id: number;data: BodyType<NonReadonly<ProductImage>>}, TContext> => {
 
 const mutationKey = ['catalogImagesUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -839,7 +840,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogImagesUpdate>>, {id: number;data: NonReadonly<ProductImage>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogImagesUpdate>>, {id: number;data: BodyType<NonReadonly<ProductImage>>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  catalogImagesUpdate(id,data,)
@@ -851,15 +852,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogImagesUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogImagesUpdate>>>
-    export type CatalogImagesUpdateMutationBody = NonReadonly<ProductImage>
-    export type CatalogImagesUpdateMutationError = unknown
+    export type CatalogImagesUpdateMutationBody = BodyType<NonReadonly<ProductImage>>
+    export type CatalogImagesUpdateMutationError = ErrorType<unknown>
 
-    export const useCatalogImagesUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesUpdate>>, TError,{id: number;data: NonReadonly<ProductImage>}, TContext>, }
+    export const useCatalogImagesUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesUpdate>>, TError,{id: number;data: BodyType<NonReadonly<ProductImage>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogImagesUpdate>>,
         TError,
-        {id: number;data: NonReadonly<ProductImage>},
+        {id: number;data: BodyType<NonReadonly<ProductImage>>},
         TContext
       > => {
 
@@ -872,7 +873,7 @@ const {mutation: mutationOptions} = options ?
  */
 export const catalogImagesPartialUpdate = (
     id: number,
-    patchedProductImage: NonReadonly<PatchedProductImage>,
+    patchedProductImage: BodyType<NonReadonly<PatchedProductImage>>,
  ) => {
       
       
@@ -886,9 +887,9 @@ export const catalogImagesPartialUpdate = (
   
 
 
-export const getCatalogImagesPartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedProductImage>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogImagesPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedProductImage>}, TContext> => {
+export const getCatalogImagesPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedProductImage>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogImagesPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedProductImage>>}, TContext> => {
 
 const mutationKey = ['catalogImagesPartialUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -900,7 +901,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogImagesPartialUpdate>>, {id: number;data: NonReadonly<PatchedProductImage>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogImagesPartialUpdate>>, {id: number;data: BodyType<NonReadonly<PatchedProductImage>>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  catalogImagesPartialUpdate(id,data,)
@@ -912,15 +913,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogImagesPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogImagesPartialUpdate>>>
-    export type CatalogImagesPartialUpdateMutationBody = NonReadonly<PatchedProductImage>
-    export type CatalogImagesPartialUpdateMutationError = unknown
+    export type CatalogImagesPartialUpdateMutationBody = BodyType<NonReadonly<PatchedProductImage>>
+    export type CatalogImagesPartialUpdateMutationError = ErrorType<unknown>
 
-    export const useCatalogImagesPartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedProductImage>}, TContext>, }
+    export const useCatalogImagesPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedProductImage>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogImagesPartialUpdate>>,
         TError,
-        {id: number;data: NonReadonly<PatchedProductImage>},
+        {id: number;data: BodyType<NonReadonly<PatchedProductImage>>},
         TContext
       > => {
 
@@ -944,7 +945,7 @@ export const catalogImagesDestroy = (
   
 
 
-export const getCatalogImagesDestroyMutationOptions = <TError = unknown,
+export const getCatalogImagesDestroyMutationOptions = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesDestroy>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof catalogImagesDestroy>>, TError,{id: number}, TContext> => {
 
@@ -971,9 +972,9 @@ const {mutation: mutationOptions} = options ?
 
     export type CatalogImagesDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof catalogImagesDestroy>>>
     
-    export type CatalogImagesDestroyMutationError = unknown
+    export type CatalogImagesDestroyMutationError = ErrorType<unknown>
 
-    export const useCatalogImagesDestroy = <TError = unknown,
+    export const useCatalogImagesDestroy = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesDestroy>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogImagesDestroy>>,
@@ -991,7 +992,7 @@ const {mutation: mutationOptions} = options ?
  */
 export const catalogImagesSetPrimaryCreate = (
     id: number,
-    productImage: NonReadonly<ProductImage>,
+    productImage: BodyType<NonReadonly<ProductImage>>,
  signal?: AbortSignal
 ) => {
       
@@ -1006,9 +1007,9 @@ export const catalogImagesSetPrimaryCreate = (
   
 
 
-export const getCatalogImagesSetPrimaryCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesSetPrimaryCreate>>, TError,{id: number;data: NonReadonly<ProductImage>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogImagesSetPrimaryCreate>>, TError,{id: number;data: NonReadonly<ProductImage>}, TContext> => {
+export const getCatalogImagesSetPrimaryCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesSetPrimaryCreate>>, TError,{id: number;data: BodyType<NonReadonly<ProductImage>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogImagesSetPrimaryCreate>>, TError,{id: number;data: BodyType<NonReadonly<ProductImage>>}, TContext> => {
 
 const mutationKey = ['catalogImagesSetPrimaryCreate'];
 const {mutation: mutationOptions} = options ?
@@ -1020,7 +1021,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogImagesSetPrimaryCreate>>, {id: number;data: NonReadonly<ProductImage>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogImagesSetPrimaryCreate>>, {id: number;data: BodyType<NonReadonly<ProductImage>>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  catalogImagesSetPrimaryCreate(id,data,)
@@ -1032,15 +1033,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogImagesSetPrimaryCreateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogImagesSetPrimaryCreate>>>
-    export type CatalogImagesSetPrimaryCreateMutationBody = NonReadonly<ProductImage>
-    export type CatalogImagesSetPrimaryCreateMutationError = unknown
+    export type CatalogImagesSetPrimaryCreateMutationBody = BodyType<NonReadonly<ProductImage>>
+    export type CatalogImagesSetPrimaryCreateMutationError = ErrorType<unknown>
 
-    export const useCatalogImagesSetPrimaryCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesSetPrimaryCreate>>, TError,{id: number;data: NonReadonly<ProductImage>}, TContext>, }
+    export const useCatalogImagesSetPrimaryCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesSetPrimaryCreate>>, TError,{id: number;data: BodyType<NonReadonly<ProductImage>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogImagesSetPrimaryCreate>>,
         TError,
-        {id: number;data: NonReadonly<ProductImage>},
+        {id: number;data: BodyType<NonReadonly<ProductImage>>},
         TContext
       > => {
 
@@ -1054,7 +1055,7 @@ const {mutation: mutationOptions} = options ?
 ) => {
       
       
-      return shopInstance<PaginatedManufacturerListList>(
+      return shopInstance<ManufacturerList[]>(
       {url: `/api/catalog/manufacturers/`, method: 'GET',
         params, signal
     },
@@ -1067,7 +1068,7 @@ export const getCatalogManufacturersListQueryKey = (params?: CatalogManufacturer
     }
 
     
-export const getCatalogManufacturersListQueryOptions = <TData = Awaited<ReturnType<typeof catalogManufacturersList>>, TError = unknown>(params?: CatalogManufacturersListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogManufacturersList>>, TError, TData>>, }
+export const getCatalogManufacturersListQueryOptions = <TData = Awaited<ReturnType<typeof catalogManufacturersList>>, TError = ErrorType<unknown>>(params?: CatalogManufacturersListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogManufacturersList>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1086,10 +1087,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogManufacturersListQueryResult = NonNullable<Awaited<ReturnType<typeof catalogManufacturersList>>>
-export type CatalogManufacturersListQueryError = unknown
+export type CatalogManufacturersListQueryError = ErrorType<unknown>
 
 
-export function useCatalogManufacturersList<TData = Awaited<ReturnType<typeof catalogManufacturersList>>, TError = unknown>(
+export function useCatalogManufacturersList<TData = Awaited<ReturnType<typeof catalogManufacturersList>>, TError = ErrorType<unknown>>(
  params: undefined |  CatalogManufacturersListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogManufacturersList>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogManufacturersList>>,
@@ -1099,7 +1100,7 @@ export function useCatalogManufacturersList<TData = Awaited<ReturnType<typeof ca
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogManufacturersList<TData = Awaited<ReturnType<typeof catalogManufacturersList>>, TError = unknown>(
+export function useCatalogManufacturersList<TData = Awaited<ReturnType<typeof catalogManufacturersList>>, TError = ErrorType<unknown>>(
  params?: CatalogManufacturersListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogManufacturersList>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogManufacturersList>>,
@@ -1109,12 +1110,12 @@ export function useCatalogManufacturersList<TData = Awaited<ReturnType<typeof ca
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogManufacturersList<TData = Awaited<ReturnType<typeof catalogManufacturersList>>, TError = unknown>(
+export function useCatalogManufacturersList<TData = Awaited<ReturnType<typeof catalogManufacturersList>>, TError = ErrorType<unknown>>(
  params?: CatalogManufacturersListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogManufacturersList>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogManufacturersList<TData = Awaited<ReturnType<typeof catalogManufacturersList>>, TError = unknown>(
+export function useCatalogManufacturersList<TData = Awaited<ReturnType<typeof catalogManufacturersList>>, TError = ErrorType<unknown>>(
  params?: CatalogManufacturersListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogManufacturersList>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1131,7 +1132,7 @@ export function useCatalogManufacturersList<TData = Awaited<ReturnType<typeof ca
 
 
 export const catalogManufacturersCreate = (
-    manufacturerCreate: ManufacturerCreate,
+    manufacturerCreate: BodyType<ManufacturerCreate>,
  signal?: AbortSignal
 ) => {
       
@@ -1146,9 +1147,9 @@ export const catalogManufacturersCreate = (
   
 
 
-export const getCatalogManufacturersCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersCreate>>, TError,{data: ManufacturerCreate}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersCreate>>, TError,{data: ManufacturerCreate}, TContext> => {
+export const getCatalogManufacturersCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersCreate>>, TError,{data: BodyType<ManufacturerCreate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersCreate>>, TError,{data: BodyType<ManufacturerCreate>}, TContext> => {
 
 const mutationKey = ['catalogManufacturersCreate'];
 const {mutation: mutationOptions} = options ?
@@ -1160,7 +1161,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogManufacturersCreate>>, {data: ManufacturerCreate}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogManufacturersCreate>>, {data: BodyType<ManufacturerCreate>}> = (props) => {
           const {data} = props ?? {};
 
           return  catalogManufacturersCreate(data,)
@@ -1172,15 +1173,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogManufacturersCreateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogManufacturersCreate>>>
-    export type CatalogManufacturersCreateMutationBody = ManufacturerCreate
-    export type CatalogManufacturersCreateMutationError = unknown
+    export type CatalogManufacturersCreateMutationBody = BodyType<ManufacturerCreate>
+    export type CatalogManufacturersCreateMutationError = ErrorType<unknown>
 
-    export const useCatalogManufacturersCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersCreate>>, TError,{data: ManufacturerCreate}, TContext>, }
+    export const useCatalogManufacturersCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersCreate>>, TError,{data: BodyType<ManufacturerCreate>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogManufacturersCreate>>,
         TError,
-        {data: ManufacturerCreate},
+        {data: BodyType<ManufacturerCreate>},
         TContext
       > => {
 
@@ -1206,7 +1207,7 @@ export const getCatalogManufacturersRetrieveQueryKey = (id: number,) => {
     }
 
     
-export const getCatalogManufacturersRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError, TData>>, }
+export const getCatalogManufacturersRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1225,10 +1226,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogManufacturersRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof catalogManufacturersRetrieve>>>
-export type CatalogManufacturersRetrieveQueryError = unknown
+export type CatalogManufacturersRetrieveQueryError = ErrorType<unknown>
 
 
-export function useCatalogManufacturersRetrieve<TData = Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError = unknown>(
+export function useCatalogManufacturersRetrieve<TData = Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogManufacturersRetrieve>>,
@@ -1238,7 +1239,7 @@ export function useCatalogManufacturersRetrieve<TData = Awaited<ReturnType<typeo
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogManufacturersRetrieve<TData = Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError = unknown>(
+export function useCatalogManufacturersRetrieve<TData = Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogManufacturersRetrieve>>,
@@ -1248,12 +1249,12 @@ export function useCatalogManufacturersRetrieve<TData = Awaited<ReturnType<typeo
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogManufacturersRetrieve<TData = Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError = unknown>(
+export function useCatalogManufacturersRetrieve<TData = Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogManufacturersRetrieve<TData = Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError = unknown>(
+export function useCatalogManufacturersRetrieve<TData = Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogManufacturersRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1271,7 +1272,7 @@ export function useCatalogManufacturersRetrieve<TData = Awaited<ReturnType<typeo
 
 export const catalogManufacturersUpdate = (
     id: number,
-    manufacturerUpdate: ManufacturerUpdate,
+    manufacturerUpdate: BodyType<ManufacturerUpdate>,
  ) => {
       
       
@@ -1285,9 +1286,9 @@ export const catalogManufacturersUpdate = (
   
 
 
-export const getCatalogManufacturersUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersUpdate>>, TError,{id: number;data: ManufacturerUpdate}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersUpdate>>, TError,{id: number;data: ManufacturerUpdate}, TContext> => {
+export const getCatalogManufacturersUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersUpdate>>, TError,{id: number;data: BodyType<ManufacturerUpdate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersUpdate>>, TError,{id: number;data: BodyType<ManufacturerUpdate>}, TContext> => {
 
 const mutationKey = ['catalogManufacturersUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -1299,7 +1300,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogManufacturersUpdate>>, {id: number;data: ManufacturerUpdate}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogManufacturersUpdate>>, {id: number;data: BodyType<ManufacturerUpdate>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  catalogManufacturersUpdate(id,data,)
@@ -1311,15 +1312,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogManufacturersUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogManufacturersUpdate>>>
-    export type CatalogManufacturersUpdateMutationBody = ManufacturerUpdate
-    export type CatalogManufacturersUpdateMutationError = unknown
+    export type CatalogManufacturersUpdateMutationBody = BodyType<ManufacturerUpdate>
+    export type CatalogManufacturersUpdateMutationError = ErrorType<unknown>
 
-    export const useCatalogManufacturersUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersUpdate>>, TError,{id: number;data: ManufacturerUpdate}, TContext>, }
+    export const useCatalogManufacturersUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersUpdate>>, TError,{id: number;data: BodyType<ManufacturerUpdate>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogManufacturersUpdate>>,
         TError,
-        {id: number;data: ManufacturerUpdate},
+        {id: number;data: BodyType<ManufacturerUpdate>},
         TContext
       > => {
 
@@ -1329,7 +1330,7 @@ const {mutation: mutationOptions} = options ?
     }
     export const catalogManufacturersPartialUpdate = (
     id: number,
-    patchedManufacturer: NonReadonly<PatchedManufacturer>,
+    patchedManufacturer: BodyType<NonReadonly<PatchedManufacturer>>,
  ) => {
       
       
@@ -1343,9 +1344,9 @@ const {mutation: mutationOptions} = options ?
   
 
 
-export const getCatalogManufacturersPartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedManufacturer>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedManufacturer>}, TContext> => {
+export const getCatalogManufacturersPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedManufacturer>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedManufacturer>>}, TContext> => {
 
 const mutationKey = ['catalogManufacturersPartialUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -1357,7 +1358,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogManufacturersPartialUpdate>>, {id: number;data: NonReadonly<PatchedManufacturer>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogManufacturersPartialUpdate>>, {id: number;data: BodyType<NonReadonly<PatchedManufacturer>>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  catalogManufacturersPartialUpdate(id,data,)
@@ -1369,15 +1370,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogManufacturersPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogManufacturersPartialUpdate>>>
-    export type CatalogManufacturersPartialUpdateMutationBody = NonReadonly<PatchedManufacturer>
-    export type CatalogManufacturersPartialUpdateMutationError = unknown
+    export type CatalogManufacturersPartialUpdateMutationBody = BodyType<NonReadonly<PatchedManufacturer>>
+    export type CatalogManufacturersPartialUpdateMutationError = ErrorType<unknown>
 
-    export const useCatalogManufacturersPartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedManufacturer>}, TContext>, }
+    export const useCatalogManufacturersPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedManufacturer>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogManufacturersPartialUpdate>>,
         TError,
-        {id: number;data: NonReadonly<PatchedManufacturer>},
+        {id: number;data: BodyType<NonReadonly<PatchedManufacturer>>},
         TContext
       > => {
 
@@ -1398,7 +1399,7 @@ const {mutation: mutationOptions} = options ?
   
 
 
-export const getCatalogManufacturersDestroyMutationOptions = <TError = unknown,
+export const getCatalogManufacturersDestroyMutationOptions = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersDestroy>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersDestroy>>, TError,{id: number}, TContext> => {
 
@@ -1425,9 +1426,9 @@ const {mutation: mutationOptions} = options ?
 
     export type CatalogManufacturersDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof catalogManufacturersDestroy>>>
     
-    export type CatalogManufacturersDestroyMutationError = unknown
+    export type CatalogManufacturersDestroyMutationError = ErrorType<unknown>
 
-    export const useCatalogManufacturersDestroy = <TError = unknown,
+    export const useCatalogManufacturersDestroy = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogManufacturersDestroy>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogManufacturersDestroy>>,
@@ -1437,6 +1438,270 @@ const {mutation: mutationOptions} = options ?
       > => {
 
       const mutationOptions = getCatalogManufacturersDestroyMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesList = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<NotificationPreference[]>(
+      {url: `/api/catalog/notifications/preferences/`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getCatalogNotificationsPreferencesListQueryKey = () => {
+    return [`/api/catalog/notifications/preferences/`] as const;
+    }
+
+    
+export const getCatalogNotificationsPreferencesListQueryOptions = <TData = Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCatalogNotificationsPreferencesListQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>> = ({ signal }) => catalogNotificationsPreferencesList(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CatalogNotificationsPreferencesListQueryResult = NonNullable<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>>
+export type CatalogNotificationsPreferencesListQueryError = ErrorType<unknown>
+
+
+export function useCatalogNotificationsPreferencesList<TData = Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>,
+          TError,
+          Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCatalogNotificationsPreferencesList<TData = Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>,
+          TError,
+          Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCatalogNotificationsPreferencesList<TData = Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCatalogNotificationsPreferencesList<TData = Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesList>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCatalogNotificationsPreferencesListQueryOptions(options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesCreate = (
+    notificationPreference: BodyType<NonReadonly<NotificationPreference>>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<NotificationPreference>(
+      {url: `/api/catalog/notifications/preferences/`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: notificationPreference, signal
+    },
+      );
+    }
+  
+
+
+export const getCatalogNotificationsPreferencesCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesCreate>>, TError,{data: BodyType<NonReadonly<NotificationPreference>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesCreate>>, TError,{data: BodyType<NonReadonly<NotificationPreference>>}, TContext> => {
+
+const mutationKey = ['catalogNotificationsPreferencesCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogNotificationsPreferencesCreate>>, {data: BodyType<NonReadonly<NotificationPreference>>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  catalogNotificationsPreferencesCreate(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogNotificationsPreferencesCreateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogNotificationsPreferencesCreate>>>
+    export type CatalogNotificationsPreferencesCreateMutationBody = BodyType<NonReadonly<NotificationPreference>>
+    export type CatalogNotificationsPreferencesCreateMutationError = ErrorType<unknown>
+
+    export const useCatalogNotificationsPreferencesCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesCreate>>, TError,{data: BodyType<NonReadonly<NotificationPreference>>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogNotificationsPreferencesCreate>>,
+        TError,
+        {data: BodyType<NonReadonly<NotificationPreference>>},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogNotificationsPreferencesCreateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesUpdate = (
+    id: string,
+    notificationPreferenceUpdate: BodyType<NotificationPreferenceUpdate>,
+ ) => {
+      
+      
+      return shopInstance<NotificationPreferenceUpdate>(
+      {url: `/api/catalog/notifications/preferences/${id}/`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: notificationPreferenceUpdate
+    },
+      );
+    }
+  
+
+
+export const getCatalogNotificationsPreferencesUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesUpdate>>, TError,{id: string;data: BodyType<NotificationPreferenceUpdate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesUpdate>>, TError,{id: string;data: BodyType<NotificationPreferenceUpdate>}, TContext> => {
+
+const mutationKey = ['catalogNotificationsPreferencesUpdate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogNotificationsPreferencesUpdate>>, {id: string;data: BodyType<NotificationPreferenceUpdate>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  catalogNotificationsPreferencesUpdate(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogNotificationsPreferencesUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogNotificationsPreferencesUpdate>>>
+    export type CatalogNotificationsPreferencesUpdateMutationBody = BodyType<NotificationPreferenceUpdate>
+    export type CatalogNotificationsPreferencesUpdateMutationError = ErrorType<unknown>
+
+    export const useCatalogNotificationsPreferencesUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesUpdate>>, TError,{id: string;data: BodyType<NotificationPreferenceUpdate>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogNotificationsPreferencesUpdate>>,
+        TError,
+        {id: string;data: BodyType<NotificationPreferenceUpdate>},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogNotificationsPreferencesUpdateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * ViewSet for managing user notification preferences.
+ */
+export const catalogNotificationsPreferencesDestroy = (
+    id: string,
+ ) => {
+      
+      
+      return shopInstance<void>(
+      {url: `/api/catalog/notifications/preferences/${id}/`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getCatalogNotificationsPreferencesDestroyMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesDestroy>>, TError,{id: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesDestroy>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['catalogNotificationsPreferencesDestroy'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogNotificationsPreferencesDestroy>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  catalogNotificationsPreferencesDestroy(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogNotificationsPreferencesDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof catalogNotificationsPreferencesDestroy>>>
+    
+    export type CatalogNotificationsPreferencesDestroyMutationError = ErrorType<unknown>
+
+    export const useCatalogNotificationsPreferencesDestroy = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogNotificationsPreferencesDestroy>>, TError,{id: string}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogNotificationsPreferencesDestroy>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogNotificationsPreferencesDestroyMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }
@@ -1462,7 +1727,7 @@ export const getCatalogProductsListQueryKey = (params?: CatalogProductsListParam
     }
 
     
-export const getCatalogProductsListQueryOptions = <TData = Awaited<ReturnType<typeof catalogProductsList>>, TError = unknown>(params?: CatalogProductsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsList>>, TError, TData>>, }
+export const getCatalogProductsListQueryOptions = <TData = Awaited<ReturnType<typeof catalogProductsList>>, TError = ErrorType<unknown>>(params?: CatalogProductsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsList>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1481,10 +1746,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogProductsListQueryResult = NonNullable<Awaited<ReturnType<typeof catalogProductsList>>>
-export type CatalogProductsListQueryError = unknown
+export type CatalogProductsListQueryError = ErrorType<unknown>
 
 
-export function useCatalogProductsList<TData = Awaited<ReturnType<typeof catalogProductsList>>, TError = unknown>(
+export function useCatalogProductsList<TData = Awaited<ReturnType<typeof catalogProductsList>>, TError = ErrorType<unknown>>(
  params: undefined |  CatalogProductsListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsList>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogProductsList>>,
@@ -1494,7 +1759,7 @@ export function useCatalogProductsList<TData = Awaited<ReturnType<typeof catalog
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogProductsList<TData = Awaited<ReturnType<typeof catalogProductsList>>, TError = unknown>(
+export function useCatalogProductsList<TData = Awaited<ReturnType<typeof catalogProductsList>>, TError = ErrorType<unknown>>(
  params?: CatalogProductsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsList>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogProductsList>>,
@@ -1504,12 +1769,12 @@ export function useCatalogProductsList<TData = Awaited<ReturnType<typeof catalog
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogProductsList<TData = Awaited<ReturnType<typeof catalogProductsList>>, TError = unknown>(
+export function useCatalogProductsList<TData = Awaited<ReturnType<typeof catalogProductsList>>, TError = ErrorType<unknown>>(
  params?: CatalogProductsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsList>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogProductsList<TData = Awaited<ReturnType<typeof catalogProductsList>>, TError = unknown>(
+export function useCatalogProductsList<TData = Awaited<ReturnType<typeof catalogProductsList>>, TError = ErrorType<unknown>>(
  params?: CatalogProductsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsList>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1529,7 +1794,7 @@ export function useCatalogProductsList<TData = Awaited<ReturnType<typeof catalog
  * ViewSet for Product model with advanced CRUD operations.
  */
 export const catalogProductsCreate = (
-    productCreate: ProductCreate,
+    productCreate: BodyType<ProductCreate>,
  signal?: AbortSignal
 ) => {
       
@@ -1544,9 +1809,9 @@ export const catalogProductsCreate = (
   
 
 
-export const getCatalogProductsCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsCreate>>, TError,{data: ProductCreate}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogProductsCreate>>, TError,{data: ProductCreate}, TContext> => {
+export const getCatalogProductsCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsCreate>>, TError,{data: BodyType<ProductCreate>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogProductsCreate>>, TError,{data: BodyType<ProductCreate>}, TContext> => {
 
 const mutationKey = ['catalogProductsCreate'];
 const {mutation: mutationOptions} = options ?
@@ -1558,7 +1823,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogProductsCreate>>, {data: ProductCreate}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogProductsCreate>>, {data: BodyType<ProductCreate>}> = (props) => {
           const {data} = props ?? {};
 
           return  catalogProductsCreate(data,)
@@ -1570,15 +1835,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogProductsCreateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogProductsCreate>>>
-    export type CatalogProductsCreateMutationBody = ProductCreate
-    export type CatalogProductsCreateMutationError = unknown
+    export type CatalogProductsCreateMutationBody = BodyType<ProductCreate>
+    export type CatalogProductsCreateMutationError = ErrorType<unknown>
 
-    export const useCatalogProductsCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsCreate>>, TError,{data: ProductCreate}, TContext>, }
+    export const useCatalogProductsCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsCreate>>, TError,{data: BodyType<ProductCreate>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogProductsCreate>>,
         TError,
-        {data: ProductCreate},
+        {data: BodyType<ProductCreate>},
         TContext
       > => {
 
@@ -1607,7 +1872,7 @@ export const getCatalogProductsRetrieveQueryKey = (id: number,) => {
     }
 
     
-export const getCatalogProductsRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError, TData>>, }
+export const getCatalogProductsRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1626,10 +1891,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogProductsRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof catalogProductsRetrieve>>>
-export type CatalogProductsRetrieveQueryError = unknown
+export type CatalogProductsRetrieveQueryError = ErrorType<unknown>
 
 
-export function useCatalogProductsRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError = unknown>(
+export function useCatalogProductsRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogProductsRetrieve>>,
@@ -1639,7 +1904,7 @@ export function useCatalogProductsRetrieve<TData = Awaited<ReturnType<typeof cat
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogProductsRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError = unknown>(
+export function useCatalogProductsRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogProductsRetrieve>>,
@@ -1649,12 +1914,12 @@ export function useCatalogProductsRetrieve<TData = Awaited<ReturnType<typeof cat
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogProductsRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError = unknown>(
+export function useCatalogProductsRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogProductsRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError = unknown>(
+export function useCatalogProductsRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1675,7 +1940,7 @@ export function useCatalogProductsRetrieve<TData = Awaited<ReturnType<typeof cat
  */
 export const catalogProductsUpdate = (
     id: number,
-    productDetail: NonReadonly<ProductDetail>,
+    productDetail: BodyType<NonReadonly<ProductDetail>>,
  ) => {
       
       
@@ -1689,9 +1954,9 @@ export const catalogProductsUpdate = (
   
 
 
-export const getCatalogProductsUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsUpdate>>, TError,{id: number;data: NonReadonly<ProductDetail>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogProductsUpdate>>, TError,{id: number;data: NonReadonly<ProductDetail>}, TContext> => {
+export const getCatalogProductsUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsUpdate>>, TError,{id: number;data: BodyType<NonReadonly<ProductDetail>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogProductsUpdate>>, TError,{id: number;data: BodyType<NonReadonly<ProductDetail>>}, TContext> => {
 
 const mutationKey = ['catalogProductsUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -1703,7 +1968,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogProductsUpdate>>, {id: number;data: NonReadonly<ProductDetail>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogProductsUpdate>>, {id: number;data: BodyType<NonReadonly<ProductDetail>>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  catalogProductsUpdate(id,data,)
@@ -1715,15 +1980,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogProductsUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogProductsUpdate>>>
-    export type CatalogProductsUpdateMutationBody = NonReadonly<ProductDetail>
-    export type CatalogProductsUpdateMutationError = unknown
+    export type CatalogProductsUpdateMutationBody = BodyType<NonReadonly<ProductDetail>>
+    export type CatalogProductsUpdateMutationError = ErrorType<unknown>
 
-    export const useCatalogProductsUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsUpdate>>, TError,{id: number;data: NonReadonly<ProductDetail>}, TContext>, }
+    export const useCatalogProductsUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsUpdate>>, TError,{id: number;data: BodyType<NonReadonly<ProductDetail>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogProductsUpdate>>,
         TError,
-        {id: number;data: NonReadonly<ProductDetail>},
+        {id: number;data: BodyType<NonReadonly<ProductDetail>>},
         TContext
       > => {
 
@@ -1736,7 +2001,7 @@ const {mutation: mutationOptions} = options ?
  */
 export const catalogProductsPartialUpdate = (
     id: number,
-    patchedProductDetail: NonReadonly<PatchedProductDetail>,
+    patchedProductDetail: BodyType<NonReadonly<PatchedProductDetail>>,
  ) => {
       
       
@@ -1750,9 +2015,9 @@ export const catalogProductsPartialUpdate = (
   
 
 
-export const getCatalogProductsPartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedProductDetail>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogProductsPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedProductDetail>}, TContext> => {
+export const getCatalogProductsPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedProductDetail>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogProductsPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedProductDetail>>}, TContext> => {
 
 const mutationKey = ['catalogProductsPartialUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -1764,7 +2029,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogProductsPartialUpdate>>, {id: number;data: NonReadonly<PatchedProductDetail>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogProductsPartialUpdate>>, {id: number;data: BodyType<NonReadonly<PatchedProductDetail>>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  catalogProductsPartialUpdate(id,data,)
@@ -1776,15 +2041,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogProductsPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogProductsPartialUpdate>>>
-    export type CatalogProductsPartialUpdateMutationBody = NonReadonly<PatchedProductDetail>
-    export type CatalogProductsPartialUpdateMutationError = unknown
+    export type CatalogProductsPartialUpdateMutationBody = BodyType<NonReadonly<PatchedProductDetail>>
+    export type CatalogProductsPartialUpdateMutationError = ErrorType<unknown>
 
-    export const useCatalogProductsPartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedProductDetail>}, TContext>, }
+    export const useCatalogProductsPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedProductDetail>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogProductsPartialUpdate>>,
         TError,
-        {id: number;data: NonReadonly<PatchedProductDetail>},
+        {id: number;data: BodyType<NonReadonly<PatchedProductDetail>>},
         TContext
       > => {
 
@@ -1808,7 +2073,7 @@ export const catalogProductsDestroy = (
   
 
 
-export const getCatalogProductsDestroyMutationOptions = <TError = unknown,
+export const getCatalogProductsDestroyMutationOptions = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsDestroy>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof catalogProductsDestroy>>, TError,{id: number}, TContext> => {
 
@@ -1835,9 +2100,9 @@ const {mutation: mutationOptions} = options ?
 
     export type CatalogProductsDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof catalogProductsDestroy>>>
     
-    export type CatalogProductsDestroyMutationError = unknown
+    export type CatalogProductsDestroyMutationError = ErrorType<unknown>
 
-    export const useCatalogProductsDestroy = <TError = unknown,
+    export const useCatalogProductsDestroy = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsDestroy>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogProductsDestroy>>,
@@ -1847,68 +2112,6 @@ const {mutation: mutationOptions} = options ?
       > => {
 
       const mutationOptions = getCatalogProductsDestroyMutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
-    }
-    /**
- * Add product to user's wishlist.
- */
-export const catalogProductsAddToWishlistCreate = (
-    id: number,
-    productDetail: NonReadonly<ProductDetail>,
- signal?: AbortSignal
-) => {
-      
-      
-      return shopInstance<ProductDetail>(
-      {url: `/api/catalog/products/${id}/add_to_wishlist/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: productDetail, signal
-    },
-      );
-    }
-  
-
-
-export const getCatalogProductsAddToWishlistCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsAddToWishlistCreate>>, TError,{id: number;data: NonReadonly<ProductDetail>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogProductsAddToWishlistCreate>>, TError,{id: number;data: NonReadonly<ProductDetail>}, TContext> => {
-
-const mutationKey = ['catalogProductsAddToWishlistCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogProductsAddToWishlistCreate>>, {id: number;data: NonReadonly<ProductDetail>}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  catalogProductsAddToWishlistCreate(id,data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CatalogProductsAddToWishlistCreateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogProductsAddToWishlistCreate>>>
-    export type CatalogProductsAddToWishlistCreateMutationBody = NonReadonly<ProductDetail>
-    export type CatalogProductsAddToWishlistCreateMutationError = unknown
-
-    export const useCatalogProductsAddToWishlistCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogProductsAddToWishlistCreate>>, TError,{id: number;data: NonReadonly<ProductDetail>}, TContext>, }
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof catalogProductsAddToWishlistCreate>>,
-        TError,
-        {id: number;data: NonReadonly<ProductDetail>},
-        TContext
-      > => {
-
-      const mutationOptions = getCatalogProductsAddToWishlistCreateMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }
@@ -1933,7 +2136,7 @@ export const getCatalogProductsRelatedRetrieveQueryKey = (id: number,) => {
     }
 
     
-export const getCatalogProductsRelatedRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError, TData>>, }
+export const getCatalogProductsRelatedRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1952,10 +2155,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogProductsRelatedRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>>
-export type CatalogProductsRelatedRetrieveQueryError = unknown
+export type CatalogProductsRelatedRetrieveQueryError = ErrorType<unknown>
 
 
-export function useCatalogProductsRelatedRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError = unknown>(
+export function useCatalogProductsRelatedRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>,
@@ -1965,7 +2168,7 @@ export function useCatalogProductsRelatedRetrieve<TData = Awaited<ReturnType<typ
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogProductsRelatedRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError = unknown>(
+export function useCatalogProductsRelatedRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>,
@@ -1975,12 +2178,12 @@ export function useCatalogProductsRelatedRetrieve<TData = Awaited<ReturnType<typ
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogProductsRelatedRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError = unknown>(
+export function useCatalogProductsRelatedRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogProductsRelatedRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError = unknown>(
+export function useCatalogProductsRelatedRetrieve<TData = Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsRelatedRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2017,7 +2220,7 @@ export const getCatalogProductsOnSaleRetrieveQueryKey = () => {
     }
 
     
-export const getCatalogProductsOnSaleRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError, TData>>, }
+export const getCatalogProductsOnSaleRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -2036,10 +2239,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogProductsOnSaleRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>>
-export type CatalogProductsOnSaleRetrieveQueryError = unknown
+export type CatalogProductsOnSaleRetrieveQueryError = ErrorType<unknown>
 
 
-export function useCatalogProductsOnSaleRetrieve<TData = Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError = unknown>(
+export function useCatalogProductsOnSaleRetrieve<TData = Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError = ErrorType<unknown>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>,
@@ -2049,7 +2252,7 @@ export function useCatalogProductsOnSaleRetrieve<TData = Awaited<ReturnType<type
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogProductsOnSaleRetrieve<TData = Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError = unknown>(
+export function useCatalogProductsOnSaleRetrieve<TData = Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>,
@@ -2059,12 +2262,12 @@ export function useCatalogProductsOnSaleRetrieve<TData = Awaited<ReturnType<type
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogProductsOnSaleRetrieve<TData = Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError = unknown>(
+export function useCatalogProductsOnSaleRetrieve<TData = Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogProductsOnSaleRetrieve<TData = Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError = unknown>(
+export function useCatalogProductsOnSaleRetrieve<TData = Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError = ErrorType<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogProductsOnSaleRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2102,7 +2305,7 @@ export const getCatalogTagsListQueryKey = (params?: CatalogTagsListParams,) => {
     }
 
     
-export const getCatalogTagsListQueryOptions = <TData = Awaited<ReturnType<typeof catalogTagsList>>, TError = unknown>(params?: CatalogTagsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsList>>, TError, TData>>, }
+export const getCatalogTagsListQueryOptions = <TData = Awaited<ReturnType<typeof catalogTagsList>>, TError = ErrorType<unknown>>(params?: CatalogTagsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsList>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -2121,10 +2324,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogTagsListQueryResult = NonNullable<Awaited<ReturnType<typeof catalogTagsList>>>
-export type CatalogTagsListQueryError = unknown
+export type CatalogTagsListQueryError = ErrorType<unknown>
 
 
-export function useCatalogTagsList<TData = Awaited<ReturnType<typeof catalogTagsList>>, TError = unknown>(
+export function useCatalogTagsList<TData = Awaited<ReturnType<typeof catalogTagsList>>, TError = ErrorType<unknown>>(
  params: undefined |  CatalogTagsListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsList>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogTagsList>>,
@@ -2134,7 +2337,7 @@ export function useCatalogTagsList<TData = Awaited<ReturnType<typeof catalogTags
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogTagsList<TData = Awaited<ReturnType<typeof catalogTagsList>>, TError = unknown>(
+export function useCatalogTagsList<TData = Awaited<ReturnType<typeof catalogTagsList>>, TError = ErrorType<unknown>>(
  params?: CatalogTagsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsList>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogTagsList>>,
@@ -2144,12 +2347,12 @@ export function useCatalogTagsList<TData = Awaited<ReturnType<typeof catalogTags
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogTagsList<TData = Awaited<ReturnType<typeof catalogTagsList>>, TError = unknown>(
+export function useCatalogTagsList<TData = Awaited<ReturnType<typeof catalogTagsList>>, TError = ErrorType<unknown>>(
  params?: CatalogTagsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsList>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogTagsList<TData = Awaited<ReturnType<typeof catalogTagsList>>, TError = unknown>(
+export function useCatalogTagsList<TData = Awaited<ReturnType<typeof catalogTagsList>>, TError = ErrorType<unknown>>(
  params?: CatalogTagsListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsList>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2169,7 +2372,7 @@ export function useCatalogTagsList<TData = Awaited<ReturnType<typeof catalogTags
  * ViewSet for Tag model with CRUD operations.
  */
 export const catalogTagsCreate = (
-    tag: NonReadonly<Tag>,
+    tag: BodyType<NonReadonly<Tag>>,
  signal?: AbortSignal
 ) => {
       
@@ -2184,9 +2387,9 @@ export const catalogTagsCreate = (
   
 
 
-export const getCatalogTagsCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsCreate>>, TError,{data: NonReadonly<Tag>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogTagsCreate>>, TError,{data: NonReadonly<Tag>}, TContext> => {
+export const getCatalogTagsCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsCreate>>, TError,{data: BodyType<NonReadonly<Tag>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogTagsCreate>>, TError,{data: BodyType<NonReadonly<Tag>>}, TContext> => {
 
 const mutationKey = ['catalogTagsCreate'];
 const {mutation: mutationOptions} = options ?
@@ -2198,7 +2401,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogTagsCreate>>, {data: NonReadonly<Tag>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogTagsCreate>>, {data: BodyType<NonReadonly<Tag>>}> = (props) => {
           const {data} = props ?? {};
 
           return  catalogTagsCreate(data,)
@@ -2210,15 +2413,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogTagsCreateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogTagsCreate>>>
-    export type CatalogTagsCreateMutationBody = NonReadonly<Tag>
-    export type CatalogTagsCreateMutationError = unknown
+    export type CatalogTagsCreateMutationBody = BodyType<NonReadonly<Tag>>
+    export type CatalogTagsCreateMutationError = ErrorType<unknown>
 
-    export const useCatalogTagsCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsCreate>>, TError,{data: NonReadonly<Tag>}, TContext>, }
+    export const useCatalogTagsCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsCreate>>, TError,{data: BodyType<NonReadonly<Tag>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogTagsCreate>>,
         TError,
-        {data: NonReadonly<Tag>},
+        {data: BodyType<NonReadonly<Tag>>},
         TContext
       > => {
 
@@ -2247,7 +2450,7 @@ export const getCatalogTagsRetrieveQueryKey = (id: number,) => {
     }
 
     
-export const getCatalogTagsRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError, TData>>, }
+export const getCatalogTagsRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -2266,10 +2469,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogTagsRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof catalogTagsRetrieve>>>
-export type CatalogTagsRetrieveQueryError = unknown
+export type CatalogTagsRetrieveQueryError = ErrorType<unknown>
 
 
-export function useCatalogTagsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError = unknown>(
+export function useCatalogTagsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogTagsRetrieve>>,
@@ -2279,7 +2482,7 @@ export function useCatalogTagsRetrieve<TData = Awaited<ReturnType<typeof catalog
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogTagsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError = unknown>(
+export function useCatalogTagsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogTagsRetrieve>>,
@@ -2289,12 +2492,12 @@ export function useCatalogTagsRetrieve<TData = Awaited<ReturnType<typeof catalog
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogTagsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError = unknown>(
+export function useCatalogTagsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogTagsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError = unknown>(
+export function useCatalogTagsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2315,7 +2518,7 @@ export function useCatalogTagsRetrieve<TData = Awaited<ReturnType<typeof catalog
  */
 export const catalogTagsUpdate = (
     id: number,
-    tag: NonReadonly<Tag>,
+    tag: BodyType<NonReadonly<Tag>>,
  ) => {
       
       
@@ -2329,9 +2532,9 @@ export const catalogTagsUpdate = (
   
 
 
-export const getCatalogTagsUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsUpdate>>, TError,{id: number;data: NonReadonly<Tag>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogTagsUpdate>>, TError,{id: number;data: NonReadonly<Tag>}, TContext> => {
+export const getCatalogTagsUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsUpdate>>, TError,{id: number;data: BodyType<NonReadonly<Tag>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogTagsUpdate>>, TError,{id: number;data: BodyType<NonReadonly<Tag>>}, TContext> => {
 
 const mutationKey = ['catalogTagsUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -2343,7 +2546,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogTagsUpdate>>, {id: number;data: NonReadonly<Tag>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogTagsUpdate>>, {id: number;data: BodyType<NonReadonly<Tag>>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  catalogTagsUpdate(id,data,)
@@ -2355,15 +2558,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogTagsUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogTagsUpdate>>>
-    export type CatalogTagsUpdateMutationBody = NonReadonly<Tag>
-    export type CatalogTagsUpdateMutationError = unknown
+    export type CatalogTagsUpdateMutationBody = BodyType<NonReadonly<Tag>>
+    export type CatalogTagsUpdateMutationError = ErrorType<unknown>
 
-    export const useCatalogTagsUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsUpdate>>, TError,{id: number;data: NonReadonly<Tag>}, TContext>, }
+    export const useCatalogTagsUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsUpdate>>, TError,{id: number;data: BodyType<NonReadonly<Tag>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogTagsUpdate>>,
         TError,
-        {id: number;data: NonReadonly<Tag>},
+        {id: number;data: BodyType<NonReadonly<Tag>>},
         TContext
       > => {
 
@@ -2376,7 +2579,7 @@ const {mutation: mutationOptions} = options ?
  */
 export const catalogTagsPartialUpdate = (
     id: number,
-    patchedTag: NonReadonly<PatchedTag>,
+    patchedTag: BodyType<NonReadonly<PatchedTag>>,
  ) => {
       
       
@@ -2390,9 +2593,9 @@ export const catalogTagsPartialUpdate = (
   
 
 
-export const getCatalogTagsPartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedTag>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogTagsPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedTag>}, TContext> => {
+export const getCatalogTagsPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedTag>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogTagsPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedTag>>}, TContext> => {
 
 const mutationKey = ['catalogTagsPartialUpdate'];
 const {mutation: mutationOptions} = options ?
@@ -2404,7 +2607,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogTagsPartialUpdate>>, {id: number;data: NonReadonly<PatchedTag>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogTagsPartialUpdate>>, {id: number;data: BodyType<NonReadonly<PatchedTag>>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  catalogTagsPartialUpdate(id,data,)
@@ -2416,15 +2619,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogTagsPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogTagsPartialUpdate>>>
-    export type CatalogTagsPartialUpdateMutationBody = NonReadonly<PatchedTag>
-    export type CatalogTagsPartialUpdateMutationError = unknown
+    export type CatalogTagsPartialUpdateMutationBody = BodyType<NonReadonly<PatchedTag>>
+    export type CatalogTagsPartialUpdateMutationError = ErrorType<unknown>
 
-    export const useCatalogTagsPartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsPartialUpdate>>, TError,{id: number;data: NonReadonly<PatchedTag>}, TContext>, }
+    export const useCatalogTagsPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedTag>>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogTagsPartialUpdate>>,
         TError,
-        {id: number;data: NonReadonly<PatchedTag>},
+        {id: number;data: BodyType<NonReadonly<PatchedTag>>},
         TContext
       > => {
 
@@ -2448,7 +2651,7 @@ export const catalogTagsDestroy = (
   
 
 
-export const getCatalogTagsDestroyMutationOptions = <TError = unknown,
+export const getCatalogTagsDestroyMutationOptions = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsDestroy>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof catalogTagsDestroy>>, TError,{id: number}, TContext> => {
 
@@ -2475,9 +2678,9 @@ const {mutation: mutationOptions} = options ?
 
     export type CatalogTagsDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof catalogTagsDestroy>>>
     
-    export type CatalogTagsDestroyMutationError = unknown
+    export type CatalogTagsDestroyMutationError = ErrorType<unknown>
 
-    export const useCatalogTagsDestroy = <TError = unknown,
+    export const useCatalogTagsDestroy = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogTagsDestroy>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogTagsDestroy>>,
@@ -2511,7 +2714,7 @@ export const getCatalogTagsProductsRetrieveQueryKey = (id: number,) => {
     }
 
     
-export const getCatalogTagsProductsRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError, TData>>, }
+export const getCatalogTagsProductsRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -2530,10 +2733,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type CatalogTagsProductsRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>>
-export type CatalogTagsProductsRetrieveQueryError = unknown
+export type CatalogTagsProductsRetrieveQueryError = ErrorType<unknown>
 
 
-export function useCatalogTagsProductsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError = unknown>(
+export function useCatalogTagsProductsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>,
@@ -2543,8 +2746,8 @@ export function useCatalogTagsProductsRetrieve<TData = Awaited<ReturnType<typeof
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogTagsProductsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError = unknown>(
- id: number, options?: { query?:gPartial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError, TData>> & Pick<
+export function useCatalogTagsProductsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>,
           TError,
@@ -2553,12 +2756,12 @@ export function useCatalogTagsProductsRetrieve<TData = Awaited<ReturnType<typeof
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCatalogTagsProductsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError = unknown>(
+export function useCatalogTagsProductsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCatalogTagsProductsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError = unknown>(
+export function useCatalogTagsProductsRetrieve<TData = Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError = ErrorType<unknown>>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogTagsProductsRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {

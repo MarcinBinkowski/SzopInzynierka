@@ -5,7 +5,6 @@ import { useProfileProfilesCreate } from "@/api/generated/shop/profile/profile"
 import { profileProfilesCreateBody } from "@/api/generated/shop/profile/profile.zod"
 import { ProfileForm, type ProfileUpdateData } from "@/components/profiles/ProfileForm"
 import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
 
 // Use the generated Zod schema types
@@ -14,7 +13,6 @@ type ProfileFormData = z.infer<typeof profileProfilesCreateBody>
 function NewProfilePage() {
   const navigate = useNavigate()
   const createMutation = useProfileProfilesCreate()
-  const queryClient = useQueryClient()
 
   const handleSubmit = async (formData: ProfileFormData | ProfileUpdateData) => {
     try {
@@ -22,9 +20,6 @@ function NewProfilePage() {
       const validatedData = profileProfilesCreateBody.parse(formData as ProfileFormData)
       
       await createMutation.mutateAsync({ data: validatedData })
-      
-      queryClient.invalidateQueries({ queryKey: ["/api/profile/profiles/"] })
-      
       toast.success("Profile created successfully")
       navigate({ to: "/profiles" })
     } catch (error) {

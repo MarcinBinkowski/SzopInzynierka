@@ -5,7 +5,7 @@
  * API for ShopDjango project
  * OpenAPI spec version: 1.0.0
  */
-import type { StatusEnum } from './statusEnum';
+import type { ProductStatusEnum } from './productStatusEnum';
 import type { Category } from './category';
 import type { Manufacturer } from './manufacturer';
 
@@ -40,7 +40,8 @@ export interface ProductList {
    * @pattern ^-?\d{0,8}(?:\.\d{0,2})?$
    */
   original_price: string;
-  readonly current_price: number;
+  /** Get current price as formatted decimal string. */
+  readonly current_price: string;
   /** Calculate discount percentage. */
   readonly discount_percentage: number;
   /**
@@ -60,7 +61,7 @@ export interface ProductList {
 * `active` - Active
 * `inactive` - Inactive
 * `out_of_stock` - Out of Stock */
-  status?: StatusEnum;
+  status?: ProductStatusEnum;
   /** Is product visible to the users */
   is_visible?: boolean;
   readonly is_on_sale: boolean;

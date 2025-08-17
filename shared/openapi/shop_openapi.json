@@ -1791,6 +1791,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/Cart'
           description: ''
+  /api/checkout/carts/current/:
+    get:
+      operationId: checkout_carts_current_retrieve
+      description: Get current user's active cart.
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
   /api/checkout/confirm_payment_intent/:
     post:
       operationId: checkout_confirm_payment_intent_create
@@ -1820,6 +1836,246 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaymentConfirmationResponse'
           description: ''
+  /api/checkout/coupons/:
+    get:
+      operationId: checkout_coupons_list
+      description: Full CRUD ViewSet for coupon management.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCouponList'
+          description: ''
+    post:
+      operationId: checkout_coupons_create
+      description: Full CRUD ViewSet for coupon management.
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Coupon'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Coupon'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Coupon'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+          description: ''
+  /api/checkout/coupons/{id}/:
+    get:
+      operationId: checkout_coupons_retrieve
+      description: Full CRUD ViewSet for coupon management.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Coupon.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+          description: ''
+    put:
+      operationId: checkout_coupons_update
+      description: Full CRUD ViewSet for coupon management.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Coupon.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Coupon'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Coupon'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Coupon'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+          description: ''
+    patch:
+      operationId: checkout_coupons_partial_update
+      description: Full CRUD ViewSet for coupon management.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Coupon.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCoupon'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCoupon'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCoupon'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+          description: ''
+    delete:
+      operationId: checkout_coupons_destroy
+      description: Full CRUD ViewSet for coupon management.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Coupon.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/checkout/coupons/active/:
+    get:
+      operationId: checkout_coupons_active_list
+      description: Get list of active coupons for users
+      summary: Get active coupons
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCouponList'
+          description: ''
+  /api/checkout/coupons/remove/:
+    post:
+      operationId: checkout_coupons_remove_create
+      description: Remove applied coupon from cart
+      summary: Remove coupon from cart
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CouponRemoveResponse'
+          description: ''
+  /api/checkout/coupons/validate/:
+    post:
+      operationId: checkout_coupons_validate_create
+      description: Validate and apply coupon to cart
+      summary: Validate and apply coupon
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CouponValidationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CouponValidationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CouponValidationRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CouponValidationResponse'
+          description: ''
   /api/checkout/create_checkout_session/:
     post:
       operationId: checkout_create_checkout_session_create
@@ -1847,6 +2103,417 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CheckoutSessionResponse'
+          description: ''
+  /api/checkout/invoice-templates/:
+    get:
+      operationId: checkout_invoice_templates_list
+      description: ViewSet for managing invoice templates.
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvoiceTemplate'
+          description: ''
+    post:
+      operationId: checkout_invoice_templates_create
+      description: ViewSet for managing invoice templates.
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceTemplate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/InvoiceTemplate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InvoiceTemplate'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceTemplate'
+          description: ''
+  /api/checkout/invoice-templates/{id}/:
+    get:
+      operationId: checkout_invoice_templates_retrieve
+      description: ViewSet for managing invoice templates.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Invoice Template.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceTemplate'
+          description: ''
+    put:
+      operationId: checkout_invoice_templates_update
+      description: ViewSet for managing invoice templates.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Invoice Template.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceTemplate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/InvoiceTemplate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InvoiceTemplate'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceTemplate'
+          description: ''
+    patch:
+      operationId: checkout_invoice_templates_partial_update
+      description: ViewSet for managing invoice templates.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Invoice Template.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedInvoiceTemplate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedInvoiceTemplate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedInvoiceTemplate'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceTemplate'
+          description: ''
+    delete:
+      operationId: checkout_invoice_templates_destroy
+      description: ViewSet for managing invoice templates.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Invoice Template.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/checkout/invoice-templates/{id}/validate/:
+    post:
+      operationId: checkout_invoice_templates_validate_create
+      description: Validates Jinja2 template syntax and checks for forbidden properties
+      summary: Validate template syntax and security
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Invoice Template.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceTemplate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/InvoiceTemplate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InvoiceTemplate'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateValidationResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateValidationError'
+          description: ''
+  /api/checkout/invoice-templates/variables/:
+    get:
+      operationId: checkout_invoice_templates_variables_retrieve
+      description: Returns all available variables that can be used in templates
+      summary: Get available template variables
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateVariablesResponse'
+          description: ''
+  /api/checkout/invoices/:
+    get:
+      operationId: checkout_invoices_list
+      description: ViewSet for managing invoices.
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invoice'
+          description: ''
+    post:
+      operationId: checkout_invoices_create
+      description: ViewSet for managing invoices.
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+          description: ''
+  /api/checkout/invoices/{id}/:
+    get:
+      operationId: checkout_invoices_retrieve
+      description: ViewSet for managing invoices.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Invoice.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+          description: ''
+    put:
+      operationId: checkout_invoices_update
+      description: ViewSet for managing invoices.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Invoice.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+          description: ''
+    patch:
+      operationId: checkout_invoices_partial_update
+      description: ViewSet for managing invoices.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Invoice.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedInvoice'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedInvoice'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedInvoice'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+          description: ''
+    delete:
+      operationId: checkout_invoices_destroy
+      description: ViewSet for managing invoices.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Invoice.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/checkout/invoices/download_by_order/:
+    get:
+      operationId: checkout_invoices_download_by_order_retrieve
+      description: Downloads the PDF invoice for a specific order
+      summary: Download invoice PDF by order
+      parameters:
+      - in: query
+        name: order_id
+        schema:
+          type: integer
+        description: ID of the order to generate invoice for
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+          description: Invoice PDF file.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceNotFound'
           description: ''
   /api/checkout/items/:
     get:
@@ -3198,6 +3865,10 @@ components:
           allOf:
           - $ref: '#/components/schemas/ShippingMethod'
           readOnly: true
+        applied_coupon:
+          allOf:
+          - $ref: '#/components/schemas/Coupon'
+          readOnly: true
         item_count:
           type: integer
           description: Get total number of items in cart.
@@ -3211,6 +3882,11 @@ components:
           type: number
           format: double
           description: Get shipping cost from selected shipping method.
+          readOnly: true
+        coupon_discount:
+          type: number
+          format: double
+          description: Get coupon discount amount.
           readOnly: true
         total:
           type: number
@@ -3228,6 +3904,8 @@ components:
           readOnly: true
           description: Timestamp when the record was last updated
       required:
+      - applied_coupon
+      - coupon_discount
       - created_at
       - id
       - item_count
@@ -3499,6 +4177,84 @@ components:
       required:
       - code
       - name
+    Coupon:
+      type: object
+      description: Serializer for coupon list and detail views.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          description: Coupon code
+          maxLength: 20
+        name:
+          type: string
+          description: Display name
+          maxLength: 100
+        description:
+          type: string
+        discount_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Fixed discount amount
+        valid_from:
+          type: string
+          format: date-time
+        valid_until:
+          type: string
+          format: date-time
+        max_uses:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Maximum total uses (null = unlimited)
+        max_uses_per_user:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Maximum uses per user
+      required:
+      - code
+      - discount_amount
+      - id
+      - name
+      - valid_from
+      - valid_until
+    CouponRemoveResponse:
+      type: object
+      description: Serializer for coupon removal response.
+      properties:
+        message:
+          type: string
+      required:
+      - message
+    CouponValidationRequest:
+      type: object
+      description: Serializer for coupon validation request.
+      properties:
+        code:
+          type: string
+          description: Coupon code to validate
+          maxLength: 20
+      required:
+      - code
+    CouponValidationResponse:
+      type: object
+      description: Serializer for coupon validation response.
+      properties:
+        coupon:
+          $ref: '#/components/schemas/Coupon'
+        applied_discount:
+          type: string
+        cart_total:
+          type: string
+      required:
+      - applied_discount
+      - cart_total
+      - coupon
     CreateCheckoutSession:
       type: object
       description: Serializer for creating payment intent (PaymentSheet).
@@ -3517,6 +4273,89 @@ components:
       required:
       - shipping_address_id
       - shipping_method_id
+    Invoice:
+      type: object
+      description: Serializer for invoices.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+          description: Order this invoice is for
+        order_number:
+          type: string
+          readOnly: true
+        invoice_number:
+          type: string
+          readOnly: true
+          description: Unique invoice number
+        html_content:
+          type: string
+          description: Rendered HTML content of the invoice
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - created_at
+      - html_content
+      - id
+      - invoice_number
+      - order
+      - order_number
+      - updated_at
+    InvoiceNotFound:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+      - error
+    InvoiceTemplate:
+      type: object
+      description: Serializer for invoice templates.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Template name (e.g., 'Standard Invoice')
+          maxLength: 100
+        content:
+          type: string
+          description: Jinja2 template content with HTML
+        is_default:
+          type: boolean
+          description: Use as default template for automatic invoice generation
+        created_by:
+          type: integer
+          readOnly: true
+          description: User who created this template
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - content
+      - created_at
+      - created_by
+      - id
+      - name
+      - updated_at
     Manufacturer:
       type: object
       description: Serializer for Manufacturer model.
@@ -3740,7 +4579,6 @@ components:
             * `confirmed` - Confirmed
             * `shipped` - Shipped
             * `delivered` - Delivered
-            * `cancelled` - Cancelled
         subtotal:
           type: string
           format: decimal
@@ -3751,6 +4589,11 @@ components:
           format: decimal
           pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
           description: Shipping cost
+        coupon_discount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Discount amount from applied coupon
         total:
           type: string
           format: decimal
@@ -3789,6 +4632,11 @@ components:
           type: string
           format: decimal
           pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        coupon_discount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Discount amount from applied coupon
         total:
           type: string
           format: decimal
@@ -3810,12 +4658,17 @@ components:
           allOf:
           - $ref: '#/components/schemas/ShippingMethod'
           readOnly: true
+        applied_coupon:
+          allOf:
+          - $ref: '#/components/schemas/Coupon'
+          readOnly: true
         items:
           type: array
           items:
             $ref: '#/components/schemas/OrderItem'
           readOnly: true
       required:
+      - applied_coupon
       - created_at
       - id
       - items
@@ -3864,14 +4717,12 @@ components:
       - confirmed
       - shipped
       - delivered
-      - cancelled
       type: string
       description: |-
         * `pending` - Pending
         * `confirmed` - Confirmed
         * `shipped` - Shipped
         * `delivered` - Delivered
-        * `cancelled` - Cancelled
     OrdersListResponse:
       type: object
       properties:
@@ -3904,6 +4755,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CartList'
+    PaginatedCouponList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Coupon'
     PaginatedNotificationHistoryList:
       type: object
       required:
@@ -4131,6 +5005,10 @@ components:
           allOf:
           - $ref: '#/components/schemas/ShippingMethod'
           readOnly: true
+        applied_coupon:
+          allOf:
+          - $ref: '#/components/schemas/Coupon'
+          readOnly: true
         item_count:
           type: integer
           description: Get total number of items in cart.
@@ -4144,6 +5022,11 @@ components:
           type: number
           format: double
           description: Get shipping cost from selected shipping method.
+          readOnly: true
+        coupon_discount:
+          type: number
+          format: double
+          description: Get coupon discount amount.
           readOnly: true
         total:
           type: number
@@ -4247,6 +5130,106 @@ components:
           type: string
           description: Official country name in English
           maxLength: 100
+    PatchedCoupon:
+      type: object
+      description: Serializer for coupon list and detail views.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          description: Coupon code
+          maxLength: 20
+        name:
+          type: string
+          description: Display name
+          maxLength: 100
+        description:
+          type: string
+        discount_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Fixed discount amount
+        valid_from:
+          type: string
+          format: date-time
+        valid_until:
+          type: string
+          format: date-time
+        max_uses:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Maximum total uses (null = unlimited)
+        max_uses_per_user:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Maximum uses per user
+    PatchedInvoice:
+      type: object
+      description: Serializer for invoices.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+          description: Order this invoice is for
+        order_number:
+          type: string
+          readOnly: true
+        invoice_number:
+          type: string
+          readOnly: true
+          description: Unique invoice number
+        html_content:
+          type: string
+          description: Rendered HTML content of the invoice
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+    PatchedInvoiceTemplate:
+      type: object
+      description: Serializer for invoice templates.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Template name (e.g., 'Standard Invoice')
+          maxLength: 100
+        content:
+          type: string
+          description: Jinja2 template content with HTML
+        is_default:
+          type: boolean
+          description: Use as default template for automatic invoice generation
+        created_by:
+          type: integer
+          readOnly: true
+          description: User who created this template
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
     PatchedManufacturer:
       type: object
       description: Serializer for Manufacturer model.
@@ -5232,6 +6215,36 @@ components:
       - name
       - slug
       - updated_at
+    TemplateValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+      - error
+    TemplateValidationResponse:
+      type: object
+      properties:
+        is_valid:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+      required:
+      - errors
+      - is_valid
+    TemplateVariablesResponse:
+      type: object
+      properties:
+        variables:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      required:
+      - variables
     WishlistCheck:
       type: object
       description: Serializer for wishlist check response.

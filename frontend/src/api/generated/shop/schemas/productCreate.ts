@@ -5,7 +5,7 @@
  * API for ShopDjango project
  * OpenAPI spec version: 1.0.0
  */
-import type { StatusEnum } from './statusEnum';
+import type { ProductStatusEnum } from './productStatusEnum';
 
 /**
  * Serializer for creating products.
@@ -60,7 +60,7 @@ export interface ProductCreate {
 * `active` - Active
 * `inactive` - Inactive
 * `out_of_stock` - Out of Stock */
-  status?: StatusEnum;
+  status?: ProductStatusEnum;
   /** Is product visible to the users */
   is_visible?: boolean;
   /** @nullable */

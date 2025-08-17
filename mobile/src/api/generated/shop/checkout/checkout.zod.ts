@@ -77,6 +77,15 @@ export const checkoutCartsRetrieveResponseShippingAddressPostalCodeMax = 20;
 export const checkoutCartsRetrieveResponseShippingAddressLabelMax = 50;
 export const checkoutCartsRetrieveResponseShippingMethodNameMax = 100;
 export const checkoutCartsRetrieveResponseShippingMethodPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsRetrieveResponseAppliedCouponCodeMax = 20;
+export const checkoutCartsRetrieveResponseAppliedCouponNameMax = 100;
+export const checkoutCartsRetrieveResponseAppliedCouponDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsRetrieveResponseAppliedCouponMaxUsesMin = 0;
+
+export const checkoutCartsRetrieveResponseAppliedCouponMaxUsesMax = 2147483647;
+export const checkoutCartsRetrieveResponseAppliedCouponMaxUsesPerUserMin = 0;
+
+export const checkoutCartsRetrieveResponseAppliedCouponMaxUsesPerUserMax = 2147483647;
 
 
 export const checkoutCartsRetrieveResponse = zod.object({
@@ -158,9 +167,21 @@ export const checkoutCartsRetrieveResponse = zod.object({
   "name": zod.string().max(checkoutCartsRetrieveResponseShippingMethodNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
   "price": zod.regex(checkoutCartsRetrieveResponseShippingMethodPriceRegExp).describe('Shipping cost')
 }).describe('Serializer for ShippingMethod model.'),
+  "applied_coupon": zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCartsRetrieveResponseAppliedCouponCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCartsRetrieveResponseAppliedCouponNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCartsRetrieveResponseAppliedCouponDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCartsRetrieveResponseAppliedCouponMaxUsesMin).max(checkoutCartsRetrieveResponseAppliedCouponMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCartsRetrieveResponseAppliedCouponMaxUsesPerUserMin).max(checkoutCartsRetrieveResponseAppliedCouponMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'),
   "item_count": zod.number().describe('Get total number of items in cart.'),
   "subtotal": zod.number().describe('Get subtotal of all items in cart.'),
   "shipping_cost": zod.number().describe('Get shipping cost from selected shipping method.'),
+  "coupon_discount": zod.number().describe('Get coupon discount amount.'),
   "total": zod.number().describe('Get total including shipping.'),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
@@ -207,6 +228,15 @@ export const checkoutCartsUpdateResponseShippingAddressPostalCodeMax = 20;
 export const checkoutCartsUpdateResponseShippingAddressLabelMax = 50;
 export const checkoutCartsUpdateResponseShippingMethodNameMax = 100;
 export const checkoutCartsUpdateResponseShippingMethodPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsUpdateResponseAppliedCouponCodeMax = 20;
+export const checkoutCartsUpdateResponseAppliedCouponNameMax = 100;
+export const checkoutCartsUpdateResponseAppliedCouponDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsUpdateResponseAppliedCouponMaxUsesMin = 0;
+
+export const checkoutCartsUpdateResponseAppliedCouponMaxUsesMax = 2147483647;
+export const checkoutCartsUpdateResponseAppliedCouponMaxUsesPerUserMin = 0;
+
+export const checkoutCartsUpdateResponseAppliedCouponMaxUsesPerUserMax = 2147483647;
 
 
 export const checkoutCartsUpdateResponse = zod.object({
@@ -288,9 +318,21 @@ export const checkoutCartsUpdateResponse = zod.object({
   "name": zod.string().max(checkoutCartsUpdateResponseShippingMethodNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
   "price": zod.regex(checkoutCartsUpdateResponseShippingMethodPriceRegExp).describe('Shipping cost')
 }).describe('Serializer for ShippingMethod model.'),
+  "applied_coupon": zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCartsUpdateResponseAppliedCouponCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCartsUpdateResponseAppliedCouponNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCartsUpdateResponseAppliedCouponDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCartsUpdateResponseAppliedCouponMaxUsesMin).max(checkoutCartsUpdateResponseAppliedCouponMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCartsUpdateResponseAppliedCouponMaxUsesPerUserMin).max(checkoutCartsUpdateResponseAppliedCouponMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'),
   "item_count": zod.number().describe('Get total number of items in cart.'),
   "subtotal": zod.number().describe('Get subtotal of all items in cart.'),
   "shipping_cost": zod.number().describe('Get shipping cost from selected shipping method.'),
+  "coupon_discount": zod.number().describe('Get coupon discount amount.'),
   "total": zod.number().describe('Get total including shipping.'),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
@@ -337,6 +379,15 @@ export const checkoutCartsPartialUpdateResponseShippingAddressPostalCodeMax = 20
 export const checkoutCartsPartialUpdateResponseShippingAddressLabelMax = 50;
 export const checkoutCartsPartialUpdateResponseShippingMethodNameMax = 100;
 export const checkoutCartsPartialUpdateResponseShippingMethodPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsPartialUpdateResponseAppliedCouponCodeMax = 20;
+export const checkoutCartsPartialUpdateResponseAppliedCouponNameMax = 100;
+export const checkoutCartsPartialUpdateResponseAppliedCouponDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsPartialUpdateResponseAppliedCouponMaxUsesMin = 0;
+
+export const checkoutCartsPartialUpdateResponseAppliedCouponMaxUsesMax = 2147483647;
+export const checkoutCartsPartialUpdateResponseAppliedCouponMaxUsesPerUserMin = 0;
+
+export const checkoutCartsPartialUpdateResponseAppliedCouponMaxUsesPerUserMax = 2147483647;
 
 
 export const checkoutCartsPartialUpdateResponse = zod.object({
@@ -418,9 +469,21 @@ export const checkoutCartsPartialUpdateResponse = zod.object({
   "name": zod.string().max(checkoutCartsPartialUpdateResponseShippingMethodNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
   "price": zod.regex(checkoutCartsPartialUpdateResponseShippingMethodPriceRegExp).describe('Shipping cost')
 }).describe('Serializer for ShippingMethod model.'),
+  "applied_coupon": zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCartsPartialUpdateResponseAppliedCouponCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCartsPartialUpdateResponseAppliedCouponNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCartsPartialUpdateResponseAppliedCouponDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCartsPartialUpdateResponseAppliedCouponMaxUsesMin).max(checkoutCartsPartialUpdateResponseAppliedCouponMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCartsPartialUpdateResponseAppliedCouponMaxUsesPerUserMin).max(checkoutCartsPartialUpdateResponseAppliedCouponMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'),
   "item_count": zod.number().describe('Get total number of items in cart.'),
   "subtotal": zod.number().describe('Get subtotal of all items in cart.'),
   "shipping_cost": zod.number().describe('Get shipping cost from selected shipping method.'),
+  "coupon_discount": zod.number().describe('Get coupon discount amount.'),
   "total": zod.number().describe('Get total including shipping.'),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
@@ -474,6 +537,15 @@ export const checkoutCartsClearCreateResponseShippingAddressPostalCodeMax = 20;
 export const checkoutCartsClearCreateResponseShippingAddressLabelMax = 50;
 export const checkoutCartsClearCreateResponseShippingMethodNameMax = 100;
 export const checkoutCartsClearCreateResponseShippingMethodPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsClearCreateResponseAppliedCouponCodeMax = 20;
+export const checkoutCartsClearCreateResponseAppliedCouponNameMax = 100;
+export const checkoutCartsClearCreateResponseAppliedCouponDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsClearCreateResponseAppliedCouponMaxUsesMin = 0;
+
+export const checkoutCartsClearCreateResponseAppliedCouponMaxUsesMax = 2147483647;
+export const checkoutCartsClearCreateResponseAppliedCouponMaxUsesPerUserMin = 0;
+
+export const checkoutCartsClearCreateResponseAppliedCouponMaxUsesPerUserMax = 2147483647;
 
 
 export const checkoutCartsClearCreateResponse = zod.object({
@@ -555,9 +627,21 @@ export const checkoutCartsClearCreateResponse = zod.object({
   "name": zod.string().max(checkoutCartsClearCreateResponseShippingMethodNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
   "price": zod.regex(checkoutCartsClearCreateResponseShippingMethodPriceRegExp).describe('Shipping cost')
 }).describe('Serializer for ShippingMethod model.'),
+  "applied_coupon": zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCartsClearCreateResponseAppliedCouponCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCartsClearCreateResponseAppliedCouponNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCartsClearCreateResponseAppliedCouponDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCartsClearCreateResponseAppliedCouponMaxUsesMin).max(checkoutCartsClearCreateResponseAppliedCouponMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCartsClearCreateResponseAppliedCouponMaxUsesPerUserMin).max(checkoutCartsClearCreateResponseAppliedCouponMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'),
   "item_count": zod.number().describe('Get total number of items in cart.'),
   "subtotal": zod.number().describe('Get subtotal of all items in cart.'),
   "shipping_cost": zod.number().describe('Get shipping cost from selected shipping method.'),
+  "coupon_discount": zod.number().describe('Get coupon discount amount.'),
   "total": zod.number().describe('Get total including shipping.'),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
@@ -604,6 +688,15 @@ export const checkoutCartsSetShippingAddressCreateResponseShippingAddressPostalC
 export const checkoutCartsSetShippingAddressCreateResponseShippingAddressLabelMax = 50;
 export const checkoutCartsSetShippingAddressCreateResponseShippingMethodNameMax = 100;
 export const checkoutCartsSetShippingAddressCreateResponseShippingMethodPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsSetShippingAddressCreateResponseAppliedCouponCodeMax = 20;
+export const checkoutCartsSetShippingAddressCreateResponseAppliedCouponNameMax = 100;
+export const checkoutCartsSetShippingAddressCreateResponseAppliedCouponDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsSetShippingAddressCreateResponseAppliedCouponMaxUsesMin = 0;
+
+export const checkoutCartsSetShippingAddressCreateResponseAppliedCouponMaxUsesMax = 2147483647;
+export const checkoutCartsSetShippingAddressCreateResponseAppliedCouponMaxUsesPerUserMin = 0;
+
+export const checkoutCartsSetShippingAddressCreateResponseAppliedCouponMaxUsesPerUserMax = 2147483647;
 
 
 export const checkoutCartsSetShippingAddressCreateResponse = zod.object({
@@ -685,9 +778,21 @@ export const checkoutCartsSetShippingAddressCreateResponse = zod.object({
   "name": zod.string().max(checkoutCartsSetShippingAddressCreateResponseShippingMethodNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
   "price": zod.regex(checkoutCartsSetShippingAddressCreateResponseShippingMethodPriceRegExp).describe('Shipping cost')
 }).describe('Serializer for ShippingMethod model.'),
+  "applied_coupon": zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCartsSetShippingAddressCreateResponseAppliedCouponCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCartsSetShippingAddressCreateResponseAppliedCouponNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCartsSetShippingAddressCreateResponseAppliedCouponDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCartsSetShippingAddressCreateResponseAppliedCouponMaxUsesMin).max(checkoutCartsSetShippingAddressCreateResponseAppliedCouponMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCartsSetShippingAddressCreateResponseAppliedCouponMaxUsesPerUserMin).max(checkoutCartsSetShippingAddressCreateResponseAppliedCouponMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'),
   "item_count": zod.number().describe('Get total number of items in cart.'),
   "subtotal": zod.number().describe('Get subtotal of all items in cart.'),
   "shipping_cost": zod.number().describe('Get shipping cost from selected shipping method.'),
+  "coupon_discount": zod.number().describe('Get coupon discount amount.'),
   "total": zod.number().describe('Get total including shipping.'),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
@@ -734,6 +839,15 @@ export const checkoutCartsSetShippingMethodCreateResponseShippingAddressPostalCo
 export const checkoutCartsSetShippingMethodCreateResponseShippingAddressLabelMax = 50;
 export const checkoutCartsSetShippingMethodCreateResponseShippingMethodNameMax = 100;
 export const checkoutCartsSetShippingMethodCreateResponseShippingMethodPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsSetShippingMethodCreateResponseAppliedCouponCodeMax = 20;
+export const checkoutCartsSetShippingMethodCreateResponseAppliedCouponNameMax = 100;
+export const checkoutCartsSetShippingMethodCreateResponseAppliedCouponDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsSetShippingMethodCreateResponseAppliedCouponMaxUsesMin = 0;
+
+export const checkoutCartsSetShippingMethodCreateResponseAppliedCouponMaxUsesMax = 2147483647;
+export const checkoutCartsSetShippingMethodCreateResponseAppliedCouponMaxUsesPerUserMin = 0;
+
+export const checkoutCartsSetShippingMethodCreateResponseAppliedCouponMaxUsesPerUserMax = 2147483647;
 
 
 export const checkoutCartsSetShippingMethodCreateResponse = zod.object({
@@ -815,9 +929,21 @@ export const checkoutCartsSetShippingMethodCreateResponse = zod.object({
   "name": zod.string().max(checkoutCartsSetShippingMethodCreateResponseShippingMethodNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
   "price": zod.regex(checkoutCartsSetShippingMethodCreateResponseShippingMethodPriceRegExp).describe('Shipping cost')
 }).describe('Serializer for ShippingMethod model.'),
+  "applied_coupon": zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCartsSetShippingMethodCreateResponseAppliedCouponCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCartsSetShippingMethodCreateResponseAppliedCouponNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCartsSetShippingMethodCreateResponseAppliedCouponDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCartsSetShippingMethodCreateResponseAppliedCouponMaxUsesMin).max(checkoutCartsSetShippingMethodCreateResponseAppliedCouponMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCartsSetShippingMethodCreateResponseAppliedCouponMaxUsesPerUserMin).max(checkoutCartsSetShippingMethodCreateResponseAppliedCouponMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'),
   "item_count": zod.number().describe('Get total number of items in cart.'),
   "subtotal": zod.number().describe('Get subtotal of all items in cart.'),
   "shipping_cost": zod.number().describe('Get shipping cost from selected shipping method.'),
+  "coupon_discount": zod.number().describe('Get coupon discount amount.'),
   "total": zod.number().describe('Get total including shipping.'),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
@@ -860,6 +986,15 @@ export const checkoutCartsSummaryRetrieveResponseShippingAddressPostalCodeMax = 
 export const checkoutCartsSummaryRetrieveResponseShippingAddressLabelMax = 50;
 export const checkoutCartsSummaryRetrieveResponseShippingMethodNameMax = 100;
 export const checkoutCartsSummaryRetrieveResponseShippingMethodPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsSummaryRetrieveResponseAppliedCouponCodeMax = 20;
+export const checkoutCartsSummaryRetrieveResponseAppliedCouponNameMax = 100;
+export const checkoutCartsSummaryRetrieveResponseAppliedCouponDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsSummaryRetrieveResponseAppliedCouponMaxUsesMin = 0;
+
+export const checkoutCartsSummaryRetrieveResponseAppliedCouponMaxUsesMax = 2147483647;
+export const checkoutCartsSummaryRetrieveResponseAppliedCouponMaxUsesPerUserMin = 0;
+
+export const checkoutCartsSummaryRetrieveResponseAppliedCouponMaxUsesPerUserMax = 2147483647;
 
 
 export const checkoutCartsSummaryRetrieveResponse = zod.object({
@@ -941,9 +1076,164 @@ export const checkoutCartsSummaryRetrieveResponse = zod.object({
   "name": zod.string().max(checkoutCartsSummaryRetrieveResponseShippingMethodNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
   "price": zod.regex(checkoutCartsSummaryRetrieveResponseShippingMethodPriceRegExp).describe('Shipping cost')
 }).describe('Serializer for ShippingMethod model.'),
+  "applied_coupon": zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCartsSummaryRetrieveResponseAppliedCouponCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCartsSummaryRetrieveResponseAppliedCouponNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCartsSummaryRetrieveResponseAppliedCouponDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCartsSummaryRetrieveResponseAppliedCouponMaxUsesMin).max(checkoutCartsSummaryRetrieveResponseAppliedCouponMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCartsSummaryRetrieveResponseAppliedCouponMaxUsesPerUserMin).max(checkoutCartsSummaryRetrieveResponseAppliedCouponMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'),
   "item_count": zod.number().describe('Get total number of items in cart.'),
   "subtotal": zod.number().describe('Get subtotal of all items in cart.'),
   "shipping_cost": zod.number().describe('Get shipping cost from selected shipping method.'),
+  "coupon_discount": zod.number().describe('Get coupon discount amount.'),
+  "total": zod.number().describe('Get total including shipping.'),
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
+}).describe('Serializer for Cart model.')
+
+/**
+ * Get current user's active cart.
+ */
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductNameMax = 200;
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductSlugMax = 200;
+
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductShortDescriptionMax = 500;
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductOriginalPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductSkuMax = 100;
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductStockQuantityMin = 0;
+
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductStockQuantityMax = 2147483647;
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductCategoryNameMax = 100;
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductCategorySlugMax = 100;
+
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductCategorySlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductManufacturerNameMax = 100;
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductManufacturerSlugMax = 100;
+
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductManufacturerSlugRegExp = new RegExp('^[-a-zA-Z0-9_]+$');
+export const checkoutCartsCurrentRetrieveResponseItemsItemProductManufacturerWebsiteMax = 200;
+export const checkoutCartsCurrentRetrieveResponseItemsItemQuantityMax = 2147483647;
+export const checkoutCartsCurrentRetrieveResponseItemsItemUnitPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsCurrentRetrieveResponseShippingAddressProfileFirstNameMax = 150;
+export const checkoutCartsCurrentRetrieveResponseShippingAddressProfileLastNameMax = 150;
+export const checkoutCartsCurrentRetrieveResponseShippingAddressAddressMax = 255;
+export const checkoutCartsCurrentRetrieveResponseShippingAddressCityMax = 100;
+export const checkoutCartsCurrentRetrieveResponseShippingAddressPostalCodeMax = 20;
+export const checkoutCartsCurrentRetrieveResponseShippingAddressLabelMax = 50;
+export const checkoutCartsCurrentRetrieveResponseShippingMethodNameMax = 100;
+export const checkoutCartsCurrentRetrieveResponseShippingMethodPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsCurrentRetrieveResponseAppliedCouponCodeMax = 20;
+export const checkoutCartsCurrentRetrieveResponseAppliedCouponNameMax = 100;
+export const checkoutCartsCurrentRetrieveResponseAppliedCouponDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCartsCurrentRetrieveResponseAppliedCouponMaxUsesMin = 0;
+
+export const checkoutCartsCurrentRetrieveResponseAppliedCouponMaxUsesMax = 2147483647;
+export const checkoutCartsCurrentRetrieveResponseAppliedCouponMaxUsesPerUserMin = 0;
+
+export const checkoutCartsCurrentRetrieveResponseAppliedCouponMaxUsesPerUserMax = 2147483647;
+
+
+export const checkoutCartsCurrentRetrieveResponse = zod.object({
+  "id": zod.number(),
+  "user": zod.number().nullable().describe('User who owns this cart'),
+  "status": zod.enum(['active', 'converted', 'abandoned', 'expired']).describe('* `active` - Active\n* `converted` - Converted to Order\n* `abandoned` - Abandoned\n* `expired` - Expired').optional().describe('Current status of the cart\n\n* `active` - Active\n* `converted` - Converted to Order\n* `abandoned` - Abandoned\n* `expired` - Expired'),
+  "items": zod.array(zod.object({
+  "id": zod.number(),
+  "product": zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(checkoutCartsCurrentRetrieveResponseItemsItemProductNameMax).describe('Product name'),
+  "slug": zod.string().max(checkoutCartsCurrentRetrieveResponseItemsItemProductSlugMax).regex(checkoutCartsCurrentRetrieveResponseItemsItemProductSlugRegExp).describe('URL-friendly version of the name'),
+  "short_description": zod.string().max(checkoutCartsCurrentRetrieveResponseItemsItemProductShortDescriptionMax).optional().describe('Short description for listings'),
+  "price": zod.regex(checkoutCartsCurrentRetrieveResponseItemsItemProductPriceRegExp).describe('Product price'),
+  "original_price": zod.regex(checkoutCartsCurrentRetrieveResponseItemsItemProductOriginalPriceRegExp).describe('Original price for showing discounts'),
+  "current_price": zod.string().describe('Get current price as formatted decimal string.'),
+  "discount_percentage": zod.number().describe('Calculate discount percentage.'),
+  "sku": zod.string().max(checkoutCartsCurrentRetrieveResponseItemsItemProductSkuMax).describe('Unique product identifier'),
+  "stock_quantity": zod.number().min(checkoutCartsCurrentRetrieveResponseItemsItemProductStockQuantityMin).max(checkoutCartsCurrentRetrieveResponseItemsItemProductStockQuantityMax).optional().describe('Available quantity in stock'),
+  "status": zod.enum(['draft', 'active', 'inactive', 'out_of_stock']).describe('* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock').optional().describe('Product status\n\n* `draft` - Draft\n* `active` - Active\n* `inactive` - Inactive\n* `out_of_stock` - Out of Stock'),
+  "is_visible": zod.boolean().optional().describe('Is product visible to the users'),
+  "is_on_sale": zod.boolean(),
+  "is_in_stock": zod.boolean().describe('Check if product is in stock.'),
+  "is_available": zod.boolean().describe('Check if product is available for purchase.'),
+  "category": zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(checkoutCartsCurrentRetrieveResponseItemsItemProductCategoryNameMax).describe('Category name'),
+  "slug": zod.string().max(checkoutCartsCurrentRetrieveResponseItemsItemProductCategorySlugMax).regex(checkoutCartsCurrentRetrieveResponseItemsItemProductCategorySlugRegExp).describe('URL-friendly version of the name'),
+  "description": zod.string().optional().describe('Category description'),
+  "is_active": zod.boolean().optional().describe('Whether this category is visible'),
+  "active_product_count": zod.number(),
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
+}).describe('Serializer for Category model.'),
+  "manufacturer": zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(checkoutCartsCurrentRetrieveResponseItemsItemProductManufacturerNameMax).describe('Manufacturer name'),
+  "slug": zod.string().max(checkoutCartsCurrentRetrieveResponseItemsItemProductManufacturerSlugMax).regex(checkoutCartsCurrentRetrieveResponseItemsItemProductManufacturerSlugRegExp).describe('URL-friendly version of the name'),
+  "description": zod.string().optional().describe('Manufacturer description'),
+  "website": zod.url().max(checkoutCartsCurrentRetrieveResponseItemsItemProductManufacturerWebsiteMax).optional().describe('Manufacturer website URL'),
+  "is_active": zod.boolean().optional().describe('Whether this manufacturer is visible'),
+  "active_product_count": zod.number(),
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
+}).describe('Serializer for Manufacturer model.'),
+  "primary_image": zod.string().nullable().describe('Get URL of primary product image.'),
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
+}).describe('Simplified serializer for product listings.'),
+  "product_id": zod.number(),
+  "quantity": zod.number().min(1).max(checkoutCartsCurrentRetrieveResponseItemsItemQuantityMax).optional().describe('Quantity of this product in cart'),
+  "unit_price": zod.regex(checkoutCartsCurrentRetrieveResponseItemsItemUnitPriceRegExp).describe('Price per unit when added to cart'),
+  "total_price": zod.number().describe('Get total price for this item.'),
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
+}).describe('Serializer for CartItem model.')),
+  "shipping_address": zod.object({
+  "id": zod.number(),
+  "profile": zod.object({
+  "id": zod.number(),
+  "user_email": zod.string(),
+  "display_name": zod.string(),
+  "first_name": zod.string().max(checkoutCartsCurrentRetrieveResponseShippingAddressProfileFirstNameMax).optional().describe('User\'s first name'),
+  "last_name": zod.string().max(checkoutCartsCurrentRetrieveResponseShippingAddressProfileLastNameMax).optional().describe('User\'s last name')
+}).describe('Minimal profile serializer for address responses.'),
+  "address": zod.string().max(checkoutCartsCurrentRetrieveResponseShippingAddressAddressMax).describe('Street address, apartment, unit, etc.'),
+  "city": zod.string().max(checkoutCartsCurrentRetrieveResponseShippingAddressCityMax).describe('City name'),
+  "postal_code": zod.string().max(checkoutCartsCurrentRetrieveResponseShippingAddressPostalCodeMax).describe('ZIP code or postal code'),
+  "country": zod.number().describe('Country for this address'),
+  "is_default": zod.boolean().optional().describe('Whether this is the default address'),
+  "label": zod.string().max(checkoutCartsCurrentRetrieveResponseShippingAddressLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
+  "full_address": zod.string(),
+  "address_dict": zod.record(zod.string(), zod.any()),
+  "is_complete": zod.boolean(),
+  "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
+}),
+  "shipping_method": zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(checkoutCartsCurrentRetrieveResponseShippingMethodNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
+  "price": zod.regex(checkoutCartsCurrentRetrieveResponseShippingMethodPriceRegExp).describe('Shipping cost')
+}).describe('Serializer for ShippingMethod model.'),
+  "applied_coupon": zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCartsCurrentRetrieveResponseAppliedCouponCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCartsCurrentRetrieveResponseAppliedCouponNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCartsCurrentRetrieveResponseAppliedCouponDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCartsCurrentRetrieveResponseAppliedCouponMaxUsesMin).max(checkoutCartsCurrentRetrieveResponseAppliedCouponMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCartsCurrentRetrieveResponseAppliedCouponMaxUsesPerUserMin).max(checkoutCartsCurrentRetrieveResponseAppliedCouponMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'),
+  "item_count": zod.number().describe('Get total number of items in cart.'),
+  "subtotal": zod.number().describe('Get subtotal of all items in cart.'),
+  "shipping_cost": zod.number().describe('Get shipping cost from selected shipping method.'),
+  "coupon_discount": zod.number().describe('Get coupon discount amount.'),
   "total": zod.number().describe('Get total including shipping.'),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
   "updated_at": zod.iso.datetime({}).describe('Timestamp when the record was last updated')
@@ -967,6 +1257,291 @@ export const checkoutConfirmPaymentIntentCreateResponse = zod.object({
   "amount_paid": zod.regex(checkoutConfirmPaymentIntentCreateResponseAmountPaidRegExp),
   "currency": zod.string()
 }).describe('Serializer for payment confirmation response.')
+
+/**
+ * Full CRUD ViewSet for coupon management.
+ */
+export const checkoutCouponsListQueryParams = zod.object({
+  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
+  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.')
+})
+
+export const checkoutCouponsListResponseResultsItemCodeMax = 20;
+export const checkoutCouponsListResponseResultsItemNameMax = 100;
+export const checkoutCouponsListResponseResultsItemDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponsListResponseResultsItemMaxUsesMin = 0;
+
+export const checkoutCouponsListResponseResultsItemMaxUsesMax = 2147483647;
+export const checkoutCouponsListResponseResultsItemMaxUsesPerUserMin = 0;
+
+export const checkoutCouponsListResponseResultsItemMaxUsesPerUserMax = 2147483647;
+
+
+export const checkoutCouponsListResponse = zod.object({
+  "count": zod.number(),
+  "next": zod.url().nullish(),
+  "previous": zod.url().nullish(),
+  "results": zod.array(zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCouponsListResponseResultsItemCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCouponsListResponseResultsItemNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCouponsListResponseResultsItemDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCouponsListResponseResultsItemMaxUsesMin).max(checkoutCouponsListResponseResultsItemMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCouponsListResponseResultsItemMaxUsesPerUserMin).max(checkoutCouponsListResponseResultsItemMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'))
+})
+
+/**
+ * Full CRUD ViewSet for coupon management.
+ */
+export const checkoutCouponsCreateBodyCodeMax = 20;
+export const checkoutCouponsCreateBodyNameMax = 100;
+export const checkoutCouponsCreateBodyDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponsCreateBodyMaxUsesMin = 0;
+
+export const checkoutCouponsCreateBodyMaxUsesMax = 2147483647;
+export const checkoutCouponsCreateBodyMaxUsesPerUserMin = 0;
+
+export const checkoutCouponsCreateBodyMaxUsesPerUserMax = 2147483647;
+
+
+export const checkoutCouponsCreateBody = zod.object({
+  "code": zod.string().max(checkoutCouponsCreateBodyCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCouponsCreateBodyNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCouponsCreateBodyDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCouponsCreateBodyMaxUsesMin).max(checkoutCouponsCreateBodyMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCouponsCreateBodyMaxUsesPerUserMin).max(checkoutCouponsCreateBodyMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.')
+
+/**
+ * Full CRUD ViewSet for coupon management.
+ */
+export const checkoutCouponsRetrieveParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Coupon.')
+})
+
+export const checkoutCouponsRetrieveResponseCodeMax = 20;
+export const checkoutCouponsRetrieveResponseNameMax = 100;
+export const checkoutCouponsRetrieveResponseDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponsRetrieveResponseMaxUsesMin = 0;
+
+export const checkoutCouponsRetrieveResponseMaxUsesMax = 2147483647;
+export const checkoutCouponsRetrieveResponseMaxUsesPerUserMin = 0;
+
+export const checkoutCouponsRetrieveResponseMaxUsesPerUserMax = 2147483647;
+
+
+export const checkoutCouponsRetrieveResponse = zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCouponsRetrieveResponseCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCouponsRetrieveResponseNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCouponsRetrieveResponseDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCouponsRetrieveResponseMaxUsesMin).max(checkoutCouponsRetrieveResponseMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCouponsRetrieveResponseMaxUsesPerUserMin).max(checkoutCouponsRetrieveResponseMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.')
+
+/**
+ * Full CRUD ViewSet for coupon management.
+ */
+export const checkoutCouponsUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Coupon.')
+})
+
+export const checkoutCouponsUpdateBodyCodeMax = 20;
+export const checkoutCouponsUpdateBodyNameMax = 100;
+export const checkoutCouponsUpdateBodyDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponsUpdateBodyMaxUsesMin = 0;
+
+export const checkoutCouponsUpdateBodyMaxUsesMax = 2147483647;
+export const checkoutCouponsUpdateBodyMaxUsesPerUserMin = 0;
+
+export const checkoutCouponsUpdateBodyMaxUsesPerUserMax = 2147483647;
+
+
+export const checkoutCouponsUpdateBody = zod.object({
+  "code": zod.string().max(checkoutCouponsUpdateBodyCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCouponsUpdateBodyNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCouponsUpdateBodyDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCouponsUpdateBodyMaxUsesMin).max(checkoutCouponsUpdateBodyMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCouponsUpdateBodyMaxUsesPerUserMin).max(checkoutCouponsUpdateBodyMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.')
+
+export const checkoutCouponsUpdateResponseCodeMax = 20;
+export const checkoutCouponsUpdateResponseNameMax = 100;
+export const checkoutCouponsUpdateResponseDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponsUpdateResponseMaxUsesMin = 0;
+
+export const checkoutCouponsUpdateResponseMaxUsesMax = 2147483647;
+export const checkoutCouponsUpdateResponseMaxUsesPerUserMin = 0;
+
+export const checkoutCouponsUpdateResponseMaxUsesPerUserMax = 2147483647;
+
+
+export const checkoutCouponsUpdateResponse = zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCouponsUpdateResponseCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCouponsUpdateResponseNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCouponsUpdateResponseDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCouponsUpdateResponseMaxUsesMin).max(checkoutCouponsUpdateResponseMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCouponsUpdateResponseMaxUsesPerUserMin).max(checkoutCouponsUpdateResponseMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.')
+
+/**
+ * Full CRUD ViewSet for coupon management.
+ */
+export const checkoutCouponsPartialUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Coupon.')
+})
+
+export const checkoutCouponsPartialUpdateBodyCodeMax = 20;
+export const checkoutCouponsPartialUpdateBodyNameMax = 100;
+export const checkoutCouponsPartialUpdateBodyDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponsPartialUpdateBodyMaxUsesMin = 0;
+
+export const checkoutCouponsPartialUpdateBodyMaxUsesMax = 2147483647;
+export const checkoutCouponsPartialUpdateBodyMaxUsesPerUserMin = 0;
+
+export const checkoutCouponsPartialUpdateBodyMaxUsesPerUserMax = 2147483647;
+
+
+export const checkoutCouponsPartialUpdateBody = zod.object({
+  "code": zod.string().max(checkoutCouponsPartialUpdateBodyCodeMax).optional().describe('Coupon code'),
+  "name": zod.string().max(checkoutCouponsPartialUpdateBodyNameMax).optional().describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCouponsPartialUpdateBodyDiscountAmountRegExp).optional().describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}).optional(),
+  "valid_until": zod.iso.datetime({}).optional(),
+  "max_uses": zod.number().min(checkoutCouponsPartialUpdateBodyMaxUsesMin).max(checkoutCouponsPartialUpdateBodyMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCouponsPartialUpdateBodyMaxUsesPerUserMin).max(checkoutCouponsPartialUpdateBodyMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.')
+
+export const checkoutCouponsPartialUpdateResponseCodeMax = 20;
+export const checkoutCouponsPartialUpdateResponseNameMax = 100;
+export const checkoutCouponsPartialUpdateResponseDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponsPartialUpdateResponseMaxUsesMin = 0;
+
+export const checkoutCouponsPartialUpdateResponseMaxUsesMax = 2147483647;
+export const checkoutCouponsPartialUpdateResponseMaxUsesPerUserMin = 0;
+
+export const checkoutCouponsPartialUpdateResponseMaxUsesPerUserMax = 2147483647;
+
+
+export const checkoutCouponsPartialUpdateResponse = zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCouponsPartialUpdateResponseCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCouponsPartialUpdateResponseNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCouponsPartialUpdateResponseDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCouponsPartialUpdateResponseMaxUsesMin).max(checkoutCouponsPartialUpdateResponseMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCouponsPartialUpdateResponseMaxUsesPerUserMin).max(checkoutCouponsPartialUpdateResponseMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.')
+
+/**
+ * Full CRUD ViewSet for coupon management.
+ */
+export const checkoutCouponsDestroyParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Coupon.')
+})
+
+/**
+ * Get list of active coupons for users
+ * @summary Get active coupons
+ */
+export const checkoutCouponsActiveListQueryParams = zod.object({
+  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
+  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.')
+})
+
+export const checkoutCouponsActiveListResponseResultsItemCodeMax = 20;
+export const checkoutCouponsActiveListResponseResultsItemNameMax = 100;
+export const checkoutCouponsActiveListResponseResultsItemDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponsActiveListResponseResultsItemMaxUsesMin = 0;
+
+export const checkoutCouponsActiveListResponseResultsItemMaxUsesMax = 2147483647;
+export const checkoutCouponsActiveListResponseResultsItemMaxUsesPerUserMin = 0;
+
+export const checkoutCouponsActiveListResponseResultsItemMaxUsesPerUserMax = 2147483647;
+
+
+export const checkoutCouponsActiveListResponse = zod.object({
+  "count": zod.number(),
+  "next": zod.url().nullish(),
+  "previous": zod.url().nullish(),
+  "results": zod.array(zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCouponsActiveListResponseResultsItemCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCouponsActiveListResponseResultsItemNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCouponsActiveListResponseResultsItemDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCouponsActiveListResponseResultsItemMaxUsesMin).max(checkoutCouponsActiveListResponseResultsItemMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCouponsActiveListResponseResultsItemMaxUsesPerUserMin).max(checkoutCouponsActiveListResponseResultsItemMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'))
+})
+
+/**
+ * Remove applied coupon from cart
+ * @summary Remove coupon from cart
+ */
+export const checkoutCouponsRemoveCreateResponse = zod.object({
+  "message": zod.string()
+}).describe('Serializer for coupon removal response.')
+
+/**
+ * Validate and apply coupon to cart
+ * @summary Validate and apply coupon
+ */
+export const checkoutCouponsValidateCreateBodyCodeMax = 20;
+
+
+export const checkoutCouponsValidateCreateBody = zod.object({
+  "code": zod.string().max(checkoutCouponsValidateCreateBodyCodeMax).describe('Coupon code to validate')
+}).describe('Serializer for coupon validation request.')
+
+export const checkoutCouponsValidateCreateResponseCouponCodeMax = 20;
+export const checkoutCouponsValidateCreateResponseCouponNameMax = 100;
+export const checkoutCouponsValidateCreateResponseCouponDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponsValidateCreateResponseCouponMaxUsesMin = 0;
+
+export const checkoutCouponsValidateCreateResponseCouponMaxUsesMax = 2147483647;
+export const checkoutCouponsValidateCreateResponseCouponMaxUsesPerUserMin = 0;
+
+export const checkoutCouponsValidateCreateResponseCouponMaxUsesPerUserMax = 2147483647;
+
+
+export const checkoutCouponsValidateCreateResponse = zod.object({
+  "coupon": zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCouponsValidateCreateResponseCouponCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCouponsValidateCreateResponseCouponNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutCouponsValidateCreateResponseCouponDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutCouponsValidateCreateResponseCouponMaxUsesMin).max(checkoutCouponsValidateCreateResponseCouponMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCouponsValidateCreateResponseCouponMaxUsesPerUserMin).max(checkoutCouponsValidateCreateResponseCouponMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'),
+  "applied_discount": zod.string(),
+  "cart_total": zod.string()
+}).describe('Serializer for coupon validation response.')
 
 /**
  * Create a Stripe Checkout session for a cart.
@@ -1624,6 +2199,7 @@ export const checkoutOrdersListQueryParams = zod.object({
 export const checkoutOrdersListResponseResultsItemOrderNumberMax = 50;
 export const checkoutOrdersListResponseResultsItemSubtotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 export const checkoutOrdersListResponseResultsItemShippingCostRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutOrdersListResponseResultsItemCouponDiscountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 export const checkoutOrdersListResponseResultsItemTotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
 
@@ -1637,6 +2213,7 @@ export const checkoutOrdersListResponse = zod.object({
   "status": zod.enum(['pending', 'confirmed', 'shipped', 'delivered', 'cancelled']).describe('* `pending` - Pending\n* `confirmed` - Confirmed\n* `shipped` - Shipped\n* `delivered` - Delivered\n* `cancelled` - Cancelled').optional().describe('Current status of the order\n\n* `pending` - Pending\n* `confirmed` - Confirmed\n* `shipped` - Shipped\n* `delivered` - Delivered\n* `cancelled` - Cancelled'),
   "subtotal": zod.regex(checkoutOrdersListResponseResultsItemSubtotalRegExp).describe('Subtotal of all items'),
   "shipping_cost": zod.regex(checkoutOrdersListResponseResultsItemShippingCostRegExp).optional().describe('Shipping cost'),
+  "coupon_discount": zod.regex(checkoutOrdersListResponseResultsItemCouponDiscountRegExp).optional().describe('Discount amount from applied coupon'),
   "total": zod.regex(checkoutOrdersListResponseResultsItemTotalRegExp).describe('Total amount including shipping'),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Serializer for order list view.'))
@@ -1653,6 +2230,7 @@ export const checkoutOrdersRetrieveParams = zod.object({
 export const checkoutOrdersRetrieveResponseOrderNumberMax = 50;
 export const checkoutOrdersRetrieveResponseSubtotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 export const checkoutOrdersRetrieveResponseShippingCostRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutOrdersRetrieveResponseCouponDiscountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 export const checkoutOrdersRetrieveResponseTotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 export const checkoutOrdersRetrieveResponseShippingAddressProfileFirstNameMax = 150;
 export const checkoutOrdersRetrieveResponseShippingAddressProfileLastNameMax = 150;
@@ -1662,6 +2240,15 @@ export const checkoutOrdersRetrieveResponseShippingAddressPostalCodeMax = 20;
 export const checkoutOrdersRetrieveResponseShippingAddressLabelMax = 50;
 export const checkoutOrdersRetrieveResponseShippingMethodNameMax = 100;
 export const checkoutOrdersRetrieveResponseShippingMethodPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutOrdersRetrieveResponseAppliedCouponCodeMax = 20;
+export const checkoutOrdersRetrieveResponseAppliedCouponNameMax = 100;
+export const checkoutOrdersRetrieveResponseAppliedCouponDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutOrdersRetrieveResponseAppliedCouponMaxUsesMin = 0;
+
+export const checkoutOrdersRetrieveResponseAppliedCouponMaxUsesMax = 2147483647;
+export const checkoutOrdersRetrieveResponseAppliedCouponMaxUsesPerUserMin = 0;
+
+export const checkoutOrdersRetrieveResponseAppliedCouponMaxUsesPerUserMax = 2147483647;
 export const checkoutOrdersRetrieveResponseItemsItemProductNameMax = 200;
 export const checkoutOrdersRetrieveResponseItemsItemProductSlugMax = 200;
 
@@ -1703,6 +2290,7 @@ export const checkoutOrdersRetrieveResponse = zod.object({
   "status": zod.enum(['pending', 'confirmed', 'shipped', 'delivered', 'cancelled']).describe('* `pending` - Pending\n* `confirmed` - Confirmed\n* `shipped` - Shipped\n* `delivered` - Delivered\n* `cancelled` - Cancelled'),
   "subtotal": zod.regex(checkoutOrdersRetrieveResponseSubtotalRegExp).describe('Subtotal of all items'),
   "shipping_cost": zod.regex(checkoutOrdersRetrieveResponseShippingCostRegExp),
+  "coupon_discount": zod.regex(checkoutOrdersRetrieveResponseCouponDiscountRegExp).optional().describe('Discount amount from applied coupon'),
   "total": zod.regex(checkoutOrdersRetrieveResponseTotalRegExp).describe('Total amount including shipping'),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created'),
   "notes": zod.string().optional().describe('Additional notes for the order'),
@@ -1732,6 +2320,17 @@ export const checkoutOrdersRetrieveResponse = zod.object({
   "name": zod.string().max(checkoutOrdersRetrieveResponseShippingMethodNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
   "price": zod.regex(checkoutOrdersRetrieveResponseShippingMethodPriceRegExp).describe('Shipping cost')
 }).describe('Serializer for ShippingMethod model.'),
+  "applied_coupon": zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutOrdersRetrieveResponseAppliedCouponCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutOrdersRetrieveResponseAppliedCouponNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.regex(checkoutOrdersRetrieveResponseAppliedCouponDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.iso.datetime({}),
+  "valid_until": zod.iso.datetime({}),
+  "max_uses": zod.number().min(checkoutOrdersRetrieveResponseAppliedCouponMaxUsesMin).max(checkoutOrdersRetrieveResponseAppliedCouponMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutOrdersRetrieveResponseAppliedCouponMaxUsesPerUserMin).max(checkoutOrdersRetrieveResponseAppliedCouponMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'),
   "items": zod.array(zod.object({
   "id": zod.number(),
   "product": zod.object({
@@ -1810,6 +2409,7 @@ export const checkoutOrdersRetrieveResponse = zod.object({
 export const checkoutOrdersMeRetrieveResponseOrdersItemOrderNumberMax = 50;
 export const checkoutOrdersMeRetrieveResponseOrdersItemSubtotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 export const checkoutOrdersMeRetrieveResponseOrdersItemShippingCostRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutOrdersMeRetrieveResponseOrdersItemCouponDiscountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 export const checkoutOrdersMeRetrieveResponseOrdersItemTotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
 
@@ -1820,6 +2420,7 @@ export const checkoutOrdersMeRetrieveResponse = zod.object({
   "status": zod.enum(['pending', 'confirmed', 'shipped', 'delivered', 'cancelled']).describe('* `pending` - Pending\n* `confirmed` - Confirmed\n* `shipped` - Shipped\n* `delivered` - Delivered\n* `cancelled` - Cancelled').optional().describe('Current status of the order\n\n* `pending` - Pending\n* `confirmed` - Confirmed\n* `shipped` - Shipped\n* `delivered` - Delivered\n* `cancelled` - Cancelled'),
   "subtotal": zod.regex(checkoutOrdersMeRetrieveResponseOrdersItemSubtotalRegExp).describe('Subtotal of all items'),
   "shipping_cost": zod.regex(checkoutOrdersMeRetrieveResponseOrdersItemShippingCostRegExp).optional().describe('Shipping cost'),
+  "coupon_discount": zod.regex(checkoutOrdersMeRetrieveResponseOrdersItemCouponDiscountRegExp).optional().describe('Discount amount from applied coupon'),
   "total": zod.regex(checkoutOrdersMeRetrieveResponseOrdersItemTotalRegExp).describe('Total amount including shipping'),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
 }).describe('Serializer for order list view.'))

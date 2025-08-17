@@ -5,7 +5,6 @@ import { useProfileAddressesCreate } from "@/api/generated/shop/profile/profile"
 import { profileAddressesCreateBody, profileAddressesUpdateBody } from "@/api/generated/shop/profile/profile.zod"
 import { AddressForm } from "@/components/addresses/AddressForm"
 import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
 
 // Use the generated Zod schema types
@@ -16,7 +15,7 @@ type AddressFormData = AddressCreateData | AddressUpdateData
 function NewAddressPage() {
   const navigate = useNavigate()
   const createMutation = useProfileAddressesCreate()
-  const queryClient = useQueryClient()
+
 
   const handleSubmit = async (formData: AddressFormData) => {
     try {
@@ -25,7 +24,6 @@ function NewAddressPage() {
       
       await createMutation.mutateAsync({ data: validatedData })
       
-      queryClient.invalidateQueries({ queryKey: ["/api/profile/addresses/"] })
       
       toast.success("Address created successfully")
       navigate({ to: "/addresses" })

@@ -5,7 +5,6 @@ import { useGeographicCountriesRetrieve, useGeographicCountriesUpdate } from "@/
 import { geographicCountriesUpdateBody } from "@/api/generated/shop/geographic/geographic.zod"
 import { CountryForm } from "@/components/countries/CountryForm"
 import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
 import { Spinner } from "@/components/customui/spinner"
 import { Button } from "@/components/ui/button"
@@ -17,7 +16,6 @@ function EditCountryPage() {
   const navigate = useNavigate()
   const { countryId } = useParams({ from: '/_authenticated/countries/$countryId/edit' })
   const updateMutation = useGeographicCountriesUpdate()
-  const queryClient = useQueryClient()
 
   const { data: country, isLoading, error } = useGeographicCountriesRetrieve(
     parseInt(countryId),
@@ -37,8 +35,6 @@ function EditCountryPage() {
         id: parseInt(countryId), 
         data: validatedData 
       })
-      
-      queryClient.invalidateQueries({ queryKey: ["/api/geographic/countries/"] })
       
       toast.success("Country updated successfully")
       navigate({ to: "/countries" })

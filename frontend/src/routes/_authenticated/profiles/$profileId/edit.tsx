@@ -6,7 +6,6 @@ import { profileProfilesUpdateBody } from "@/api/generated/shop/profile/profile.
 import { ProfileForm, type ProfileUpdateData } from "@/components/profiles/ProfileForm"
 import { Spinner } from "@/components/customui/spinner"
 import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
 
 // Use the generated Zod schema types
@@ -16,7 +15,7 @@ function EditProfilePage() {
   const navigate = useNavigate()
   const { profileId } = useParams({ from: "/_authenticated/profiles/$profileId/edit" })
   const updateMutation = useProfileProfilesUpdate()
-  const queryClient = useQueryClient()
+
   
   const { data: profile, isLoading, error } = useProfileProfilesRetrieve(Number(profileId))
 
@@ -28,10 +27,6 @@ function EditProfilePage() {
         id: Number(profileId), 
         data: validatedData 
       })
-      
-      queryClient.invalidateQueries({ queryKey: ["/api/profile/profiles/"] })
-      queryClient.invalidateQueries({ queryKey: [`/api/profile/profiles/${Number(profileId)}/`] })
-      
       toast.success("Profile updated successfully")
       navigate({ to: "/profiles" })
     } catch (error) {

@@ -5,7 +5,6 @@ import { useCatalogProductsRetrieve, useCatalogProductsPartialUpdate } from "@/a
 import { catalogProductsPartialUpdateBody } from "@/api/generated/shop/catalog/catalog.zod"
 import { ProductForm } from "@/components/products/ProductForm"
 import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
 import { Spinner } from "@/components/customui/spinner"
 
@@ -16,7 +15,6 @@ function EditProductPage() {
   const navigate = useNavigate()
   const { productId } = useParams({ from: "/_authenticated/catalog/products/$productId/edit" })
   const updateMutation = useCatalogProductsPartialUpdate()
-  const queryClient = useQueryClient()
 
   // Fetch product data
   const { data: product, isLoading, error } = useCatalogProductsRetrieve(parseInt(productId))
@@ -30,9 +28,6 @@ function EditProductPage() {
         id: parseInt(productId), 
         data: validatedData 
       })
-      
-      queryClient.invalidateQueries({ queryKey: ["/api/catalog/products/"] })
-      queryClient.invalidateQueries({ queryKey: [`/api/catalog/products/${productId}/`] })
       
       toast.success("Product updated successfully")
       navigate({ to: "/catalog/products" })

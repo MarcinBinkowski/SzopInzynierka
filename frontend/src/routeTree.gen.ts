@@ -14,9 +14,12 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedProfilesIndexRouteImport } from './routes/_authenticated/profiles/index'
+import { Route as AuthenticatedOrdersIndexRouteImport } from './routes/_authenticated/orders/index'
+import { Route as AuthenticatedInvoiceTemplatesIndexRouteImport } from './routes/_authenticated/invoice-templates/index'
 import { Route as AuthenticatedCountriesIndexRouteImport } from './routes/_authenticated/countries/index'
 import { Route as AuthenticatedAddressesIndexRouteImport } from './routes/_authenticated/addresses/index'
 import { Route as AuthenticatedProfilesNewRouteImport } from './routes/_authenticated/profiles/new'
+import { Route as AuthenticatedInvoiceTemplatesNewRouteImport } from './routes/_authenticated/invoice-templates/new'
 import { Route as AuthenticatedCountriesNewRouteImport } from './routes/_authenticated/countries/new'
 import { Route as AuthenticatedAddressesNewRouteImport } from './routes/_authenticated/addresses/new'
 import { Route as AuthenticatedCatalogTagsIndexRouteImport } from './routes/_authenticated/catalog/tags/index'
@@ -24,6 +27,7 @@ import { Route as AuthenticatedCatalogProductsIndexRouteImport } from './routes/
 import { Route as AuthenticatedCatalogManufacturersIndexRouteImport } from './routes/_authenticated/catalog/manufacturers/index'
 import { Route as AuthenticatedCatalogCategoriesIndexRouteImport } from './routes/_authenticated/catalog/categories/index'
 import { Route as AuthenticatedProfilesProfileIdEditRouteImport } from './routes/_authenticated/profiles/$profileId/edit'
+import { Route as AuthenticatedInvoiceTemplatesTemplateIdEditRouteImport } from './routes/_authenticated/invoice-templates/$templateId/edit'
 import { Route as AuthenticatedCountriesCountryIdEditRouteImport } from './routes/_authenticated/countries/$countryId/edit'
 import { Route as AuthenticatedCatalogTagsNewRouteImport } from './routes/_authenticated/catalog/tags/new'
 import { Route as AuthenticatedCatalogProductsNewRouteImport } from './routes/_authenticated/catalog/products/new'
@@ -60,6 +64,18 @@ const AuthenticatedProfilesIndexRoute =
     path: '/profiles/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedOrdersIndexRoute =
+  AuthenticatedOrdersIndexRouteImport.update({
+    id: '/orders/',
+    path: '/orders/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedInvoiceTemplatesIndexRoute =
+  AuthenticatedInvoiceTemplatesIndexRouteImport.update({
+    id: '/invoice-templates/',
+    path: '/invoice-templates/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedCountriesIndexRoute =
   AuthenticatedCountriesIndexRouteImport.update({
     id: '/countries/',
@@ -76,6 +92,12 @@ const AuthenticatedProfilesNewRoute =
   AuthenticatedProfilesNewRouteImport.update({
     id: '/profiles/new',
     path: '/profiles/new',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedInvoiceTemplatesNewRoute =
+  AuthenticatedInvoiceTemplatesNewRouteImport.update({
+    id: '/invoice-templates/new',
+    path: '/invoice-templates/new',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedCountriesNewRoute =
@@ -118,6 +140,12 @@ const AuthenticatedProfilesProfileIdEditRoute =
   AuthenticatedProfilesProfileIdEditRouteImport.update({
     id: '/profiles/$profileId/edit',
     path: '/profiles/$profileId/edit',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedInvoiceTemplatesTemplateIdEditRoute =
+  AuthenticatedInvoiceTemplatesTemplateIdEditRouteImport.update({
+    id: '/invoice-templates/$templateId/edit',
+    path: '/invoice-templates/$templateId/edit',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedCountriesCountryIdEditRoute =
@@ -187,9 +215,12 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/addresses/new': typeof AuthenticatedAddressesNewRoute
   '/countries/new': typeof AuthenticatedCountriesNewRoute
+  '/invoice-templates/new': typeof AuthenticatedInvoiceTemplatesNewRoute
   '/profiles/new': typeof AuthenticatedProfilesNewRoute
   '/addresses': typeof AuthenticatedAddressesIndexRoute
   '/countries': typeof AuthenticatedCountriesIndexRoute
+  '/invoice-templates': typeof AuthenticatedInvoiceTemplatesIndexRoute
+  '/orders': typeof AuthenticatedOrdersIndexRoute
   '/profiles': typeof AuthenticatedProfilesIndexRoute
   '/addresses/$addressId/edit': typeof AuthenticatedAddressesAddressIdEditRoute
   '/catalog/categories/new': typeof AuthenticatedCatalogCategoriesNewRoute
@@ -197,6 +228,7 @@ export interface FileRoutesByFullPath {
   '/catalog/products/new': typeof AuthenticatedCatalogProductsNewRoute
   '/catalog/tags/new': typeof AuthenticatedCatalogTagsNewRoute
   '/countries/$countryId/edit': typeof AuthenticatedCountriesCountryIdEditRoute
+  '/invoice-templates/$templateId/edit': typeof AuthenticatedInvoiceTemplatesTemplateIdEditRoute
   '/profiles/$profileId/edit': typeof AuthenticatedProfilesProfileIdEditRoute
   '/catalog/categories': typeof AuthenticatedCatalogCategoriesIndexRoute
   '/catalog/manufacturers': typeof AuthenticatedCatalogManufacturersIndexRoute
@@ -213,9 +245,12 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/addresses/new': typeof AuthenticatedAddressesNewRoute
   '/countries/new': typeof AuthenticatedCountriesNewRoute
+  '/invoice-templates/new': typeof AuthenticatedInvoiceTemplatesNewRoute
   '/profiles/new': typeof AuthenticatedProfilesNewRoute
   '/addresses': typeof AuthenticatedAddressesIndexRoute
   '/countries': typeof AuthenticatedCountriesIndexRoute
+  '/invoice-templates': typeof AuthenticatedInvoiceTemplatesIndexRoute
+  '/orders': typeof AuthenticatedOrdersIndexRoute
   '/profiles': typeof AuthenticatedProfilesIndexRoute
   '/addresses/$addressId/edit': typeof AuthenticatedAddressesAddressIdEditRoute
   '/catalog/categories/new': typeof AuthenticatedCatalogCategoriesNewRoute
@@ -223,6 +258,7 @@ export interface FileRoutesByTo {
   '/catalog/products/new': typeof AuthenticatedCatalogProductsNewRoute
   '/catalog/tags/new': typeof AuthenticatedCatalogTagsNewRoute
   '/countries/$countryId/edit': typeof AuthenticatedCountriesCountryIdEditRoute
+  '/invoice-templates/$templateId/edit': typeof AuthenticatedInvoiceTemplatesTemplateIdEditRoute
   '/profiles/$profileId/edit': typeof AuthenticatedProfilesProfileIdEditRoute
   '/catalog/categories': typeof AuthenticatedCatalogCategoriesIndexRoute
   '/catalog/manufacturers': typeof AuthenticatedCatalogManufacturersIndexRoute
@@ -241,9 +277,12 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/addresses/new': typeof AuthenticatedAddressesNewRoute
   '/_authenticated/countries/new': typeof AuthenticatedCountriesNewRoute
+  '/_authenticated/invoice-templates/new': typeof AuthenticatedInvoiceTemplatesNewRoute
   '/_authenticated/profiles/new': typeof AuthenticatedProfilesNewRoute
   '/_authenticated/addresses/': typeof AuthenticatedAddressesIndexRoute
   '/_authenticated/countries/': typeof AuthenticatedCountriesIndexRoute
+  '/_authenticated/invoice-templates/': typeof AuthenticatedInvoiceTemplatesIndexRoute
+  '/_authenticated/orders/': typeof AuthenticatedOrdersIndexRoute
   '/_authenticated/profiles/': typeof AuthenticatedProfilesIndexRoute
   '/_authenticated/addresses/$addressId/edit': typeof AuthenticatedAddressesAddressIdEditRoute
   '/_authenticated/catalog/categories/new': typeof AuthenticatedCatalogCategoriesNewRoute
@@ -251,6 +290,7 @@ export interface FileRoutesById {
   '/_authenticated/catalog/products/new': typeof AuthenticatedCatalogProductsNewRoute
   '/_authenticated/catalog/tags/new': typeof AuthenticatedCatalogTagsNewRoute
   '/_authenticated/countries/$countryId/edit': typeof AuthenticatedCountriesCountryIdEditRoute
+  '/_authenticated/invoice-templates/$templateId/edit': typeof AuthenticatedInvoiceTemplatesTemplateIdEditRoute
   '/_authenticated/profiles/$profileId/edit': typeof AuthenticatedProfilesProfileIdEditRoute
   '/_authenticated/catalog/categories/': typeof AuthenticatedCatalogCategoriesIndexRoute
   '/_authenticated/catalog/manufacturers/': typeof AuthenticatedCatalogManufacturersIndexRoute
@@ -269,9 +309,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/addresses/new'
     | '/countries/new'
+    | '/invoice-templates/new'
     | '/profiles/new'
     | '/addresses'
     | '/countries'
+    | '/invoice-templates'
+    | '/orders'
     | '/profiles'
     | '/addresses/$addressId/edit'
     | '/catalog/categories/new'
@@ -279,6 +322,7 @@ export interface FileRouteTypes {
     | '/catalog/products/new'
     | '/catalog/tags/new'
     | '/countries/$countryId/edit'
+    | '/invoice-templates/$templateId/edit'
     | '/profiles/$profileId/edit'
     | '/catalog/categories'
     | '/catalog/manufacturers'
@@ -295,9 +339,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/addresses/new'
     | '/countries/new'
+    | '/invoice-templates/new'
     | '/profiles/new'
     | '/addresses'
     | '/countries'
+    | '/invoice-templates'
+    | '/orders'
     | '/profiles'
     | '/addresses/$addressId/edit'
     | '/catalog/categories/new'
@@ -305,6 +352,7 @@ export interface FileRouteTypes {
     | '/catalog/products/new'
     | '/catalog/tags/new'
     | '/countries/$countryId/edit'
+    | '/invoice-templates/$templateId/edit'
     | '/profiles/$profileId/edit'
     | '/catalog/categories'
     | '/catalog/manufacturers'
@@ -322,9 +370,12 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/addresses/new'
     | '/_authenticated/countries/new'
+    | '/_authenticated/invoice-templates/new'
     | '/_authenticated/profiles/new'
     | '/_authenticated/addresses/'
     | '/_authenticated/countries/'
+    | '/_authenticated/invoice-templates/'
+    | '/_authenticated/orders/'
     | '/_authenticated/profiles/'
     | '/_authenticated/addresses/$addressId/edit'
     | '/_authenticated/catalog/categories/new'
@@ -332,6 +383,7 @@ export interface FileRouteTypes {
     | '/_authenticated/catalog/products/new'
     | '/_authenticated/catalog/tags/new'
     | '/_authenticated/countries/$countryId/edit'
+    | '/_authenticated/invoice-templates/$templateId/edit'
     | '/_authenticated/profiles/$profileId/edit'
     | '/_authenticated/catalog/categories/'
     | '/_authenticated/catalog/manufacturers/'
@@ -386,6 +438,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfilesIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/orders/': {
+      id: '/_authenticated/orders/'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof AuthenticatedOrdersIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/invoice-templates/': {
+      id: '/_authenticated/invoice-templates/'
+      path: '/invoice-templates'
+      fullPath: '/invoice-templates'
+      preLoaderRoute: typeof AuthenticatedInvoiceTemplatesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/countries/': {
       id: '/_authenticated/countries/'
       path: '/countries'
@@ -405,6 +471,13 @@ declare module '@tanstack/react-router' {
       path: '/profiles/new'
       fullPath: '/profiles/new'
       preLoaderRoute: typeof AuthenticatedProfilesNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/invoice-templates/new': {
+      id: '/_authenticated/invoice-templates/new'
+      path: '/invoice-templates/new'
+      fullPath: '/invoice-templates/new'
+      preLoaderRoute: typeof AuthenticatedInvoiceTemplatesNewRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/countries/new': {
@@ -454,6 +527,13 @@ declare module '@tanstack/react-router' {
       path: '/profiles/$profileId/edit'
       fullPath: '/profiles/$profileId/edit'
       preLoaderRoute: typeof AuthenticatedProfilesProfileIdEditRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/invoice-templates/$templateId/edit': {
+      id: '/_authenticated/invoice-templates/$templateId/edit'
+      path: '/invoice-templates/$templateId/edit'
+      fullPath: '/invoice-templates/$templateId/edit'
+      preLoaderRoute: typeof AuthenticatedInvoiceTemplatesTemplateIdEditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/countries/$countryId/edit': {
@@ -533,9 +613,12 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedAddressesNewRoute: typeof AuthenticatedAddressesNewRoute
   AuthenticatedCountriesNewRoute: typeof AuthenticatedCountriesNewRoute
+  AuthenticatedInvoiceTemplatesNewRoute: typeof AuthenticatedInvoiceTemplatesNewRoute
   AuthenticatedProfilesNewRoute: typeof AuthenticatedProfilesNewRoute
   AuthenticatedAddressesIndexRoute: typeof AuthenticatedAddressesIndexRoute
   AuthenticatedCountriesIndexRoute: typeof AuthenticatedCountriesIndexRoute
+  AuthenticatedInvoiceTemplatesIndexRoute: typeof AuthenticatedInvoiceTemplatesIndexRoute
+  AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
   AuthenticatedProfilesIndexRoute: typeof AuthenticatedProfilesIndexRoute
   AuthenticatedAddressesAddressIdEditRoute: typeof AuthenticatedAddressesAddressIdEditRoute
   AuthenticatedCatalogCategoriesNewRoute: typeof AuthenticatedCatalogCategoriesNewRoute
@@ -543,6 +626,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedCatalogProductsNewRoute: typeof AuthenticatedCatalogProductsNewRoute
   AuthenticatedCatalogTagsNewRoute: typeof AuthenticatedCatalogTagsNewRoute
   AuthenticatedCountriesCountryIdEditRoute: typeof AuthenticatedCountriesCountryIdEditRoute
+  AuthenticatedInvoiceTemplatesTemplateIdEditRoute: typeof AuthenticatedInvoiceTemplatesTemplateIdEditRoute
   AuthenticatedProfilesProfileIdEditRoute: typeof AuthenticatedProfilesProfileIdEditRoute
   AuthenticatedCatalogCategoriesIndexRoute: typeof AuthenticatedCatalogCategoriesIndexRoute
   AuthenticatedCatalogManufacturersIndexRoute: typeof AuthenticatedCatalogManufacturersIndexRoute
@@ -558,9 +642,13 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedAddressesNewRoute: AuthenticatedAddressesNewRoute,
   AuthenticatedCountriesNewRoute: AuthenticatedCountriesNewRoute,
+  AuthenticatedInvoiceTemplatesNewRoute: AuthenticatedInvoiceTemplatesNewRoute,
   AuthenticatedProfilesNewRoute: AuthenticatedProfilesNewRoute,
   AuthenticatedAddressesIndexRoute: AuthenticatedAddressesIndexRoute,
   AuthenticatedCountriesIndexRoute: AuthenticatedCountriesIndexRoute,
+  AuthenticatedInvoiceTemplatesIndexRoute:
+    AuthenticatedInvoiceTemplatesIndexRoute,
+  AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
   AuthenticatedProfilesIndexRoute: AuthenticatedProfilesIndexRoute,
   AuthenticatedAddressesAddressIdEditRoute:
     AuthenticatedAddressesAddressIdEditRoute,
@@ -572,6 +660,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCatalogTagsNewRoute: AuthenticatedCatalogTagsNewRoute,
   AuthenticatedCountriesCountryIdEditRoute:
     AuthenticatedCountriesCountryIdEditRoute,
+  AuthenticatedInvoiceTemplatesTemplateIdEditRoute:
+    AuthenticatedInvoiceTemplatesTemplateIdEditRoute,
   AuthenticatedProfilesProfileIdEditRoute:
     AuthenticatedProfilesProfileIdEditRoute,
   AuthenticatedCatalogCategoriesIndexRoute:

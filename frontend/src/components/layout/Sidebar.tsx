@@ -15,6 +15,8 @@ import {
   Users,
   Globe,
   Building2,
+  FileText,
+  ShoppingCart,
 } from "lucide-react"
 
 const navigation = [
@@ -23,9 +25,11 @@ const navigation = [
   { name: "Categories", href: "/catalog/categories", icon: FolderOpen },
   { name: "Tags", href: "/catalog/tags", icon: Tag },
   { name: "Manufacturers", href: "/catalog/manufacturers", icon: Building2 },
+  { name: "Orders", href: "/orders", icon: ShoppingCart },
   { name: "Addresses", href: "/addresses", icon: MapPin },
   { name: "Profiles", href: "/profiles", icon: Users },
   { name: "Countries", href: "/countries", icon: Globe },
+  { name: "Invoice Templates", href: "/invoice-templates", icon: FileText },
 ]
 
 export default function Sidebar() {

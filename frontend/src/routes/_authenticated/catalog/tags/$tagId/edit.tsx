@@ -6,7 +6,6 @@ import { catalogTagsUpdateBody } from "@/api/generated/shop/catalog/catalog.zod"
 import { TagForm } from "@/components/tags/TagForm"
 import { Spinner } from "@/components/customui/spinner"
 import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
 
 // Use the generated Zod schema types
@@ -16,7 +15,6 @@ function EditTagPage() {
   const navigate = useNavigate()
   const { tagId } = useParams({ from: "/_authenticated/catalog/tags/$tagId/edit" })
   const updateMutation = useCatalogTagsUpdate()
-  const queryClient = useQueryClient()
   
   const { data: tag, isLoading, error } = useCatalogTagsRetrieve(Number(tagId))
 
@@ -28,10 +26,6 @@ function EditTagPage() {
         id: Number(tagId), 
         data: validatedData 
       })
-      
-      queryClient.invalidateQueries({ queryKey: ["/api/catalog/tags/"] })
-      queryClient.invalidateQueries({ queryKey: [`/api/catalog/tags/${Number(tagId)}/`] })
-      
       toast.success("Tag updated successfully")
       navigate({ to: "/catalog/tags" })
     } catch (error) {

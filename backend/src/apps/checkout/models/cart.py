@@ -47,6 +47,20 @@ class Cart(TimestampedModel):
         related_name='carts',
         help_text="Selected shipping method for this cart",
     )
+    applied_coupon = models.ForeignKey(
+        'Coupon',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='carts',
+        help_text="Applied coupon to this cart",
+    )
+    coupon_discount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=Decimal("0.00"),
+        help_text="Discount amount from applied coupon",
+    )
 
     class Meta:
         ordering = ["-created_at"]
@@ -81,7 +95,12 @@ class Cart(TimestampedModel):
 
     @property
     def total(self) -> Decimal:
-        """Calculate total (subtotal + shipping)."""
+        """Calculate total (subtotal + shipping - coupon discount)."""
+        return self.subtotal + self.shipping_cost - self.coupon_discount
+
+    @property
+    def total_before_coupon(self) -> Decimal:
+        """Calculate total before coupon discount."""
         return self.subtotal + self.shipping_cost
 
     def clear(self) -> None:

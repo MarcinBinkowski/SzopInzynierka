@@ -13,8 +13,9 @@ import reportWebVitals from './reportWebVitals'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5,
-      retry: 1,
+      staleTime: 0,
+      gcTime: 0,
+      retry: 3,
     },
   },
 })

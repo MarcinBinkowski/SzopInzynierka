@@ -7,16 +7,18 @@ import {
   Divider,
   IconButton,
   useTheme,
-  RadioButton
+  RadioButton,
+  TextInput,
+  Chip
 } from 'react-native-paper';
 import { ScreenWrapper } from '@/components/layout/ScreenWrapper';
 import ScreenLoader from '@/components/common/ScreenLoader';
 import ErrorScreen from '@/components/common/ErrorScreen';
-import { useCheckoutItemsList } from '@/api/generated/shop/checkout/checkout';
-import { useCheckoutItemsIncreaseQuantityCreate, useCheckoutItemsDecreaseQuantityCreate } from '@/api/generated/shop/checkout/checkout';
-import { useCheckoutCreateCheckoutSessionCreate, useCheckoutConfirmPaymentIntentCreate } from '@/api/generated/shop/checkout/checkout';
+import { useCheckoutCartsCurrentRetrieve, useCheckoutItemsIncreaseQuantityCreate, useCheckoutItemsDecreaseQuantityCreate, useCheckoutCreateCheckoutSessionCreate, useCheckoutConfirmPaymentIntentCreate, useCheckoutCouponsValidateCreate, useCheckoutCouponsRemoveCreate } from '@/api/generated/shop/checkout/checkout';
+import { useQueryClient } from '@tanstack/react-query';
 import { useProfileAddressesList } from '@/api/generated/shop/profile/profile';
 import { useCheckoutShippingMethodsList } from '@/api/generated/shop/checkout/checkout';
+import type { CouponValidationResponse, Coupon, Cart } from '@/api/generated/shop/schemas';
 import { Alert } from 'react-native';
 import { useStripe } from '@stripe/stripe-react-native';
 import { useState } from 'react';
@@ -25,7 +27,8 @@ import { useRouter } from 'expo-router';
 
 export default function CartScreen() {
   const theme = useTheme();
-  const { data: cartItems, isLoading: cartItemsLoading, error: cartItemsError, refetch: refetchCartItems } = useCheckoutItemsList();
+  const queryClient = useQueryClient();
+  const { data: cart, isLoading: cartLoading, error: cartError, refetch: refetchCart } = useCheckoutCartsCurrentRetrieve();
   const { data: addresses, isLoading: addressesLoading } = useProfileAddressesList();
   const { data: shippingMethods, isLoading: shippingMethodsLoading } = useCheckoutShippingMethodsList();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -33,6 +36,11 @@ export default function CartScreen() {
 
   const [selectedAddressId, setSelectedAddressId] = useState<number>(0);
   const [selectedShippingMethodId, setSelectedShippingMethodId] = useState<number>(0);
+  const [couponCode, setCouponCode] = useState<string>('');
+
+  const cartItems = cart?.items || [];
+  const appliedCoupon = cart?.applied_coupon || null;
+  const couponDiscount = cart?.coupon_discount || 0;
 
   React.useEffect(() => {
     if (addresses && addresses.length > 0 && !selectedAddressId) {
@@ -49,7 +57,7 @@ export default function CartScreen() {
   const increaseQuantityMutation = useCheckoutItemsIncreaseQuantityCreate({
     mutation: {
       onSuccess: () => {
-        refetchCartItems();
+        refetchCart();
       },
       onError: (error) => {
         Alert.alert('Error', 'Failed to increase quantity. Please try again.');
@@ -61,7 +69,7 @@ export default function CartScreen() {
   const decreaseQuantityMutation = useCheckoutItemsDecreaseQuantityCreate({
     mutation: {
       onSuccess: () => {
-        refetchCartItems();
+        refetchCart();
       },
       onError: (error) => {
         Alert.alert('Error', 'Failed to decrease quantity. Please try again.');
@@ -73,10 +81,11 @@ export default function CartScreen() {
   const confirmPaymentMutation = useCheckoutConfirmPaymentIntentCreate({
     mutation: {
       onSuccess: (data) => {
-        refetchCartItems();
+        queryClient.invalidateQueries();
+        refetchCart();
       },
       onError: (error) => {
-        refetchCartItems();
+        refetchCart();
       },
     },
   });
@@ -111,7 +120,6 @@ export default function CartScreen() {
                     {
                       text: 'View Orders',
                       onPress: () => {
-                        refetchCartItems();
                         router.push('/orders');
                       }
                     }
@@ -126,6 +134,44 @@ export default function CartScreen() {
       },
       onError: (error) => {
         console.error('Create payment intent error:', error);
+      },
+    },
+  });
+
+  const validateCouponMutation = useCheckoutCouponsValidateCreate({
+    mutation: {
+      onSuccess: (data: CouponValidationResponse) => {
+        setCouponCode('');
+        refetchCart(); // Refresh cart data to get updated coupon info
+        Alert.alert('Success', 'Coupon applied successfully!');
+      },
+      onError: (error: any) => {
+        if (error.response?.status === 404) {
+          Alert.alert('Invalid Coupon', 'This coupon code does not exist. Please check the code and try again.');
+        } else if (error.response?.status === 422) {
+          const errorMessage = error.response?.data?.error || 'This coupon cannot be applied to your cart.';
+          Alert.alert('Coupon Not Valid', errorMessage);
+        } else {
+          Alert.alert('Error', 'Failed to apply coupon. Please try again later.');
+        }
+      },
+    },
+  });
+
+  const removeCouponMutation = useCheckoutCouponsRemoveCreate({
+    mutation: {
+      onSuccess: () => {
+        // setAppliedCoupon(null); // This state is not managed in this component
+        // setCouponDiscount(0); // This state is not managed in this component
+        refetchCart(); // Refresh cart data to get updated coupon info
+        Alert.alert('Success', 'Coupon removed successfully!');
+      },
+      onError: (error: any) => {
+        if (error.response?.status === 400) {
+          Alert.alert('No Active Cart', 'No active cart found to remove coupon from.');
+        } else {
+          Alert.alert('Error', 'Failed to remove coupon. Please try again.');
+        }
       },
     },
   });
@@ -168,18 +214,18 @@ export default function CartScreen() {
   const selectedShippingMethod = shippingMethods?.find(method => method.id === selectedShippingMethodId);
   const shippingCost = selectedShippingMethod ? parseFloat(selectedShippingMethod.price) : 0;
   
-  const total = subtotal + shippingCost;
+  const total = subtotal + shippingCost - couponDiscount;
   
-  if (cartItemsLoading || addressesLoading || shippingMethodsLoading) {
+  if (cartLoading || addressesLoading || shippingMethodsLoading) {
     return <ScreenLoader />;
   }
 
-  if (cartItemsError || !cartItems) {
+  if (cartError || !cart) {
     return <ErrorScreen
       title="Failed to load cart"
       message="We couldn't load the cart information. Please check your connection and try again."
       onRetry={() => {
-        refetchCartItems();
+        refetchCart();
       }}
       icon="alert-circle"
     />
@@ -300,6 +346,47 @@ export default function CartScreen() {
 
                 <Divider style={styles.divider} />
 
+                <View style={styles.section}>
+                  <Text variant="titleMedium" style={styles.sectionTitle}>
+                    Coupon Code
+                  </Text>
+                  {appliedCoupon ? (
+                    <View style={styles.appliedCoupon}>
+                      <Chip
+                        mode="outlined"
+                        icon="ticket-percent"
+                        onClose={() => removeCouponMutation.mutate()}
+                        disabled={removeCouponMutation.isPending}
+                      >
+                        {appliedCoupon.code} - ${appliedCoupon.discount_amount}
+                      </Chip>
+                    </View>
+                  ) : (
+                    <View style={styles.couponInput}>
+                      <TextInput
+                        label="Enter coupon code"
+                        value={couponCode}
+                        onChangeText={setCouponCode}
+                        mode="outlined"
+                        style={styles.couponTextInput}
+                        right={
+                          <TextInput.Icon
+                            icon="ticket-percent"
+                            onPress={() => {
+                              if (couponCode.trim()) {
+                                validateCouponMutation.mutate({ data: { code: couponCode.trim() } });
+                              }
+                            }}
+                            disabled={!couponCode.trim() || validateCouponMutation.isPending}
+                          />
+                        }
+                      />
+                    </View>
+                  )}
+                </View>
+
+                <Divider style={styles.divider} />
+
                 <View style={styles.summary}>
                   <View style={styles.summaryRow}>
                     <Text variant="bodyMedium">Subtotal:</Text>
@@ -309,6 +396,12 @@ export default function CartScreen() {
                     <Text variant="bodyMedium">Shipping:</Text>
                     <Text variant="bodyMedium">${shippingCost.toFixed(2)}</Text>
                   </View>
+                  {couponDiscount > 0 && (
+                    <View style={styles.summaryRow}>
+                      <Text variant="bodyMedium" style={{ color: theme.colors.primary }}>Coupon Discount:</Text>
+                      <Text variant="bodyMedium" style={{ color: theme.colors.primary }}>-${couponDiscount.toFixed(2)}</Text>
+                    </View>
+                  )}
                   <Divider style={{ marginVertical: 8 }} />
                   <View style={styles.summaryRow}>
                     <Text variant="titleMedium" style={{ fontWeight: 'bold' }}>Total:</Text>
@@ -396,5 +489,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 2,
+  },
+  couponInput: {
+    marginTop: 10,
+  },
+  couponTextInput: {
+    marginTop: 10,
+  },
+  appliedCoupon: {
+    marginTop: 10,
   },
 });

@@ -5,7 +5,6 @@ import { useCatalogManufacturersCreate } from "@/api/generated/shop/catalog/cata
 import { catalogManufacturersCreateBody } from "@/api/generated/shop/catalog/catalog.zod"
 import { ManufacturerForm } from "@/components/manufacturers/ManufacturerForm"
 import { toast } from "sonner"
-import { useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
 
 // Use the generated Zod schema types
@@ -14,7 +13,7 @@ type ManufacturerFormData = z.infer<typeof catalogManufacturersCreateBody>
 function NewManufacturerPage() {
   const navigate = useNavigate()
   const createMutation = useCatalogManufacturersCreate()
-  const queryClient = useQueryClient()
+
 
   const handleSubmit = async (formData: ManufacturerFormData) => {
     try {
@@ -22,8 +21,6 @@ function NewManufacturerPage() {
       const validatedData = catalogManufacturersCreateBody.parse(formData)
       
       await createMutation.mutateAsync({ data: validatedData })
-      
-      queryClient.invalidateQueries({ queryKey: ["/api/catalog/manufacturers/"] })
       
       toast.success("Manufacturer created successfully")
       navigate({ to: "/catalog/manufacturers" })

@@ -24,7 +24,7 @@ export interface PatchedAddressUpdate {
   postal_code?: string;
   /** Country for this address */
   country?: number;
-  /** Whether this is the default address for this type */
+  /** Whether this is the default address */
   is_default?: boolean;
   /**
    * Optional label like 'Home', 'Office', etc.

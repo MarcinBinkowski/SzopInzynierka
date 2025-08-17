@@ -88,9 +88,7 @@ export default function MainScreen() {
     <ScreenWrapper showBackButton={false}>
       <View style={styles.container}>
         <View style={styles.sectionPad}>
-          <Text variant="titleMedium" style={styles.sectionTitle}>
-            Featured Products
-          </Text>
+
           
           <Searchbar
             placeholder="Search products..."
