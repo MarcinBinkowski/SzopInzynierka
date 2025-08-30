@@ -22,8 +22,7 @@ export interface Order {
 * `pending` - Pending
 * `confirmed` - Confirmed
 * `shipped` - Shipped
-* `delivered` - Delivered
-* `cancelled` - Cancelled */
+* `delivered` - Delivered */
   status?: OrderStatusEnum;
   /**
    * Subtotal of all items

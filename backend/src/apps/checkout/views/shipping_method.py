@@ -1,17 +1,23 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, SAFE_METHODS
 
 from apps.checkout.models import ShippingMethod
 from apps.checkout.serializers import ShippingMethodSerializer
 
 
-class ShippingMethodViewSet(viewsets.ReadOnlyModelViewSet):
-    """ViewSet for ShippingMethod model - read-only for users."""
+class ShippingMethodViewSet(viewsets.ModelViewSet):
+    """ViewSet for ShippingMethod model.
+
+    - Authenticated users: can list and retrieve
+    - Admin users: full CRUD (create, update, delete)
+    """
 
     serializer_class = ShippingMethodSerializer
-    permission_classes = [IsAuthenticated]
     pagination_class = None
 
-    def get_queryset(self):
-        """Return all shipping methods."""
-        return ShippingMethod.objects.all() 
+    queryset = ShippingMethod.objects.all()
+
+    def get_permissions(self):
+        if self.request.method in SAFE_METHODS:
+            return [IsAuthenticated()]
+        return [IsAdminUser()] 

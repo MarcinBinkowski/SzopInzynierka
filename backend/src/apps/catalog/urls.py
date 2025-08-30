@@ -10,6 +10,8 @@ from apps.catalog.views import (
     WishlistViewSet,
     NotificationPreferenceViewSet,
     NotificationHistoryViewSet,
+    SupplierViewSet,
+    ProductDeliveryViewSet,
 )
 
 app_name = "catalog"
@@ -24,6 +26,8 @@ router.register(r"images", ProductImageViewSet, basename="image")
 router.register(r"wishlist", WishlistViewSet, basename="wishlist")
 router.register(r"notifications/preferences", NotificationPreferenceViewSet, basename="notification-preference")
 router.register(r"notifications/history", NotificationHistoryViewSet, basename="notification-history")
+router.register(r"suppliers", SupplierViewSet, basename="supplier")
+router.register(r"deliveries", ProductDeliveryViewSet, basename="product-delivery")
 
 urlpatterns = [
     path("", include(router.urls)),

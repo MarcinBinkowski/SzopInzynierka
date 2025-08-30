@@ -14,13 +14,12 @@ import ErrorScreen from '@/components/common/ErrorScreen';
 import FormDialog from '@/components/common/FormDialog';
 import ProfileForm from '@/components/profiles/ProfileForm';
 import AddressForm from '@/components/addresses/AddressForm';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { 
   useProfileProfilesMeRetrieve, 
   useProfileProfilesMePartialUpdate 
 } from '@/api/generated/shop/profile/profile';
 import { 
-  useProfileAddressesList,
   useProfileAddressesCreate,
   useProfileAddressesPartialUpdate,
   useProfileAddressesRetrieve,
@@ -28,6 +27,7 @@ import {
   getProfileAddressesRetrieveQueryKey,
   getProfileAddressesListQueryKey
 } from '@/api/generated/shop/profile/profile';
+import { profileAddressesList } from '@/api/generated/shop/profile/profile';
 import { 
   useCatalogNotificationsPreferencesMeRetrieve,
   useCatalogNotificationsPreferencesPartialUpdate,
@@ -37,7 +37,6 @@ import type { AddressCreate } from '@/api/generated/shop/schemas/addressCreate';
 import type { PatchedAddressUpdate } from '@/api/generated/shop/schemas/patchedAddressUpdate';
 import type { AddressList } from '@/api/generated/shop/schemas/addressList';
 import type { PatchedNotificationPreferenceUpdate } from '@/api/generated/shop/schemas/patchedNotificationPreferenceUpdate';
-
 export default function ProfileScreen() {
   const { logout } = useAuth();
   const theme = useTheme();
@@ -47,8 +46,6 @@ export default function ProfileScreen() {
   const [editingAddressId, setEditingAddressId] = useState<number | null>(null);
 
   const [editingAddress, setEditingAddress] = useState<any>(null);
-
-  // Fetch profile data
   const { 
     data: profile, 
     isLoading: profileLoading, 
@@ -57,10 +54,18 @@ export default function ProfileScreen() {
   } = useProfileProfilesMeRetrieve();
 
   const { 
-    data: addresses, 
+    data: addressesAll, 
     isLoading: addressesLoading, 
     refetch: refetchAddresses 
-  } = useProfileAddressesList();
+  } = useQuery({
+    queryKey: ['addresses-all'],
+    queryFn: async () => {
+      const res = await profileAddressesList({ page: 1, page_size: 1000 }); // unlikely user will have more than 1000 addresses
+      const results = (res as any)?.results as AddressList[] | undefined;
+      return Array.isArray(results) ? results : [];
+    },
+    staleTime: 60_000,
+  });
 
   const { 
     data: fullAddressData, 
@@ -70,14 +75,12 @@ export default function ProfileScreen() {
     { query: { enabled: !!editingAddressId } }
   );
 
-  // Fetch notification preferences
   const { 
     data: notificationPrefs, 
     isLoading: notificationPrefsLoading, 
     refetch: refetchNotificationPrefs 
   } = useCatalogNotificationsPreferencesMeRetrieve();
 
-  // Mutations
   const updateProfileMutation = useProfileProfilesMePartialUpdate({
     mutation: {
       onSuccess: () => {
@@ -96,6 +99,7 @@ export default function ProfileScreen() {
       onSuccess: () => {
         setShowAddAddress(false);
         queryClient.invalidateQueries({ queryKey: getProfileAddressesListQueryKey() });
+        queryClient.invalidateQueries({ queryKey: getProfileAddressesListQueryKey() });
         refetchAddresses();
         Alert.alert('Success', 'Address added successfully!');
       },
@@ -111,6 +115,7 @@ export default function ProfileScreen() {
         queryClient.removeQueries({ 
           queryKey: getProfileAddressesRetrieveQueryKey(variables.id) 
         });
+        queryClient.invalidateQueries({ queryKey: getProfileAddressesListQueryKey() });
         queryClient.invalidateQueries({ queryKey: getProfileAddressesListQueryKey() });
         refetchAddresses();
         
@@ -130,6 +135,7 @@ export default function ProfileScreen() {
         queryClient.removeQueries({ 
           queryKey: getProfileAddressesRetrieveQueryKey(variables.id) 
         });
+        queryClient.invalidateQueries({ queryKey: getProfileAddressesListQueryKey() });
         queryClient.invalidateQueries({ queryKey: getProfileAddressesListQueryKey() });
         refetchAddresses();
         
@@ -224,7 +230,8 @@ export default function ProfileScreen() {
   if (profileLoading || notificationPrefsLoading) {
     return <ScreenLoader />;
   }
-
+  console.log("profile", profile);
+  console.log("profileError", profileError);
   if (profileError || !profile) {
     return (
       <ErrorScreen
@@ -235,7 +242,7 @@ export default function ProfileScreen() {
     );
   }
 
-  const allAddresses = addresses || [];
+  const allAddresses: AddressList[] = addressesAll || [];
 
   return (
     <ScreenWrapper showBackButton={false}>
@@ -323,7 +330,7 @@ export default function ProfileScreen() {
           <Card.Content>
             {allAddresses.length > 0 ? (
               <View style={styles.addressList}>
-                {allAddresses.map((addr) => (
+                {allAddresses.map((addr: AddressList) => (
                   <View key={addr.id} style={styles.addressItem}>
                     <View style={styles.addressInfo}>
                       <Text variant="bodyMedium">{addr.full_address}</Text>

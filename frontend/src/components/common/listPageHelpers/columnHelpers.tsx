@@ -101,16 +101,14 @@ export function createTruncatedTextColumn(
 export function createPercentageColumn(
   accessorKey: string,
   header: string,
-
 ): MRT_ColumnDef<any> {
-  
   return {
     accessorKey,
     header,
     Cell: ({ cell }) => {
       const value = cell.getValue()
       if (!value) return ""
-      return `${value}$%`
+      return `${value}%`
     }
   }
 }
@@ -167,4 +165,171 @@ export const createDateRangeFilterColumn = (
       debounceMs={options.debounceMs}
     />
   ),
-}) 
+})
+
+// Status column helper - capitalizes first letter
+export function createStatusColumn(
+  accessorKey: string,
+  header: string,
+  options?: {
+    emptyText?: string
+  }
+): MRT_ColumnDef<any> {
+  const { emptyText = "N/A" } = options || {}
+  
+  return {
+    accessorKey,
+    header,
+    Cell: ({ cell }) => {
+      const status = cell.getValue() as string
+      return status ? status.charAt(0).toUpperCase() + status.slice(1) : emptyText
+    }
+  }
+}
+
+// Enum/choice column helper - maps values to display labels
+export function createEnumColumn(
+  accessorKey: string,
+  header: string,
+  enumMap: Record<string, string>,
+  options?: {
+    emptyText?: string
+  }
+): MRT_ColumnDef<any> {
+  const { emptyText = "" } = options || {}
+  
+  return {
+    accessorKey,
+    header,
+    Cell: ({ cell }) => {
+      const value = cell.getValue() as string
+      return value ? enumMap[value] || value : emptyText
+    }
+  }
+}
+
+// Select column helper - combines display with select filter
+export function createSelectColumn(
+  accessorKey: string,
+  header: string,
+  selectOptions: Array<{ text: string; value: string }>,
+  options?: {
+    emptyText?: string
+  }
+): MRT_ColumnDef<any> {
+  const { emptyText = "" } = options || {}
+  
+  return {
+    accessorKey,
+    header,
+    filterVariant: 'select' as const,
+    filterSelectOptions: selectOptions,
+    Cell: ({ cell }) => {
+      const value = cell.getValue() as string
+      if (!value) return emptyText
+      
+      const option = selectOptions.find(opt => opt.value === value)
+      return option ? option.text : value
+    }
+  }
+}
+
+// Image column helper - displays images with consistent styling
+export function createImageColumn(
+  accessorKey: string,
+  header: string,
+  options?: {
+    width?: number
+    height?: number
+    borderRadius?: number
+    alt?: string
+    fallback?: string | null
+  }
+): MRT_ColumnDef<any> {
+  const { 
+    width = 40, 
+    height = 40, 
+    borderRadius = 4, 
+    alt = "Image",
+    fallback = null 
+  } = options || {}
+  
+  return {
+    accessorKey,
+    header,
+    Cell: ({ cell }) => {
+      const url = cell.getValue() as string | null | undefined
+      
+      if (!url) return fallback
+      
+      return (
+        <img 
+          src={url} 
+          alt={alt}
+          style={{ 
+            width, 
+            height, 
+            objectFit: 'cover' as const,
+            borderRadius,
+            border: '1px solid #e0e0e0'
+          }} 
+        />
+      )
+    }
+  }
+}
+
+// Relation column helper - displays name from related objects
+export function createRelationColumn(
+  accessorKey: string,
+  header: string,
+  options?: {
+    nameField?: string
+    emptyText?: string
+  }
+): MRT_ColumnDef<any> {
+  const { nameField = "name", emptyText = "" } = options || {}
+  
+  return {
+    accessorKey,
+    header,
+    Cell: ({ cell }) => {
+      const obj = cell.getValue()
+      
+      if (!obj || typeof obj !== 'object') return emptyText
+      
+      const name = (obj as any)[nameField]
+      return name || emptyText
+    }
+  }
+}
+
+// Number column helper - formats numbers with proper locale
+export function createNumberColumn(
+  accessorKey: string,
+  header: string,
+  options?: {
+    decimals?: number
+    locale?: string
+    emptyText?: string
+  }
+): MRT_ColumnDef<any> {
+  const { decimals = 0, locale = 'en-US', emptyText = "" } = options || {}
+  
+  return {
+    accessorKey,
+    header,
+    Cell: ({ cell }) => {
+      const value = cell.getValue()
+      if (value === null || value === undefined || value === '') return emptyText
+      
+      const num = Number(value)
+      if (isNaN(num)) return emptyText
+      
+      return num.toLocaleString(locale, { 
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals 
+      })
+    }
+  }
+}

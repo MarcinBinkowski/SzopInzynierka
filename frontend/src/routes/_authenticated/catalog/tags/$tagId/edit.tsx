@@ -4,7 +4,7 @@ import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router"
 import { useCatalogTagsRetrieve, useCatalogTagsUpdate } from "@/api/generated/shop/catalog/catalog"
 import { catalogTagsUpdateBody } from "@/api/generated/shop/catalog/catalog.zod"
 import { TagForm } from "@/components/tags/TagForm"
-import { Spinner } from "@/components/customui/spinner"
+import { Spinner } from "@/components/customui/Spinner"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -21,7 +21,6 @@ function EditTagPage() {
   const handleSubmit = async (formData: TagFormData) => {
     try {
       const validatedData = catalogTagsUpdateBody.parse(formData)
-      
       await updateMutation.mutateAsync({ 
         id: Number(tagId), 
         data: validatedData 
@@ -43,8 +42,8 @@ function EditTagPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto py-6">
-        <div className="flex items-center justify-center space-x-2">
+      <div className="flex items-center justify-center h-64">
+        <div className="flex items-center space-x-2">
           <Spinner size="lg" />
           <span className="text-sm text-muted-foreground">Loading tag...</span>
         </div>
@@ -54,7 +53,7 @@ function EditTagPage() {
 
   if (error || !tag) {
     return (
-      <div className="container mx-auto py-6">
+      <div className="flex items-center justify-center h-64">
         <div className="text-center text-red-600">Failed to load tag</div>
       </div>
     )
@@ -62,7 +61,6 @@ function EditTagPage() {
 
   return (
     <TagForm
-      key={`tag-edit-${tagId}`}
       title="Edit Tag"
       description="Update tag information"
       initialData={tag}

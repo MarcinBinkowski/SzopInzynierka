@@ -26,7 +26,6 @@ if TYPE_CHECKING:
 class AddressViewSet(viewsets.ModelViewSet):
     serializer_class = AddressSerializer
     permission_classes = [IsAuthenticated]
-    pagination_class = None
 
     @extend_schema(
         request=AddressCreateSerializer,

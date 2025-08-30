@@ -11,7 +11,6 @@
 * `confirmed` - Confirmed
 * `shipped` - Shipped
 * `delivered` - Delivered
-* `cancelled` - Cancelled
  */
 export type OrderStatusEnum = typeof OrderStatusEnum[keyof typeof OrderStatusEnum];
 
@@ -22,5 +21,4 @@ export const OrderStatusEnum = {
   confirmed: 'confirmed',
   shipped: 'shipped',
   delivered: 'delivered',
-  cancelled: 'cancelled',
 } as const;

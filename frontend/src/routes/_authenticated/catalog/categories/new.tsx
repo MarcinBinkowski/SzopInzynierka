@@ -14,15 +14,10 @@ function NewCategoryPage() {
   const navigate = useNavigate()
   const createMutation = useCatalogCategoriesCreate()
 
-
   const handleSubmit = async (formData: CategoryFormData) => {
     try {
-      // Validate the form data using Zod schema
       const validatedData = catalogCategoriesCreateBody.parse(formData)
-      
       await createMutation.mutateAsync({ data: validatedData })
-      
-      
       toast.success("Category created successfully")
       navigate({ to: "/catalog/categories" })
     } catch (error) {
@@ -41,7 +36,7 @@ function NewCategoryPage() {
   return (
     <CategoryForm
       title="Create New Category"
-      description="Add a new category to your catalog"
+      description="Add a new category to the catalog"
       onSubmit={handleSubmit}
       submitButtonText="Create Category"
       isSubmitting={createMutation.isPending}

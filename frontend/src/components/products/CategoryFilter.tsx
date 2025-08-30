@@ -16,7 +16,7 @@ export const CategoryFilter = ({ column }: CategoryFilterProps) => {
     }
   })
 
-  const categories = categoriesData?.results || []
+  const categories = (categoriesData as any)?.results || []
 
   useEffect(() => {
     // Set initial filter value
@@ -45,7 +45,7 @@ export const CategoryFilter = ({ column }: CategoryFilterProps) => {
           renderValue={(selected) => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
               {selected.map((value) => {
-                const category = categories.find(cat => cat.id.toString() === value)
+                const category = categories.find((cat: any) => cat.id.toString() === value)
                 return (
                   <Chip 
                     key={value} 
@@ -57,7 +57,7 @@ export const CategoryFilter = ({ column }: CategoryFilterProps) => {
             </Box>
           )}
         >
-          {categories.map((category) => (
+          {categories.map((category: any) => (
             <MenuItem key={category.id} value={category.id.toString()}>
               {category.name}
             </MenuItem>

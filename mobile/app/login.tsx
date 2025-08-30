@@ -4,10 +4,11 @@ import { useAuth } from '@/hooks/useAuth';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from 'zod';
+import { router } from 'expo-router';
 
 const schema = z.object({
   email: z.email("Please enter a valid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().min(9, "Password must be at least 9 characters"),
 });
 
 export default function LoginScreen() {
@@ -61,6 +62,13 @@ export default function LoginScreen() {
             disabled={isLoggingIn}
           >
             Sign In
+          </Button>
+          <Button
+            mode="text"
+            onPress={() => router.replace('/register')}
+            style={{ marginTop: 12 }}
+          >
+            Don't have an account? Register here
           </Button>
           {loginError && <Text style={{ color: 'red' }}>{loginError}</Text>}
           {errors.email && <Text style={{ color: 'red' }}>{errors.email.message}</Text>}

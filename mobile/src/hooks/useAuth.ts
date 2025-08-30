@@ -7,7 +7,6 @@ import {
 } from "@/stores/authStore";
 import * as SecureStore from "expo-secure-store";
 
-// Use the generated Orval hooks directly
 import {
   useGetAllauthClientV1AuthSession,
   useDeleteAllauthClientV1AuthSession,
@@ -57,14 +56,8 @@ export function useAuth(): UseAuthResult {
           await SecureStore.setItem('user', JSON.stringify(response.data.user));
         }
         setIsAuthenticated(true);
-        // Best effort: request permissions and auto-register token
-        try {
-          const granted = await notifications.requestPermissions();
-          if (granted) {
-            await notifications.registerToken();
-          }
-        } catch {}
-        router.replace("/maint");
+
+        router.replace("/main");
       },
       onError: (error: AxiosError) => {
         setLoginError(`Login failed. Please try again. ${error.response?.data}`);

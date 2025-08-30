@@ -14,12 +14,9 @@ function NewManufacturerPage() {
   const navigate = useNavigate()
   const createMutation = useCatalogManufacturersCreate()
 
-
   const handleSubmit = async (formData: ManufacturerFormData) => {
     try {
-      // Validate the form data using Zod schema
       const validatedData = catalogManufacturersCreateBody.parse(formData)
-      
       await createMutation.mutateAsync({ data: validatedData })
       
       toast.success("Manufacturer created successfully")

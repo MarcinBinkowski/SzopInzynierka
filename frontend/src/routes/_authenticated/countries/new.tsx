@@ -16,9 +16,7 @@ function NewCountryPage() {
 
   const handleSubmit = async (formData: CountryFormData) => {
     try {
-      // Validate the form data using Zod schema
       const validatedData = geographicCountriesCreateBody.parse(formData)
-      
       await createMutation.mutateAsync({ data: validatedData })
       
       toast.success("Country created successfully")

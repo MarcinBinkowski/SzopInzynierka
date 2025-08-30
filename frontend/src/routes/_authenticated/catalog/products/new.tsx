@@ -8,13 +8,13 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 // Use the generated Zod schema types
-type ProductFormData = z.infer<typeof catalogProductsCreateBody>
+type ProductCreateData = z.infer<typeof catalogProductsCreateBody>
 
 function NewProductPage() {
   const navigate = useNavigate()
   const createMutation = useCatalogProductsCreate()
 
-  const handleSubmit = async (formData: ProductFormData) => {
+  const handleSubmit = async (formData: ProductCreateData) => {
     try {
       // Validate the form data using Zod schema
       const validatedData = catalogProductsCreateBody.parse(formData)
@@ -38,7 +38,7 @@ function NewProductPage() {
 
   return (
     <ProductForm
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit as any}
       submitButtonText="Create Product"
       isSubmitting={createMutation.isPending}
       onCancel={handleCancel}

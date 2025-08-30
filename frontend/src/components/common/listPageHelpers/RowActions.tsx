@@ -1,61 +1,30 @@
-import { useState } from 'react'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import IconButton from '@mui/material/IconButton'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
-import { useTheme } from '@mui/material/styles'
+import { Button } from "@/components/ui/button";
+import { MRT_Row, type MRT_RowData } from "material-react-table";
 
-interface Action {
-  label: string
-  onClick: (row: any) => void
-  variant?: 'default' | 'destructive'
+interface ActionItem<T extends MRT_RowData> {
+  label: string;
+  onClick: (row: T) => void;
+  variant?: "default" | "destructive" | "outline";
 }
 
-interface RowActionsProps {
-  row: any
-  actions: Action[]
+interface RowActionsProps<T extends MRT_RowData> {
+  row: MRT_Row<T>;
+  actions: ActionItem<T>[];
 }
 
-export function RowActions({ row, actions }: RowActionsProps) {
-  const theme = useTheme()
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
-  const handleAction = (action: Action) => {
-    handleClose()
-    action.onClick(row)
-  }
-
+export function RowActions<T extends MRT_RowData>({ row, actions }: RowActionsProps<T>) {
   return (
-    <>
-      <IconButton
-        aria-label="actions"
-        onClick={handleClick}
-      >
-        <MoreVertIcon />
-      </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        {actions.map((action, index) => (
-          <MenuItem
-            key={index}
-            onClick={() => handleAction(action)}
-            sx={action.variant === 'destructive' ? { color: theme.palette.error.main } : {}}
-          >
-            {action.label}
-          </MenuItem>
-        ))}
-      </Menu>
-    </>
-  )
-} 
+    <div className="flex gap-2">
+      {actions.map((action, index) => (
+        <Button
+          key={index}
+          variant={action.variant || "default"}
+          size="sm"
+          onClick={() => action.onClick(row.original)}
+        >
+          {action.label}
+        </Button>
+      ))}
+    </div>
+  );
+}

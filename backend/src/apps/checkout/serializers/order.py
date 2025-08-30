@@ -1,3 +1,4 @@
+import uuid
 from rest_framework import serializers
 from apps.checkout.models.order import Order, OrderItem
 from apps.catalog.serializers.product import ProductDetailSerializer

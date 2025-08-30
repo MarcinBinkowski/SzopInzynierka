@@ -1258,6 +1258,86 @@ export const checkoutConfirmPaymentIntentCreateResponse = zod.object({
   "currency": zod.string()
 }).describe('Serializer for payment confirmation response.')
 
+export const checkoutCouponRedemptionsListQueryParams = zod.object({
+  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
+  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.')
+})
+
+export const checkoutCouponRedemptionsListResponseResultsItemCouponCodeMax = 20;
+export const checkoutCouponRedemptionsListResponseResultsItemCouponNameMax = 100;
+export const checkoutCouponRedemptionsListResponseResultsItemCouponDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponRedemptionsListResponseResultsItemCouponMaxUsesMin = 0;
+
+export const checkoutCouponRedemptionsListResponseResultsItemCouponMaxUsesMax = 2147483647;
+export const checkoutCouponRedemptionsListResponseResultsItemCouponMaxUsesPerUserMin = 0;
+
+export const checkoutCouponRedemptionsListResponseResultsItemCouponMaxUsesPerUserMax = 2147483647;
+export const checkoutCouponRedemptionsListResponseResultsItemDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponRedemptionsListResponseResultsItemOriginalTotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponRedemptionsListResponseResultsItemFinalTotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const checkoutCouponRedemptionsListResponse = zod.object({
+  "count": zod.number(),
+  "next": zod.string().url().nullish(),
+  "previous": zod.string().url().nullish(),
+  "results": zod.array(zod.object({
+  "id": zod.number(),
+  "coupon": zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCouponRedemptionsListResponseResultsItemCouponCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCouponRedemptionsListResponseResultsItemCouponNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.string().regex(checkoutCouponRedemptionsListResponseResultsItemCouponDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.string().datetime({}),
+  "valid_until": zod.string().datetime({}),
+  "max_uses": zod.number().min(checkoutCouponRedemptionsListResponseResultsItemCouponMaxUsesMin).max(checkoutCouponRedemptionsListResponseResultsItemCouponMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCouponRedemptionsListResponseResultsItemCouponMaxUsesPerUserMin).max(checkoutCouponRedemptionsListResponseResultsItemCouponMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'),
+  "discount_amount": zod.string().regex(checkoutCouponRedemptionsListResponseResultsItemDiscountAmountRegExp),
+  "original_total": zod.string().regex(checkoutCouponRedemptionsListResponseResultsItemOriginalTotalRegExp),
+  "final_total": zod.string().regex(checkoutCouponRedemptionsListResponseResultsItemFinalTotalRegExp),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created')
+}).describe('Serializer for coupon redemption tracking.'))
+})
+
+export const checkoutCouponRedemptionsRetrieveParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Coupon Redemption.')
+})
+
+export const checkoutCouponRedemptionsRetrieveResponseCouponCodeMax = 20;
+export const checkoutCouponRedemptionsRetrieveResponseCouponNameMax = 100;
+export const checkoutCouponRedemptionsRetrieveResponseCouponDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponRedemptionsRetrieveResponseCouponMaxUsesMin = 0;
+
+export const checkoutCouponRedemptionsRetrieveResponseCouponMaxUsesMax = 2147483647;
+export const checkoutCouponRedemptionsRetrieveResponseCouponMaxUsesPerUserMin = 0;
+
+export const checkoutCouponRedemptionsRetrieveResponseCouponMaxUsesPerUserMax = 2147483647;
+export const checkoutCouponRedemptionsRetrieveResponseDiscountAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponRedemptionsRetrieveResponseOriginalTotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutCouponRedemptionsRetrieveResponseFinalTotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const checkoutCouponRedemptionsRetrieveResponse = zod.object({
+  "id": zod.number(),
+  "coupon": zod.object({
+  "id": zod.number(),
+  "code": zod.string().max(checkoutCouponRedemptionsRetrieveResponseCouponCodeMax).describe('Coupon code'),
+  "name": zod.string().max(checkoutCouponRedemptionsRetrieveResponseCouponNameMax).describe('Display name'),
+  "description": zod.string().optional(),
+  "discount_amount": zod.string().regex(checkoutCouponRedemptionsRetrieveResponseCouponDiscountAmountRegExp).describe('Fixed discount amount'),
+  "valid_from": zod.string().datetime({}),
+  "valid_until": zod.string().datetime({}),
+  "max_uses": zod.number().min(checkoutCouponRedemptionsRetrieveResponseCouponMaxUsesMin).max(checkoutCouponRedemptionsRetrieveResponseCouponMaxUsesMax).nullish().describe('Maximum total uses (null = unlimited)'),
+  "max_uses_per_user": zod.number().min(checkoutCouponRedemptionsRetrieveResponseCouponMaxUsesPerUserMin).max(checkoutCouponRedemptionsRetrieveResponseCouponMaxUsesPerUserMax).optional().describe('Maximum uses per user')
+}).describe('Serializer for coupon list and detail views.'),
+  "discount_amount": zod.string().regex(checkoutCouponRedemptionsRetrieveResponseDiscountAmountRegExp),
+  "original_total": zod.string().regex(checkoutCouponRedemptionsRetrieveResponseOriginalTotalRegExp),
+  "final_total": zod.string().regex(checkoutCouponRedemptionsRetrieveResponseFinalTotalRegExp),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created')
+}).describe('Serializer for coupon redemption tracking.')
+
 /**
  * Full CRUD ViewSet for coupon management.
  */
@@ -1543,6 +1623,93 @@ export const checkoutCouponsValidateCreateResponse = zod.object({
   "cart_total": zod.string()
 }).describe('Serializer for coupon validation response.')
 
+export const checkoutCouriersListQueryParams = zod.object({
+  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
+  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.')
+})
+
+export const checkoutCouriersListResponseResultsItemNameMax = 100;
+
+
+export const checkoutCouriersListResponse = zod.object({
+  "count": zod.number(),
+  "next": zod.string().url().nullish(),
+  "previous": zod.string().url().nullish(),
+  "results": zod.array(zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(checkoutCouriersListResponseResultsItemNameMax).describe('Courier company name'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+}))
+})
+
+export const checkoutCouriersCreateBodyNameMax = 100;
+
+
+export const checkoutCouriersCreateBody = zod.object({
+  "name": zod.string().max(checkoutCouriersCreateBodyNameMax).describe('Courier company name')
+})
+
+export const checkoutCouriersRetrieveParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Courier.')
+})
+
+export const checkoutCouriersRetrieveResponseNameMax = 100;
+
+
+export const checkoutCouriersRetrieveResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(checkoutCouriersRetrieveResponseNameMax).describe('Courier company name'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const checkoutCouriersUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Courier.')
+})
+
+export const checkoutCouriersUpdateBodyNameMax = 100;
+
+
+export const checkoutCouriersUpdateBody = zod.object({
+  "name": zod.string().max(checkoutCouriersUpdateBodyNameMax).describe('Courier company name')
+})
+
+export const checkoutCouriersUpdateResponseNameMax = 100;
+
+
+export const checkoutCouriersUpdateResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(checkoutCouriersUpdateResponseNameMax).describe('Courier company name'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const checkoutCouriersPartialUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Courier.')
+})
+
+export const checkoutCouriersPartialUpdateBodyNameMax = 100;
+
+
+export const checkoutCouriersPartialUpdateBody = zod.object({
+  "name": zod.string().max(checkoutCouriersPartialUpdateBodyNameMax).optional().describe('Courier company name')
+})
+
+export const checkoutCouriersPartialUpdateResponseNameMax = 100;
+
+
+export const checkoutCouriersPartialUpdateResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(checkoutCouriersPartialUpdateResponseNameMax).describe('Courier company name'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const checkoutCouriersDestroyParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Courier.')
+})
+
 /**
  * Create a Stripe Checkout session for a cart.
  */
@@ -1794,6 +1961,19 @@ export const checkoutInvoicesPartialUpdateResponse = zod.object({
  */
 export const checkoutInvoicesDestroyParams = zod.object({
   "id": zod.coerce.number().describe('A unique integer value identifying this Invoice.')
+})
+
+/**
+ * Debug template rendering for a specific order
+ * @summary Debug template rendering
+ */
+export const checkoutInvoicesDebugTemplateRetrieveQueryParams = zod.object({
+  "order_id": zod.coerce.number().describe('ID of the order to debug')
+})
+
+export const checkoutInvoicesDebugTemplateRetrieveResponse = zod.object({
+  "context": zod.record(zod.string(), zod.any()),
+  "rendered_html": zod.string()
 })
 
 /**
@@ -2432,19 +2612,100 @@ export const checkoutItemsUpdateQuantityCreateResponse = zod.object({
   "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for CartItem model.')
 
+export const checkoutOrderNotesListQueryParams = zod.object({
+  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
+  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.')
+})
+
+export const checkoutOrderNotesListResponse = zod.object({
+  "count": zod.number(),
+  "next": zod.string().url().nullish(),
+  "previous": zod.string().url().nullish(),
+  "results": zod.array(zod.object({
+  "id": zod.number(),
+  "order": zod.number().describe('Order this note relates to'),
+  "staff_member": zod.number().describe('Staff member who created this note'),
+  "note": zod.string().describe('Note content'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+}))
+})
+
+export const checkoutOrderNotesCreateBody = zod.object({
+  "order": zod.number().describe('Order this note relates to'),
+  "staff_member": zod.number().describe('Staff member who created this note'),
+  "note": zod.string().describe('Note content')
+})
+
+export const checkoutOrderNotesRetrieveParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Order Processing Note.')
+})
+
+export const checkoutOrderNotesRetrieveResponse = zod.object({
+  "id": zod.number(),
+  "order": zod.number().describe('Order this note relates to'),
+  "staff_member": zod.number().describe('Staff member who created this note'),
+  "note": zod.string().describe('Note content'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const checkoutOrderNotesUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Order Processing Note.')
+})
+
+export const checkoutOrderNotesUpdateBody = zod.object({
+  "order": zod.number().describe('Order this note relates to'),
+  "staff_member": zod.number().describe('Staff member who created this note'),
+  "note": zod.string().describe('Note content')
+})
+
+export const checkoutOrderNotesUpdateResponse = zod.object({
+  "id": zod.number(),
+  "order": zod.number().describe('Order this note relates to'),
+  "staff_member": zod.number().describe('Staff member who created this note'),
+  "note": zod.string().describe('Note content'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const checkoutOrderNotesPartialUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Order Processing Note.')
+})
+
+export const checkoutOrderNotesPartialUpdateBody = zod.object({
+  "order": zod.number().optional().describe('Order this note relates to'),
+  "staff_member": zod.number().optional().describe('Staff member who created this note'),
+  "note": zod.string().optional().describe('Note content')
+})
+
+export const checkoutOrderNotesPartialUpdateResponse = zod.object({
+  "id": zod.number(),
+  "order": zod.number().describe('Order this note relates to'),
+  "staff_member": zod.number().describe('Staff member who created this note'),
+  "note": zod.string().describe('Note content'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const checkoutOrderNotesDestroyParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Order Processing Note.')
+})
+
 /**
- * ViewSet for user orders.
+ * Retrieve a list of orders for the current user
+ * @summary Get current user's orders
  */
 export const checkoutOrdersListQueryParams = zod.object({
   "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
   "page_size": zod.coerce.number().optional().describe('Number of results to return per page.')
 })
 
-export const checkoutOrdersListResponseResultsItemOrderNumberMax = 50;
-export const checkoutOrdersListResponseResultsItemSubtotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
-export const checkoutOrdersListResponseResultsItemShippingCostRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
-export const checkoutOrdersListResponseResultsItemCouponDiscountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
-export const checkoutOrdersListResponseResultsItemTotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutOrdersListResponseResultsItemOrdersItemOrderNumberMax = 50;
+export const checkoutOrdersListResponseResultsItemOrdersItemSubtotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutOrdersListResponseResultsItemOrdersItemShippingCostRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutOrdersListResponseResultsItemOrdersItemCouponDiscountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutOrdersListResponseResultsItemOrdersItemTotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
 
 
 export const checkoutOrdersListResponse = zod.object({
@@ -2452,15 +2713,17 @@ export const checkoutOrdersListResponse = zod.object({
   "next": zod.string().url().nullish(),
   "previous": zod.string().url().nullish(),
   "results": zod.array(zod.object({
+  "orders": zod.array(zod.object({
   "id": zod.number(),
-  "order_number": zod.string().max(checkoutOrdersListResponseResultsItemOrderNumberMax).describe('Unique order number'),
+  "order_number": zod.string().max(checkoutOrdersListResponseResultsItemOrdersItemOrderNumberMax).describe('Unique order number'),
   "status": zod.enum(['pending', 'confirmed', 'shipped', 'delivered']).describe('* `pending` - Pending\n* `confirmed` - Confirmed\n* `shipped` - Shipped\n* `delivered` - Delivered').optional().describe('Current status of the order\n\n* `pending` - Pending\n* `confirmed` - Confirmed\n* `shipped` - Shipped\n* `delivered` - Delivered'),
-  "subtotal": zod.string().regex(checkoutOrdersListResponseResultsItemSubtotalRegExp).describe('Subtotal of all items'),
-  "shipping_cost": zod.string().regex(checkoutOrdersListResponseResultsItemShippingCostRegExp).optional().describe('Shipping cost'),
-  "coupon_discount": zod.string().regex(checkoutOrdersListResponseResultsItemCouponDiscountRegExp).optional().describe('Discount amount from applied coupon'),
-  "total": zod.string().regex(checkoutOrdersListResponseResultsItemTotalRegExp).describe('Total amount including shipping'),
+  "subtotal": zod.string().regex(checkoutOrdersListResponseResultsItemOrdersItemSubtotalRegExp).describe('Subtotal of all items'),
+  "shipping_cost": zod.string().regex(checkoutOrdersListResponseResultsItemOrdersItemShippingCostRegExp).optional().describe('Shipping cost'),
+  "coupon_discount": zod.string().regex(checkoutOrdersListResponseResultsItemOrdersItemCouponDiscountRegExp).optional().describe('Discount amount from applied coupon'),
+  "total": zod.string().regex(checkoutOrdersListResponseResultsItemOrdersItemTotalRegExp).describe('Total amount including shipping'),
   "created_at": zod.string().datetime({}).describe('Timestamp when the record was created')
 }).describe('Serializer for order list view.'))
+}))
 })
 
 /**
@@ -2647,31 +2910,236 @@ export const checkoutOrdersRetrieveResponse = zod.object({
 }).describe('Serializer for order detail view.')
 
 /**
- * Retrieve a list of orders for the current user
- * @summary Get current user's orders
+ * Download CSV of orders for the given period (24h, 7d, 30d, lifetime)
+ * @summary Export orders CSV
  */
-export const checkoutOrdersMeRetrieveResponseOrdersItemOrderNumberMax = 50;
-export const checkoutOrdersMeRetrieveResponseOrdersItemSubtotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
-export const checkoutOrdersMeRetrieveResponseOrdersItemShippingCostRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
-export const checkoutOrdersMeRetrieveResponseOrdersItemCouponDiscountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
-export const checkoutOrdersMeRetrieveResponseOrdersItemTotalRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutOrdersExportCsvRetrieveQueryParams = zod.object({
+  "period": zod.coerce.string().optional().describe('24h | 7d | 30d | lifetime')
+})
+
+export const checkoutOrdersExportCsvRetrieveResponse = zod.instanceof(File)
+
+export const checkoutPaymentsListQueryParams = zod.object({
+  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
+  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.')
+})
+
+export const checkoutPaymentsListResponseResultsItemAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutPaymentsListResponseResultsItemStripePaymentIntentIdMax = 255;
 
 
-export const checkoutOrdersMeRetrieveResponse = zod.object({
-  "orders": zod.array(zod.object({
+export const checkoutPaymentsListResponse = zod.object({
+  "count": zod.number(),
+  "next": zod.string().url().nullish(),
+  "previous": zod.string().url().nullish(),
+  "results": zod.array(zod.object({
   "id": zod.number(),
-  "order_number": zod.string().max(checkoutOrdersMeRetrieveResponseOrdersItemOrderNumberMax).describe('Unique order number'),
-  "status": zod.enum(['pending', 'confirmed', 'shipped', 'delivered']).describe('* `pending` - Pending\n* `confirmed` - Confirmed\n* `shipped` - Shipped\n* `delivered` - Delivered').optional().describe('Current status of the order\n\n* `pending` - Pending\n* `confirmed` - Confirmed\n* `shipped` - Shipped\n* `delivered` - Delivered'),
-  "subtotal": zod.string().regex(checkoutOrdersMeRetrieveResponseOrdersItemSubtotalRegExp).describe('Subtotal of all items'),
-  "shipping_cost": zod.string().regex(checkoutOrdersMeRetrieveResponseOrdersItemShippingCostRegExp).optional().describe('Shipping cost'),
-  "coupon_discount": zod.string().regex(checkoutOrdersMeRetrieveResponseOrdersItemCouponDiscountRegExp).optional().describe('Discount amount from applied coupon'),
-  "total": zod.string().regex(checkoutOrdersMeRetrieveResponseOrdersItemTotalRegExp).describe('Total amount including shipping'),
-  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created')
-}).describe('Serializer for order list view.'))
+  "amount": zod.string().regex(checkoutPaymentsListResponseResultsItemAmountRegExp),
+  "status": zod.enum(['pending', 'completed', 'failed', 'canceled']).describe('* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled').optional().describe('Current status of the payment\n\n* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled'),
+  "stripe_payment_intent_id": zod.string().max(checkoutPaymentsListResponseResultsItemStripePaymentIntentIdMax).nullish(),
+  "description": zod.string().optional(),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+}).describe('Serializer for Payment model.'))
+})
+
+export const checkoutPaymentsCreateBodyAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutPaymentsCreateBodyStripePaymentIntentIdMax = 255;
+
+
+export const checkoutPaymentsCreateBody = zod.object({
+  "amount": zod.string().regex(checkoutPaymentsCreateBodyAmountRegExp),
+  "status": zod.enum(['pending', 'completed', 'failed', 'canceled']).describe('* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled').optional().describe('Current status of the payment\n\n* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled'),
+  "stripe_payment_intent_id": zod.string().max(checkoutPaymentsCreateBodyStripePaymentIntentIdMax).nullish(),
+  "description": zod.string().optional()
+}).describe('Serializer for Payment model.')
+
+export const checkoutPaymentsRetrieveParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this payment.')
+})
+
+export const checkoutPaymentsRetrieveResponseAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutPaymentsRetrieveResponseStripePaymentIntentIdMax = 255;
+
+
+export const checkoutPaymentsRetrieveResponse = zod.object({
+  "id": zod.number(),
+  "amount": zod.string().regex(checkoutPaymentsRetrieveResponseAmountRegExp),
+  "status": zod.enum(['pending', 'completed', 'failed', 'canceled']).describe('* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled').optional().describe('Current status of the payment\n\n* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled'),
+  "stripe_payment_intent_id": zod.string().max(checkoutPaymentsRetrieveResponseStripePaymentIntentIdMax).nullish(),
+  "description": zod.string().optional(),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+}).describe('Serializer for Payment model.')
+
+export const checkoutPaymentsUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this payment.')
+})
+
+export const checkoutPaymentsUpdateBodyAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutPaymentsUpdateBodyStripePaymentIntentIdMax = 255;
+
+
+export const checkoutPaymentsUpdateBody = zod.object({
+  "amount": zod.string().regex(checkoutPaymentsUpdateBodyAmountRegExp),
+  "status": zod.enum(['pending', 'completed', 'failed', 'canceled']).describe('* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled').optional().describe('Current status of the payment\n\n* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled'),
+  "stripe_payment_intent_id": zod.string().max(checkoutPaymentsUpdateBodyStripePaymentIntentIdMax).nullish(),
+  "description": zod.string().optional()
+}).describe('Serializer for Payment model.')
+
+export const checkoutPaymentsUpdateResponseAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutPaymentsUpdateResponseStripePaymentIntentIdMax = 255;
+
+
+export const checkoutPaymentsUpdateResponse = zod.object({
+  "id": zod.number(),
+  "amount": zod.string().regex(checkoutPaymentsUpdateResponseAmountRegExp),
+  "status": zod.enum(['pending', 'completed', 'failed', 'canceled']).describe('* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled').optional().describe('Current status of the payment\n\n* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled'),
+  "stripe_payment_intent_id": zod.string().max(checkoutPaymentsUpdateResponseStripePaymentIntentIdMax).nullish(),
+  "description": zod.string().optional(),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+}).describe('Serializer for Payment model.')
+
+export const checkoutPaymentsPartialUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this payment.')
+})
+
+export const checkoutPaymentsPartialUpdateBodyAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutPaymentsPartialUpdateBodyStripePaymentIntentIdMax = 255;
+
+
+export const checkoutPaymentsPartialUpdateBody = zod.object({
+  "amount": zod.string().regex(checkoutPaymentsPartialUpdateBodyAmountRegExp).optional(),
+  "status": zod.enum(['pending', 'completed', 'failed', 'canceled']).describe('* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled').optional().describe('Current status of the payment\n\n* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled'),
+  "stripe_payment_intent_id": zod.string().max(checkoutPaymentsPartialUpdateBodyStripePaymentIntentIdMax).nullish(),
+  "description": zod.string().optional()
+}).describe('Serializer for Payment model.')
+
+export const checkoutPaymentsPartialUpdateResponseAmountRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+export const checkoutPaymentsPartialUpdateResponseStripePaymentIntentIdMax = 255;
+
+
+export const checkoutPaymentsPartialUpdateResponse = zod.object({
+  "id": zod.number(),
+  "amount": zod.string().regex(checkoutPaymentsPartialUpdateResponseAmountRegExp),
+  "status": zod.enum(['pending', 'completed', 'failed', 'canceled']).describe('* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled').optional().describe('Current status of the payment\n\n* `pending` - Pending\n* `completed` - Completed\n* `failed` - Failed\n* `canceled` - Canceled'),
+  "stripe_payment_intent_id": zod.string().max(checkoutPaymentsPartialUpdateResponseStripePaymentIntentIdMax).nullish(),
+  "description": zod.string().optional(),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+}).describe('Serializer for Payment model.')
+
+export const checkoutPaymentsDestroyParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this payment.')
+})
+
+export const checkoutShipmentsListQueryParams = zod.object({
+  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
+  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.')
+})
+
+export const checkoutShipmentsListResponse = zod.object({
+  "count": zod.number(),
+  "next": zod.string().url().nullish(),
+  "previous": zod.string().url().nullish(),
+  "results": zod.array(zod.object({
+  "id": zod.number(),
+  "order": zod.number().describe('Order this shipment is for'),
+  "shipping_method": zod.number().describe('Shipping method used'),
+  "courier": zod.number().describe('Courier company handling the shipment'),
+  "shipped_at": zod.string().datetime({}).describe('When the package was shipped'),
+  "delivered_at": zod.string().datetime({}).nullish().describe('When the package was delivered'),
+  "shipping_address": zod.string().describe('Shipping address at time of shipment'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+}))
+})
+
+export const checkoutShipmentsCreateBody = zod.object({
+  "order": zod.number().describe('Order this shipment is for'),
+  "shipping_method": zod.number().describe('Shipping method used'),
+  "courier": zod.number().describe('Courier company handling the shipment'),
+  "shipped_at": zod.string().datetime({}).describe('When the package was shipped'),
+  "delivered_at": zod.string().datetime({}).nullish().describe('When the package was delivered'),
+  "shipping_address": zod.string().describe('Shipping address at time of shipment')
+})
+
+export const checkoutShipmentsRetrieveParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Shipment.')
+})
+
+export const checkoutShipmentsRetrieveResponse = zod.object({
+  "id": zod.number(),
+  "order": zod.number().describe('Order this shipment is for'),
+  "shipping_method": zod.number().describe('Shipping method used'),
+  "courier": zod.number().describe('Courier company handling the shipment'),
+  "shipped_at": zod.string().datetime({}).describe('When the package was shipped'),
+  "delivered_at": zod.string().datetime({}).nullish().describe('When the package was delivered'),
+  "shipping_address": zod.string().describe('Shipping address at time of shipment'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const checkoutShipmentsUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Shipment.')
+})
+
+export const checkoutShipmentsUpdateBody = zod.object({
+  "order": zod.number().describe('Order this shipment is for'),
+  "shipping_method": zod.number().describe('Shipping method used'),
+  "courier": zod.number().describe('Courier company handling the shipment'),
+  "shipped_at": zod.string().datetime({}).describe('When the package was shipped'),
+  "delivered_at": zod.string().datetime({}).nullish().describe('When the package was delivered'),
+  "shipping_address": zod.string().describe('Shipping address at time of shipment')
+})
+
+export const checkoutShipmentsUpdateResponse = zod.object({
+  "id": zod.number(),
+  "order": zod.number().describe('Order this shipment is for'),
+  "shipping_method": zod.number().describe('Shipping method used'),
+  "courier": zod.number().describe('Courier company handling the shipment'),
+  "shipped_at": zod.string().datetime({}).describe('When the package was shipped'),
+  "delivered_at": zod.string().datetime({}).nullish().describe('When the package was delivered'),
+  "shipping_address": zod.string().describe('Shipping address at time of shipment'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const checkoutShipmentsPartialUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Shipment.')
+})
+
+export const checkoutShipmentsPartialUpdateBody = zod.object({
+  "order": zod.number().optional().describe('Order this shipment is for'),
+  "shipping_method": zod.number().optional().describe('Shipping method used'),
+  "courier": zod.number().optional().describe('Courier company handling the shipment'),
+  "shipped_at": zod.string().datetime({}).optional().describe('When the package was shipped'),
+  "delivered_at": zod.string().datetime({}).nullish().describe('When the package was delivered'),
+  "shipping_address": zod.string().optional().describe('Shipping address at time of shipment')
+})
+
+export const checkoutShipmentsPartialUpdateResponse = zod.object({
+  "id": zod.number(),
+  "order": zod.number().describe('Order this shipment is for'),
+  "shipping_method": zod.number().describe('Shipping method used'),
+  "courier": zod.number().describe('Courier company handling the shipment'),
+  "shipped_at": zod.string().datetime({}).describe('When the package was shipped'),
+  "delivered_at": zod.string().datetime({}).nullish().describe('When the package was delivered'),
+  "shipping_address": zod.string().describe('Shipping address at time of shipment'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const checkoutShipmentsDestroyParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Shipment.')
 })
 
 /**
- * ViewSet for ShippingMethod model - read-only for users.
+ * ViewSet for ShippingMethod model.
+
+- Authenticated users: can list and retrieve
+- Admin users: full CRUD (create, update, delete)
  */
 export const checkoutShippingMethodsListResponseNameMax = 100;
 export const checkoutShippingMethodsListResponsePriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
@@ -2685,7 +3153,25 @@ export const checkoutShippingMethodsListResponseItem = zod.object({
 export const checkoutShippingMethodsListResponse = zod.array(checkoutShippingMethodsListResponseItem)
 
 /**
- * ViewSet for ShippingMethod model - read-only for users.
+ * ViewSet for ShippingMethod model.
+
+- Authenticated users: can list and retrieve
+- Admin users: full CRUD (create, update, delete)
+ */
+export const checkoutShippingMethodsCreateBodyNameMax = 100;
+export const checkoutShippingMethodsCreateBodyPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const checkoutShippingMethodsCreateBody = zod.object({
+  "name": zod.string().max(checkoutShippingMethodsCreateBodyNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
+  "price": zod.string().regex(checkoutShippingMethodsCreateBodyPriceRegExp).describe('Shipping cost')
+}).describe('Serializer for ShippingMethod model.')
+
+/**
+ * ViewSet for ShippingMethod model.
+
+- Authenticated users: can list and retrieve
+- Admin users: full CRUD (create, update, delete)
  */
 export const checkoutShippingMethodsRetrieveParams = zod.object({
   "id": zod.coerce.number().describe('A unique integer value identifying this Shipping Method.')
@@ -2700,4 +3186,72 @@ export const checkoutShippingMethodsRetrieveResponse = zod.object({
   "name": zod.string().max(checkoutShippingMethodsRetrieveResponseNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
   "price": zod.string().regex(checkoutShippingMethodsRetrieveResponsePriceRegExp).describe('Shipping cost')
 }).describe('Serializer for ShippingMethod model.')
+
+/**
+ * ViewSet for ShippingMethod model.
+
+- Authenticated users: can list and retrieve
+- Admin users: full CRUD (create, update, delete)
+ */
+export const checkoutShippingMethodsUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Shipping Method.')
+})
+
+export const checkoutShippingMethodsUpdateBodyNameMax = 100;
+export const checkoutShippingMethodsUpdateBodyPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const checkoutShippingMethodsUpdateBody = zod.object({
+  "name": zod.string().max(checkoutShippingMethodsUpdateBodyNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
+  "price": zod.string().regex(checkoutShippingMethodsUpdateBodyPriceRegExp).describe('Shipping cost')
+}).describe('Serializer for ShippingMethod model.')
+
+export const checkoutShippingMethodsUpdateResponseNameMax = 100;
+export const checkoutShippingMethodsUpdateResponsePriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const checkoutShippingMethodsUpdateResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(checkoutShippingMethodsUpdateResponseNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
+  "price": zod.string().regex(checkoutShippingMethodsUpdateResponsePriceRegExp).describe('Shipping cost')
+}).describe('Serializer for ShippingMethod model.')
+
+/**
+ * ViewSet for ShippingMethod model.
+
+- Authenticated users: can list and retrieve
+- Admin users: full CRUD (create, update, delete)
+ */
+export const checkoutShippingMethodsPartialUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Shipping Method.')
+})
+
+export const checkoutShippingMethodsPartialUpdateBodyNameMax = 100;
+export const checkoutShippingMethodsPartialUpdateBodyPriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const checkoutShippingMethodsPartialUpdateBody = zod.object({
+  "name": zod.string().max(checkoutShippingMethodsPartialUpdateBodyNameMax).optional().describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
+  "price": zod.string().regex(checkoutShippingMethodsPartialUpdateBodyPriceRegExp).optional().describe('Shipping cost')
+}).describe('Serializer for ShippingMethod model.')
+
+export const checkoutShippingMethodsPartialUpdateResponseNameMax = 100;
+export const checkoutShippingMethodsPartialUpdateResponsePriceRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const checkoutShippingMethodsPartialUpdateResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(checkoutShippingMethodsPartialUpdateResponseNameMax).describe('Name of the shipping method (e.g., \'Standard\', \'Express\')'),
+  "price": zod.string().regex(checkoutShippingMethodsPartialUpdateResponsePriceRegExp).describe('Shipping cost')
+}).describe('Serializer for ShippingMethod model.')
+
+/**
+ * ViewSet for ShippingMethod model.
+
+- Authenticated users: can list and retrieve
+- Admin users: full CRUD (create, update, delete)
+ */
+export const checkoutShippingMethodsDestroyParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Shipping Method.')
+})
 

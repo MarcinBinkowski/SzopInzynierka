@@ -1,32 +1,32 @@
 "use client"
 
+import { useCheckoutInvoiceTemplatesVariablesRetrieve } from "@/api/generated/shop/checkout/checkout"
+import { 
+  checkoutInvoiceTemplatesCreateBody, 
+  checkoutInvoiceTemplatesUpdateBody
+} from "@/api/generated/shop/checkout/checkout.zod"
+import type { InvoiceTemplate } from '@/api/generated/shop/schemas/invoiceTemplate'
+import { Spinner } from "@/components/customui/Spinner"
+import { FormLayout } from "@/components/common/FormLayout"
+import { FormField } from "@/components/customui/FormField"
+import { isFieldRequired } from "@/utils/zod"
+
+import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Separator } from "@/components/ui/separator"
-import { useCheckoutInvoiceTemplatesVariablesRetrieve } from "@/api/generated/shop/checkout/checkout"
-import { Spinner } from "@/components/customui/spinner"
 
-// Schema for form validation
-const invoiceTemplateSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
-  content: z.string().min(1, "Content is required"),
-})
-
-type InvoiceTemplateFormData = z.infer<typeof invoiceTemplateSchema>
+type InvoiceTemplateCreateData = z.infer<typeof checkoutInvoiceTemplatesCreateBody>
+type InvoiceTemplateUpdateData = z.infer<typeof checkoutInvoiceTemplatesUpdateBody>
+type InvoiceTemplateFormData = InvoiceTemplateCreateData | InvoiceTemplateUpdateData
 
 interface InvoiceTemplateFormProps {
   title: string
   description: string
-  initialData?: Partial<InvoiceTemplateFormData>
+  initialData?: Partial<InvoiceTemplate>
   onSubmit: (data: InvoiceTemplateFormData) => Promise<void>
   submitButtonText: string
-  isSubmitting: boolean
+  isSubmitting?: boolean
   onCancel: () => void
 }
 
@@ -39,113 +39,99 @@ export function InvoiceTemplateForm({
   isSubmitting,
   onCancel,
 }: InvoiceTemplateFormProps) {
+  const schema = initialData?.id ? checkoutInvoiceTemplatesUpdateBody : checkoutInvoiceTemplatesCreateBody
+  
   const form = useForm<InvoiceTemplateFormData>({
-    resolver: zodResolver(invoiceTemplateSchema),
-    defaultValues: {
-      name: initialData?.name || "",
-      content: initialData?.content || "",
-    },
+    resolver: zodResolver(schema),
+    defaultValues: initialData,
   })
 
-  // Fetch available variables from API
+  const handleSubmit = form.handleSubmit(async (data: InvoiceTemplateFormData) => {
+    await onSubmit(data)
+  })
+  
   const { data: variablesData, isLoading: isLoadingVariables } = useCheckoutInvoiceTemplatesVariablesRetrieve()
 
-  const handleSubmit = async (data: InvoiceTemplateFormData) => {
-    try {
-      await onSubmit(data)
-    } catch (error) {
-      console.error("Form submission error:", error)
-    }
-  }
-
   return (
-    <div className="container mx-auto py-6 max-w-4xl">
-      <Card>
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Template Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter template name (e.g., Standard Invoice)" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <FormLayout
+      title={title}
+      description={description}
+      onCancel={onCancel}
+      isSubmitting={isSubmitting}
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <FormField
+          label="Template Name"
+          id="name"
+          placeholder="Enter template name (e.g., Standard Invoice)"
+          register={form.register('name')}
+          error={form.formState.errors.name}
+          disabled={form.formState.isSubmitting}
+          required={isFieldRequired(schema, 'name')}
+        />
 
-              <FormField
-                control={form.control}
-                name="content"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Template Content (Jinja2)</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Enter Jinja2 template content with HTML..."
-                        className="min-h-[400px] font-mono text-sm"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        <FormField
+          label="Template Content (Jinja2)"
+          id="content"
+          placeholder="Enter Jinja2 template content with HTML..."
+          register={form.register('content')}
+          error={form.formState.errors.content}
+          disabled={form.formState.isSubmitting}
+          multiline
+          rows={20}
+          required={isFieldRequired(schema, 'content')}
+        />
 
-                            <div className="bg-muted p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Available Variables</h4>
-                <p className="text-sm text-muted-foreground mb-3">
-                  You can use these variables in your template:
-                </p>
-                {isLoadingVariables ? (
-                  <div className="flex items-center justify-center py-4">
-                    <Spinner size="sm" />
-                    <span className="ml-2 text-sm text-muted-foreground">Loading variables...</span>
-                  </div>
-                ) : variablesData?.variables ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    {Object.entries(variablesData.variables).map(([modelName, properties]) => (
-                      <div key={modelName}>
-                        <h5 className="font-medium capitalize">{modelName.replace('_', ' ')}</h5>
-                        <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                          {properties.map((property, index) => (
-                            <li key={index} className="font-mono text-xs">
-                              &#123;&#123; {modelName}.{property} &#125;&#125;
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+        <div className="bg-muted p-4 rounded-lg">
+          <h4 className="font-medium mb-2">Available Variables</h4>
+          <p className="text-sm text-muted-foreground mb-3">
+            You can use these variables in your template:
+          </p>
+          {isLoadingVariables ? (
+            <div className="flex items-center justify-center py-4">
+              <Spinner size="sm" />
+              <span className="ml-2 text-sm text-muted-foreground">Loading variables...</span>
+            </div>
+          ) : variablesData?.variables ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              {Object.entries(variablesData.variables).map(([modelName, properties]) => (
+                <div key={modelName}>
+                  <h5 className="font-medium capitalize">{modelName.replace('_', ' ')}</h5>
+                  <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                    {properties.map((property, index) => (
+                      <li key={index} className="font-mono text-xs">
+                        &#123;&#123; {modelName}.{property} &#125;&#125;
+                      </li>
                     ))}
-                  </div>
-                ) : (
-                  <div className="text-sm text-muted-foreground">
-                    <p>Unable to load available variables. Please check your connection.</p>
-                  </div>
-                )}
-              </div>
+                  </ul>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-sm text-muted-foreground">
+              <p>Unable to load available variables. Please check your connection.</p>
+            </div>
+          )}
+        </div>
 
-              <Separator />
-
-              <div className="flex justify-end space-x-2">
-                <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
-                  Cancel
-                </Button>
-                <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Saving..." : submitButtonText}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </div>
+        {/* Form Actions */}
+        <div className="flex justify-end gap-2 pt-4">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Spinner className="mr-2 h-4 w-4" />
+                {submitButtonText}
+              </>
+            ) : (
+              submitButtonText
+            )}
+          </Button>
+        </div>
+      </form>
+    </FormLayout>
   )
 } 

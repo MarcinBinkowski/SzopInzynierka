@@ -38,7 +38,7 @@ function NewProfilePage() {
   return (
     <ProfileForm
       title="Create New Profile"
-      description="Add a new user profile (use only if backend failed to autocreate profile for user)"
+      description="Add a new user profile to the system"
       onSubmit={handleSubmit}
       submitButtonText="Create Profile"
       isSubmitting={createMutation.isPending}

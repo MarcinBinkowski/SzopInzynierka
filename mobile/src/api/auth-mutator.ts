@@ -22,13 +22,13 @@ authClient.interceptors.request.use(
   }
 );
 
-// authClient.interceptors.response.use(
-//   async (response) => {
-//     console.log("data", data);
+authClient.interceptors.response.use(
+  async (response) => {
+    console.log("data", response.data);
 
-//     return response;
-//   }
-// );
+    return response;
+  }
+);
 authClient.interceptors.response.use(
   async (response) => response,
   async (error: AxiosError) => {

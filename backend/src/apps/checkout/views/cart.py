@@ -107,15 +107,10 @@ class CartViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["get"])
     def current(self, request):
         """Get current user's active cart."""
-        try:
-            cart = Cart.objects.filter(user=request.user, status='active').first()
-            if not cart:
-                return Response({"error": "No active cart found"}, status=status.HTTP_404_NOT_FOUND)
-            
-            serializer = CartSerializer(cart, context={"request": request})
-            return Response(serializer.data)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        cart = Cart.get_or_create_active_cart(request.user)
+        serializer = CartSerializer(cart, context={"request": request})
+        response = Response(serializer.data)
+        return response
 
 
 class CartItemViewSet(viewsets.ModelViewSet):

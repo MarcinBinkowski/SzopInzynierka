@@ -1,22 +1,20 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Spinner } from "@/components/customui/spinner"
 import { catalogManufacturersCreateBody, catalogManufacturersUpdateBody } from "@/api/generated/shop/catalog/catalog.zod"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect } from "react"
 import type { Manufacturer } from '@/api/generated/shop/schemas'
 import { z } from "zod"
-import { toast } from "sonner"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { FormLayout } from "@/components/common/FormLayout"
+import { FormField } from "@/components/customui/FormField"
+import { SwitchField } from "@/components/customui/SwitchField"
+import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/customui/Spinner"
+import { isFieldRequired } from "@/utils/zod"
 
-// Use the generated Zod schema types
-// ManufacturerFormData is for create, but update is compatible
-// (id is readonly and not in the form)
-type ManufacturerFormData = z.infer<typeof catalogManufacturersCreateBody>
+type ManufacturerCreateData = z.infer<typeof catalogManufacturersCreateBody>
+type ManufacturerUpdateData = z.infer<typeof catalogManufacturersUpdateBody>
+type ManufacturerFormData = ManufacturerCreateData | ManufacturerUpdateData
 
 interface ManufacturerFormProps {
   title: string
@@ -34,138 +32,89 @@ export function ManufacturerForm({
   initialData,
   onSubmit,
   submitButtonText,
-  isSubmitting: externalIsSubmitting,
+  isSubmitting,
   onCancel
 }: ManufacturerFormProps) {
-  const isEditMode = !!initialData?.id
-  const schema = isEditMode ? catalogManufacturersUpdateBody : catalogManufacturersCreateBody
+  const schema = initialData?.id ? catalogManufacturersUpdateBody : catalogManufacturersCreateBody
   
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting: hookIsSubmitting, isValid },
-    reset
-  } = useForm<ManufacturerFormData>({
+  const form = useForm<ManufacturerFormData>({
     resolver: zodResolver(schema),
     defaultValues: initialData,
-    mode: 'onChange'
   })
 
-  const isSubmitting = externalIsSubmitting ?? hookIsSubmitting
-
-  // Reset form when initialData changes (for edit mode)
-  useEffect(() => {
-    if (initialData) {
-      reset(initialData)
-    }
-  }, [initialData, reset])
-
-  const onSubmitForm = async (data: ManufacturerFormData) => {
-    try {
-      await onSubmit(data)
-    } catch (error) {
-        if (error instanceof Error) {
-            toast.error(`Form submission failed: ${error.message}`)
-          } else {
-            toast.error("An unexpected error occurred")
-          }    
-        }
-  }
+  const handleSubmit = form.handleSubmit(async (data: ManufacturerFormData) => {
+    await onSubmit(data)
+  })
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              {...register('name')}
-              placeholder="Enter manufacturer name"
-              disabled={isSubmitting}
-              maxLength={100}
-            />
-            {errors.name && (
-              <p className="text-sm text-red-500">{errors.name.message}</p>
-            )}
-          </div>
+    <FormLayout
+      title={title}
+      description={description}
+      onCancel={onCancel}
+      isSubmitting={isSubmitting}
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <FormField
+          label="Name"
+          id="name"
+          placeholder="Enter manufacturer name"
+          register={form.register('name')}
+          error={form.formState.errors.name}
+          disabled={form.formState.isSubmitting}
+          required={isFieldRequired(schema, 'name')}
+        />
 
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Input
-              id="description"
-              {...register('description')}
-              placeholder="Enter manufacturer description (optional)"
-              disabled={isSubmitting}
-            />
-            {errors.description && (
-              <p className="text-sm text-red-500">{errors.description.message}</p>
-            )}
-          </div>
+        <FormField
+          label="Description"
+          id="description"
+          placeholder="Enter manufacturer description (optional)"
+          register={form.register('description')}
+          error={form.formState.errors.description}
+          disabled={form.formState.isSubmitting}
+          required={isFieldRequired(schema, 'description')}
+        />
 
-          <div className="space-y-2">
-            <Label htmlFor="website">Website</Label>
-            <Input
-              id="website"
-              type="url"
-              {...register('website')}
-              placeholder="https://example.com"
-              disabled={isSubmitting}
-              maxLength={200}
-            />
-            {errors.website && (
-              <p className="text-sm text-red-500">{errors.website.message}</p>
-            )}
-            <p className="text-xs text-muted-foreground">
-              Manufacturer website URL (optional)
-            </p>
-          </div>
+        <FormField
+          label="Website (optional)"
+          id="website"
+          type="url"
+          placeholder="https://example.com"
+          register={form.register('website')}
+          error={form.formState.errors.website}
+          disabled={form.formState.isSubmitting}
+          required={isFieldRequired(schema, 'website')}
+        />
+        <p className="text-xs text-muted-foreground">
+          Manufacturer website URL (optional)
+        </p>
 
-          <div className="space-y-2">
-            <Label htmlFor="is_active">Active</Label>
-            <input
-              id="is_active"
-              type="checkbox"
-              {...register('is_active')}
-              disabled={isSubmitting}
-              className="w-4 h-4 align-middle mr-2"
-            />
-            <span className="text-sm text-muted-foreground">Is this manufacturer visible?</span>
-            {errors.is_active && (
-              <p className="text-sm text-red-500">{errors.is_active.message}</p>
-            )}
-          </div>
+        <SwitchField
+          id="is_active"
+          label="Active"
+          description="Is this manufacturer visible?"
+          checked={form.watch('is_active') || false}
+          onCheckedChange={value => form.setValue('is_active', value)}
+          disabled={form.formState.isSubmitting}
+        />
 
-          <div className="flex gap-2 pt-4">
-            <Button
-              type="submit"
-              disabled={isSubmitting || !isValid}
-              className="flex-1"
-            >
-              {isSubmitting ? (
-                <>
-                  <Spinner size="sm" className="mr-2" />
-                  Saving...
-                </>
-              ) : (
-                submitButtonText
-              )}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onCancel}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+        {/* Form Actions */}
+        <div className="flex justify-end gap-2 pt-4">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Spinner className="mr-2 h-4 w-4" />
+                {submitButtonText}
+              </>
+            ) : (
+              submitButtonText
+            )}
+          </Button>
+        </div>
+      </form>
+    </FormLayout>
   )
 } 

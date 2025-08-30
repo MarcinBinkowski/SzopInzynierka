@@ -2,15 +2,15 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { FormField } from "@/components/customui/form-field"
-import { Spinner } from "@/components/customui/spinner"
+import { FormField } from "@/components/customui/FormField"
+import { Spinner } from "@/components/customui/Spinner"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
 import type { ProductDetail } from '@/api/generated/shop/schemas'
 
 import { toast } from "sonner"
-import { Switch } from "@/components/ui/switch"
+import { SwitchField } from "@/components/customui/SwitchField"
 import { 
   useCatalogCategoriesList,
   useCatalogTagsList,
@@ -20,13 +20,18 @@ import {
   catalogProductsCreateBody, 
   catalogProductsPartialUpdateBody 
 } from "@/api/generated/shop/catalog/catalog.zod"
+import { z } from "zod"
 import { SingleValue, MultiValue } from "react-select"
 import { catalogCategoriesList, catalogTagsList, catalogManufacturersList } from "@/api/generated/shop/catalog/catalog";
 import { AsyncPaginateSelect, OptionType } from "@/components/customui/AsyncPaginateSelect";
 
+type ProductCreateData = z.infer<typeof catalogProductsCreateBody>
+type ProductUpdateData = z.infer<typeof catalogProductsPartialUpdateBody>
+type ProductFormData = ProductCreateData | ProductUpdateData
+
 interface ProductFormProps {
   initialData?: Partial<ProductDetail>
-  onSubmit: (data: any) => Promise<void>
+  onSubmit: (data: ProductFormData) => Promise<void>
   submitButtonText: string
   isSubmitting?: boolean
   onCancel: () => void
@@ -60,7 +65,7 @@ export function ProductForm({
     reset,
     setValue,
     watch
-  } = useForm({
+  } = useForm<ProductFormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       status: 'draft',
@@ -78,7 +83,7 @@ export function ProductForm({
 
   // Initialize form with initialData
   useEffect(() => {
-    if (initialData && categoriesData?.results) {
+    if (initialData && categoriesData) {
       const categoryId = initialData.category?.id
       const manufacturerId = initialData.manufacturer?.id
       const tagIds = initialData.tags?.map(tag => tag.id) || []
@@ -101,9 +106,9 @@ export function ProductForm({
         sale_end: isoToLocalDatetime(initialData.sale_end)
       })
     }
-  }, [initialData, reset, categoriesData?.results])
+  }, [initialData, reset, categoriesData])
 
-  const handleFormSubmit = async (data: any) => {
+  const handleFormSubmit = async (data: ProductFormData) => {
     // Convert local datetime to ISO string for Zod
     if (data.sale_start) data.sale_start = localDatetimeToIso(data.sale_start);
     if (data.sale_end) data.sale_end = localDatetimeToIso(data.sale_end);
@@ -118,11 +123,11 @@ export function ProductForm({
     }
   }
 
-  const { data: defaultCategories } = useCatalogCategoriesList({ search: '', page: 1 });
-  const defaultCategoryOptions = defaultCategories?.results?.map(cat => ({ value: cat.id, label: cat.name })) || [];
-  const { data: defaultManufacturers } = useCatalogManufacturersList({ search: '', page: 1 });
-  const defaultManufacturerOptions =  defaultManufacturers?.results?.map(man => ({ value: man.id, label: man.name })) || [];
-  const { data: defaultTags } = useCatalogTagsList({ search: '', page: 1 });
+  const { data: defaultCategories } = useCatalogCategoriesList({ search: '' });
+  const defaultCategoryOptions = defaultCategories?.map(cat => ({ value: cat.id, label: cat.name })) || [];
+  const { data: defaultManufacturers } = useCatalogManufacturersList({ search: '' });
+  const defaultManufacturerOptions = defaultManufacturers?.map(man => ({ value: man.id, label: man.name })) || [];
+  const { data: defaultTags } = useCatalogTagsList({ search: '' });
   const defaultTagOptions = defaultTags?.results?.map(tag => ({ value: tag.id, label: tag.name })) || [];
 
   return (
@@ -166,7 +171,7 @@ export function ProductForm({
                     value={(() => {
                       const id = watch("category_id")
                       if (!id) return null
-                      const cat = categoriesData?.results?.find((c: any) => c.id === id)
+                      const cat = categoriesData?.find(c => c.id === id)
                       return cat ? { value: cat.id, label: cat.name } : null
                     })()}
                     onChange={(option: SingleValue<OptionType>) => setValue("category_id", option ? option.value : undefined)}
@@ -188,7 +193,7 @@ export function ProductForm({
                     value={(() => {
                       const id = watch("manufacturer_id")
                       if (!id) return null
-                      const man = manufacturersData?.results?.find((m: any) => m.id === id)
+                      const man = manufacturersData?.find(m => m.id === id)
                       return man ? { value: man.id, label: man.name } : null
                     })()}
                     onChange={(option: SingleValue<OptionType>) => setValue("manufacturer_id", option ? option.value : undefined)}
@@ -213,7 +218,7 @@ export function ProductForm({
                     const ids = watch("tag_ids")
                     if (!Array.isArray(ids)) return []
                     return ids.map((id: number) => {
-                      const tag = tagsData?.results?.find((t: any) => t.id === id)
+                      const tag = tagsData?.results?.find(t => t.id === id)
                       return tag ? { value: tag.id, label: tag.name } : { value: id, label: `Tag #${id}` }
                     })
                   })()}
@@ -325,18 +330,14 @@ export function ProductForm({
               <CardTitle>Product Status</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-4">
-                <Switch
-                  checked={watch('is_visible')}
-                  onCheckedChange={value => setValue('is_visible', value)}
-                  disabled={isSubmitting}
-                  id="is_visible"
-                />
-                <span className="font-medium">Active Product</span>
-              </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                Inactive products won't be visible to customers
-              </p>
+              <SwitchField
+                id="is_visible"
+                label="Active Product"
+                description="Inactive products won't be visible to customers"
+                checked={watch('is_visible') || false}
+                onCheckedChange={value => setValue('is_visible', value)}
+                disabled={isSubmitting}
+              />
             </CardContent>
           </Card>
 

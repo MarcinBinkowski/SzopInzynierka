@@ -181,6 +181,128 @@ export const catalogCategoriesProductsRetrieveResponse = zod.object({
   "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Serializer for Category model.')
 
+export const catalogDeliveriesListQueryParams = zod.object({
+  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
+  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.')
+})
+
+export const catalogDeliveriesListResponseResultsItemQuantityMax = 2147483647;
+export const catalogDeliveriesListResponseResultsItemCostPerUnitRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const catalogDeliveriesListResponse = zod.object({
+  "count": zod.number(),
+  "next": zod.string().url().nullish(),
+  "previous": zod.string().url().nullish(),
+  "results": zod.array(zod.object({
+  "id": zod.number(),
+  "supplier": zod.number().describe('Supplier who delivered the products'),
+  "product": zod.number().describe('Product that was delivered'),
+  "quantity": zod.number().min(1).max(catalogDeliveriesListResponseResultsItemQuantityMax).describe('Quantity of products delivered'),
+  "delivery_date": zod.string().datetime({}).describe('When the delivery was received'),
+  "cost_per_unit": zod.string().regex(catalogDeliveriesListResponseResultsItemCostPerUnitRegExp).describe('Cost per unit for this delivery'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+}))
+})
+
+export const catalogDeliveriesCreateBodyQuantityMax = 2147483647;
+export const catalogDeliveriesCreateBodyCostPerUnitRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const catalogDeliveriesCreateBody = zod.object({
+  "supplier": zod.number().describe('Supplier who delivered the products'),
+  "product": zod.number().describe('Product that was delivered'),
+  "quantity": zod.number().min(1).max(catalogDeliveriesCreateBodyQuantityMax).describe('Quantity of products delivered'),
+  "delivery_date": zod.string().datetime({}).describe('When the delivery was received'),
+  "cost_per_unit": zod.string().regex(catalogDeliveriesCreateBodyCostPerUnitRegExp).describe('Cost per unit for this delivery')
+})
+
+export const catalogDeliveriesRetrieveParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Product Delivery.')
+})
+
+export const catalogDeliveriesRetrieveResponseQuantityMax = 2147483647;
+export const catalogDeliveriesRetrieveResponseCostPerUnitRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const catalogDeliveriesRetrieveResponse = zod.object({
+  "id": zod.number(),
+  "supplier": zod.number().describe('Supplier who delivered the products'),
+  "product": zod.number().describe('Product that was delivered'),
+  "quantity": zod.number().min(1).max(catalogDeliveriesRetrieveResponseQuantityMax).describe('Quantity of products delivered'),
+  "delivery_date": zod.string().datetime({}).describe('When the delivery was received'),
+  "cost_per_unit": zod.string().regex(catalogDeliveriesRetrieveResponseCostPerUnitRegExp).describe('Cost per unit for this delivery'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const catalogDeliveriesUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Product Delivery.')
+})
+
+export const catalogDeliveriesUpdateBodyQuantityMax = 2147483647;
+export const catalogDeliveriesUpdateBodyCostPerUnitRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const catalogDeliveriesUpdateBody = zod.object({
+  "supplier": zod.number().describe('Supplier who delivered the products'),
+  "product": zod.number().describe('Product that was delivered'),
+  "quantity": zod.number().min(1).max(catalogDeliveriesUpdateBodyQuantityMax).describe('Quantity of products delivered'),
+  "delivery_date": zod.string().datetime({}).describe('When the delivery was received'),
+  "cost_per_unit": zod.string().regex(catalogDeliveriesUpdateBodyCostPerUnitRegExp).describe('Cost per unit for this delivery')
+})
+
+export const catalogDeliveriesUpdateResponseQuantityMax = 2147483647;
+export const catalogDeliveriesUpdateResponseCostPerUnitRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const catalogDeliveriesUpdateResponse = zod.object({
+  "id": zod.number(),
+  "supplier": zod.number().describe('Supplier who delivered the products'),
+  "product": zod.number().describe('Product that was delivered'),
+  "quantity": zod.number().min(1).max(catalogDeliveriesUpdateResponseQuantityMax).describe('Quantity of products delivered'),
+  "delivery_date": zod.string().datetime({}).describe('When the delivery was received'),
+  "cost_per_unit": zod.string().regex(catalogDeliveriesUpdateResponseCostPerUnitRegExp).describe('Cost per unit for this delivery'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const catalogDeliveriesPartialUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Product Delivery.')
+})
+
+export const catalogDeliveriesPartialUpdateBodyQuantityMax = 2147483647;
+export const catalogDeliveriesPartialUpdateBodyCostPerUnitRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const catalogDeliveriesPartialUpdateBody = zod.object({
+  "supplier": zod.number().optional().describe('Supplier who delivered the products'),
+  "product": zod.number().optional().describe('Product that was delivered'),
+  "quantity": zod.number().min(1).max(catalogDeliveriesPartialUpdateBodyQuantityMax).optional().describe('Quantity of products delivered'),
+  "delivery_date": zod.string().datetime({}).optional().describe('When the delivery was received'),
+  "cost_per_unit": zod.string().regex(catalogDeliveriesPartialUpdateBodyCostPerUnitRegExp).optional().describe('Cost per unit for this delivery')
+})
+
+export const catalogDeliveriesPartialUpdateResponseQuantityMax = 2147483647;
+export const catalogDeliveriesPartialUpdateResponseCostPerUnitRegExp = new RegExp('^-?\\d{0,8}(?:\\.\\d{0,2})?$');
+
+
+export const catalogDeliveriesPartialUpdateResponse = zod.object({
+  "id": zod.number(),
+  "supplier": zod.number().describe('Supplier who delivered the products'),
+  "product": zod.number().describe('Product that was delivered'),
+  "quantity": zod.number().min(1).max(catalogDeliveriesPartialUpdateResponseQuantityMax).describe('Quantity of products delivered'),
+  "delivery_date": zod.string().datetime({}).describe('When the delivery was received'),
+  "cost_per_unit": zod.string().regex(catalogDeliveriesPartialUpdateResponseCostPerUnitRegExp).describe('Cost per unit for this delivery'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const catalogDeliveriesDestroyParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Product Delivery.')
+})
+
 /**
  * ViewSet for ProductImage model with CRUD operations.
  */
@@ -1241,6 +1363,121 @@ export const catalogProductsOnSaleRetrieveResponse = zod.object({
   "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
   "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
 }).describe('Detailed serializer for product detail views.')
+
+export const catalogSuppliersListQueryParams = zod.object({
+  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
+  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.')
+})
+
+export const catalogSuppliersListResponseResultsItemNameMax = 100;
+export const catalogSuppliersListResponseResultsItemContactEmailMax = 254;
+export const catalogSuppliersListResponseResultsItemPhoneMax = 20;
+
+
+export const catalogSuppliersListResponse = zod.object({
+  "count": zod.number(),
+  "next": zod.string().url().nullish(),
+  "previous": zod.string().url().nullish(),
+  "results": zod.array(zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(catalogSuppliersListResponseResultsItemNameMax).describe('Supplier company name'),
+  "contact_email": zod.string().email().max(catalogSuppliersListResponseResultsItemContactEmailMax).optional().describe('Primary contact email'),
+  "phone": zod.string().max(catalogSuppliersListResponseResultsItemPhoneMax).optional().describe('Contact phone number'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+}))
+})
+
+export const catalogSuppliersCreateBodyNameMax = 100;
+export const catalogSuppliersCreateBodyContactEmailMax = 254;
+export const catalogSuppliersCreateBodyPhoneMax = 20;
+
+
+export const catalogSuppliersCreateBody = zod.object({
+  "name": zod.string().max(catalogSuppliersCreateBodyNameMax).describe('Supplier company name'),
+  "contact_email": zod.string().email().max(catalogSuppliersCreateBodyContactEmailMax).optional().describe('Primary contact email'),
+  "phone": zod.string().max(catalogSuppliersCreateBodyPhoneMax).optional().describe('Contact phone number')
+})
+
+export const catalogSuppliersRetrieveParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Supplier.')
+})
+
+export const catalogSuppliersRetrieveResponseNameMax = 100;
+export const catalogSuppliersRetrieveResponseContactEmailMax = 254;
+export const catalogSuppliersRetrieveResponsePhoneMax = 20;
+
+
+export const catalogSuppliersRetrieveResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(catalogSuppliersRetrieveResponseNameMax).describe('Supplier company name'),
+  "contact_email": zod.string().email().max(catalogSuppliersRetrieveResponseContactEmailMax).optional().describe('Primary contact email'),
+  "phone": zod.string().max(catalogSuppliersRetrieveResponsePhoneMax).optional().describe('Contact phone number'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const catalogSuppliersUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Supplier.')
+})
+
+export const catalogSuppliersUpdateBodyNameMax = 100;
+export const catalogSuppliersUpdateBodyContactEmailMax = 254;
+export const catalogSuppliersUpdateBodyPhoneMax = 20;
+
+
+export const catalogSuppliersUpdateBody = zod.object({
+  "name": zod.string().max(catalogSuppliersUpdateBodyNameMax).describe('Supplier company name'),
+  "contact_email": zod.string().email().max(catalogSuppliersUpdateBodyContactEmailMax).optional().describe('Primary contact email'),
+  "phone": zod.string().max(catalogSuppliersUpdateBodyPhoneMax).optional().describe('Contact phone number')
+})
+
+export const catalogSuppliersUpdateResponseNameMax = 100;
+export const catalogSuppliersUpdateResponseContactEmailMax = 254;
+export const catalogSuppliersUpdateResponsePhoneMax = 20;
+
+
+export const catalogSuppliersUpdateResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(catalogSuppliersUpdateResponseNameMax).describe('Supplier company name'),
+  "contact_email": zod.string().email().max(catalogSuppliersUpdateResponseContactEmailMax).optional().describe('Primary contact email'),
+  "phone": zod.string().max(catalogSuppliersUpdateResponsePhoneMax).optional().describe('Contact phone number'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const catalogSuppliersPartialUpdateParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Supplier.')
+})
+
+export const catalogSuppliersPartialUpdateBodyNameMax = 100;
+export const catalogSuppliersPartialUpdateBodyContactEmailMax = 254;
+export const catalogSuppliersPartialUpdateBodyPhoneMax = 20;
+
+
+export const catalogSuppliersPartialUpdateBody = zod.object({
+  "name": zod.string().max(catalogSuppliersPartialUpdateBodyNameMax).optional().describe('Supplier company name'),
+  "contact_email": zod.string().email().max(catalogSuppliersPartialUpdateBodyContactEmailMax).optional().describe('Primary contact email'),
+  "phone": zod.string().max(catalogSuppliersPartialUpdateBodyPhoneMax).optional().describe('Contact phone number')
+})
+
+export const catalogSuppliersPartialUpdateResponseNameMax = 100;
+export const catalogSuppliersPartialUpdateResponseContactEmailMax = 254;
+export const catalogSuppliersPartialUpdateResponsePhoneMax = 20;
+
+
+export const catalogSuppliersPartialUpdateResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string().max(catalogSuppliersPartialUpdateResponseNameMax).describe('Supplier company name'),
+  "contact_email": zod.string().email().max(catalogSuppliersPartialUpdateResponseContactEmailMax).optional().describe('Primary contact email'),
+  "phone": zod.string().max(catalogSuppliersPartialUpdateResponsePhoneMax).optional().describe('Contact phone number'),
+  "created_at": zod.string().datetime({}).describe('Timestamp when the record was created'),
+  "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
+})
+
+export const catalogSuppliersDestroyParams = zod.object({
+  "id": zod.coerce.number().describe('A unique integer value identifying this Supplier.')
+})
 
 /**
  * ViewSet for Tag model with CRUD operations.

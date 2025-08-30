@@ -18,7 +18,7 @@ import { useCheckoutCartsCurrentRetrieve, useCheckoutItemsIncreaseQuantityCreate
 import { useQueryClient } from '@tanstack/react-query';
 import { useProfileAddressesList } from '@/api/generated/shop/profile/profile';
 import { useCheckoutShippingMethodsList } from '@/api/generated/shop/checkout/checkout';
-import type { CouponValidationResponse, Coupon, Cart } from '@/api/generated/shop/schemas';
+import type { CouponValidationResponse, Coupon, Cart, AddressList } from '@/api/generated/shop/schemas';
 import { Alert } from 'react-native';
 import { useStripe } from '@stripe/stripe-react-native';
 import { useState } from 'react';
@@ -28,8 +28,10 @@ import { useRouter } from 'expo-router';
 export default function CartScreen() {
   const theme = useTheme();
   const queryClient = useQueryClient();
-  const { data: cart, isLoading: cartLoading, error: cartError, refetch: refetchCart } = useCheckoutCartsCurrentRetrieve();
-  const { data: addresses, isLoading: addressesLoading } = useProfileAddressesList();
+  const { data: cart, isLoading: cartLoading, error: cartError, refetch: refetchCart } = useCheckoutCartsCurrentRetrieve({
+    query: { staleTime: 0, gcTime: 0, refetchOnWindowFocus: true, refetchOnReconnect: true, retry: 0 }
+  });
+  const { data: addressesPage, isLoading: addressesLoading } = useProfileAddressesList({ page: 1, page_size: 1000 });
   const { data: shippingMethods, isLoading: shippingMethodsLoading } = useCheckoutShippingMethodsList();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const router = useRouter();
@@ -42,11 +44,13 @@ export default function CartScreen() {
   const appliedCoupon = cart?.applied_coupon || null;
   const couponDiscount = cart?.coupon_discount || 0;
 
+  const addressesArray: AddressList[] = (addressesPage as any)?.results ?? [];
+
   React.useEffect(() => {
-    if (addresses && addresses.length > 0 && !selectedAddressId) {
-      setSelectedAddressId(addresses[0].id);
+    if (addressesArray.length > 0 && !selectedAddressId) {
+      setSelectedAddressId(addressesArray[0].id);
     }
-  }, [addresses, selectedAddressId]);
+  }, [addressesArray, selectedAddressId]);
 
   React.useEffect(() => {
     if (shippingMethods && shippingMethods.length > 0 && !selectedShippingMethodId) {
@@ -291,8 +295,8 @@ export default function CartScreen() {
                   <Text variant="titleMedium" style={styles.sectionTitle}>
                     Shipping Address
                   </Text>
-                  {addresses && addresses.length > 0 ? (
-                    addresses.map((address) => (
+                  {addressesArray.length > 0 ? (
+                    addressesArray.map((address: AddressList) => (
                       <View key={address.id} style={styles.radioItem}>
                         <RadioButton
                           value={address.id.toString()}

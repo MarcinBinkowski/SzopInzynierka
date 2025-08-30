@@ -26,9 +26,11 @@ import type {
 
 import type {
   CatalogCategoriesListParams,
+  CatalogDeliveriesListParams,
   CatalogImagesListParams,
   CatalogManufacturersListParams,
   CatalogProductsListParams,
+  CatalogSuppliersListParams,
   CatalogTagsListParams,
   Category,
   Manufacturer,
@@ -37,16 +39,22 @@ import type {
   ManufacturerUpdate,
   NotificationPreference,
   NotificationPreferenceUpdate,
+  PaginatedProductDeliveryList,
   PaginatedProductListList,
+  PaginatedSupplierList,
   PaginatedTagList,
   PatchedCategory,
   PatchedManufacturer,
+  PatchedProductDelivery,
   PatchedProductDetail,
   PatchedProductImage,
+  PatchedSupplier,
   PatchedTag,
   ProductCreate,
+  ProductDelivery,
   ProductDetail,
   ProductImage,
+  Supplier,
   Tag
 } from '.././schemas';
 
@@ -577,7 +585,399 @@ export function useCatalogCategoriesProductsRetrieve<TData = Awaited<ReturnType<
 
 
 
-/**
+export const catalogDeliveriesList = (
+    params?: CatalogDeliveriesListParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<PaginatedProductDeliveryList>(
+      {url: `/api/catalog/deliveries/`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getCatalogDeliveriesListQueryKey = (params?: CatalogDeliveriesListParams,) => {
+    return [`/api/catalog/deliveries/`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getCatalogDeliveriesListQueryOptions = <TData = Awaited<ReturnType<typeof catalogDeliveriesList>>, TError = ErrorType<unknown>>(params?: CatalogDeliveriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogDeliveriesList>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCatalogDeliveriesListQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof catalogDeliveriesList>>> = ({ signal }) => catalogDeliveriesList(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof catalogDeliveriesList>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CatalogDeliveriesListQueryResult = NonNullable<Awaited<ReturnType<typeof catalogDeliveriesList>>>
+export type CatalogDeliveriesListQueryError = ErrorType<unknown>
+
+
+export function useCatalogDeliveriesList<TData = Awaited<ReturnType<typeof catalogDeliveriesList>>, TError = ErrorType<unknown>>(
+ params: undefined |  CatalogDeliveriesListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogDeliveriesList>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof catalogDeliveriesList>>,
+          TError,
+          Awaited<ReturnType<typeof catalogDeliveriesList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCatalogDeliveriesList<TData = Awaited<ReturnType<typeof catalogDeliveriesList>>, TError = ErrorType<unknown>>(
+ params?: CatalogDeliveriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogDeliveriesList>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof catalogDeliveriesList>>,
+          TError,
+          Awaited<ReturnType<typeof catalogDeliveriesList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCatalogDeliveriesList<TData = Awaited<ReturnType<typeof catalogDeliveriesList>>, TError = ErrorType<unknown>>(
+ params?: CatalogDeliveriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogDeliveriesList>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCatalogDeliveriesList<TData = Awaited<ReturnType<typeof catalogDeliveriesList>>, TError = ErrorType<unknown>>(
+ params?: CatalogDeliveriesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogDeliveriesList>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCatalogDeliveriesListQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const catalogDeliveriesCreate = (
+    productDelivery: BodyType<NonReadonly<ProductDelivery>>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<ProductDelivery>(
+      {url: `/api/catalog/deliveries/`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: productDelivery, signal
+    },
+      );
+    }
+  
+
+
+export const getCatalogDeliveriesCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogDeliveriesCreate>>, TError,{data: BodyType<NonReadonly<ProductDelivery>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogDeliveriesCreate>>, TError,{data: BodyType<NonReadonly<ProductDelivery>>}, TContext> => {
+
+const mutationKey = ['catalogDeliveriesCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogDeliveriesCreate>>, {data: BodyType<NonReadonly<ProductDelivery>>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  catalogDeliveriesCreate(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogDeliveriesCreateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogDeliveriesCreate>>>
+    export type CatalogDeliveriesCreateMutationBody = BodyType<NonReadonly<ProductDelivery>>
+    export type CatalogDeliveriesCreateMutationError = ErrorType<unknown>
+
+    export const useCatalogDeliveriesCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogDeliveriesCreate>>, TError,{data: BodyType<NonReadonly<ProductDelivery>>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogDeliveriesCreate>>,
+        TError,
+        {data: BodyType<NonReadonly<ProductDelivery>>},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogDeliveriesCreateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    export const catalogDeliveriesRetrieve = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<ProductDelivery>(
+      {url: `/api/catalog/deliveries/${id}/`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getCatalogDeliveriesRetrieveQueryKey = (id: number,) => {
+    return [`/api/catalog/deliveries/${id}/`] as const;
+    }
+
+    
+export const getCatalogDeliveriesRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCatalogDeliveriesRetrieveQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>> = ({ signal }) => catalogDeliveriesRetrieve(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CatalogDeliveriesRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>>
+export type CatalogDeliveriesRetrieveQueryError = ErrorType<unknown>
+
+
+export function useCatalogDeliveriesRetrieve<TData = Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCatalogDeliveriesRetrieve<TData = Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCatalogDeliveriesRetrieve<TData = Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCatalogDeliveriesRetrieve<TData = Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogDeliveriesRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCatalogDeliveriesRetrieveQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const catalogDeliveriesUpdate = (
+    id: number,
+    productDelivery: BodyType<NonReadonly<ProductDelivery>>,
+ ) => {
+      
+      
+      return shopInstance<ProductDelivery>(
+      {url: `/api/catalog/deliveries/${id}/`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: productDelivery
+    },
+      );
+    }
+  
+
+
+export const getCatalogDeliveriesUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogDeliveriesUpdate>>, TError,{id: number;data: BodyType<NonReadonly<ProductDelivery>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogDeliveriesUpdate>>, TError,{id: number;data: BodyType<NonReadonly<ProductDelivery>>}, TContext> => {
+
+const mutationKey = ['catalogDeliveriesUpdate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogDeliveriesUpdate>>, {id: number;data: BodyType<NonReadonly<ProductDelivery>>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  catalogDeliveriesUpdate(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogDeliveriesUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogDeliveriesUpdate>>>
+    export type CatalogDeliveriesUpdateMutationBody = BodyType<NonReadonly<ProductDelivery>>
+    export type CatalogDeliveriesUpdateMutationError = ErrorType<unknown>
+
+    export const useCatalogDeliveriesUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogDeliveriesUpdate>>, TError,{id: number;data: BodyType<NonReadonly<ProductDelivery>>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogDeliveriesUpdate>>,
+        TError,
+        {id: number;data: BodyType<NonReadonly<ProductDelivery>>},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogDeliveriesUpdateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    export const catalogDeliveriesPartialUpdate = (
+    id: number,
+    patchedProductDelivery: BodyType<NonReadonly<PatchedProductDelivery>>,
+ ) => {
+      
+      
+      return shopInstance<ProductDelivery>(
+      {url: `/api/catalog/deliveries/${id}/`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: patchedProductDelivery
+    },
+      );
+    }
+  
+
+
+export const getCatalogDeliveriesPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogDeliveriesPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedProductDelivery>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogDeliveriesPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedProductDelivery>>}, TContext> => {
+
+const mutationKey = ['catalogDeliveriesPartialUpdate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogDeliveriesPartialUpdate>>, {id: number;data: BodyType<NonReadonly<PatchedProductDelivery>>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  catalogDeliveriesPartialUpdate(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogDeliveriesPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogDeliveriesPartialUpdate>>>
+    export type CatalogDeliveriesPartialUpdateMutationBody = BodyType<NonReadonly<PatchedProductDelivery>>
+    export type CatalogDeliveriesPartialUpdateMutationError = ErrorType<unknown>
+
+    export const useCatalogDeliveriesPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogDeliveriesPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedProductDelivery>>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogDeliveriesPartialUpdate>>,
+        TError,
+        {id: number;data: BodyType<NonReadonly<PatchedProductDelivery>>},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogDeliveriesPartialUpdateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    export const catalogDeliveriesDestroy = (
+    id: number,
+ ) => {
+      
+      
+      return shopInstance<void>(
+      {url: `/api/catalog/deliveries/${id}/`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getCatalogDeliveriesDestroyMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogDeliveriesDestroy>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogDeliveriesDestroy>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['catalogDeliveriesDestroy'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogDeliveriesDestroy>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  catalogDeliveriesDestroy(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogDeliveriesDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof catalogDeliveriesDestroy>>>
+    
+    export type CatalogDeliveriesDestroyMutationError = ErrorType<unknown>
+
+    export const useCatalogDeliveriesDestroy = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogDeliveriesDestroy>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogDeliveriesDestroy>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogDeliveriesDestroyMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
  * ViewSet for ProductImage model with CRUD operations.
  */
 export const catalogImagesList = (
@@ -2283,7 +2683,399 @@ export function useCatalogProductsOnSaleRetrieve<TData = Awaited<ReturnType<type
 
 
 
-/**
+export const catalogSuppliersList = (
+    params?: CatalogSuppliersListParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<PaginatedSupplierList>(
+      {url: `/api/catalog/suppliers/`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getCatalogSuppliersListQueryKey = (params?: CatalogSuppliersListParams,) => {
+    return [`/api/catalog/suppliers/`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getCatalogSuppliersListQueryOptions = <TData = Awaited<ReturnType<typeof catalogSuppliersList>>, TError = ErrorType<unknown>>(params?: CatalogSuppliersListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogSuppliersList>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCatalogSuppliersListQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof catalogSuppliersList>>> = ({ signal }) => catalogSuppliersList(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof catalogSuppliersList>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CatalogSuppliersListQueryResult = NonNullable<Awaited<ReturnType<typeof catalogSuppliersList>>>
+export type CatalogSuppliersListQueryError = ErrorType<unknown>
+
+
+export function useCatalogSuppliersList<TData = Awaited<ReturnType<typeof catalogSuppliersList>>, TError = ErrorType<unknown>>(
+ params: undefined |  CatalogSuppliersListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogSuppliersList>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof catalogSuppliersList>>,
+          TError,
+          Awaited<ReturnType<typeof catalogSuppliersList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCatalogSuppliersList<TData = Awaited<ReturnType<typeof catalogSuppliersList>>, TError = ErrorType<unknown>>(
+ params?: CatalogSuppliersListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogSuppliersList>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof catalogSuppliersList>>,
+          TError,
+          Awaited<ReturnType<typeof catalogSuppliersList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCatalogSuppliersList<TData = Awaited<ReturnType<typeof catalogSuppliersList>>, TError = ErrorType<unknown>>(
+ params?: CatalogSuppliersListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogSuppliersList>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCatalogSuppliersList<TData = Awaited<ReturnType<typeof catalogSuppliersList>>, TError = ErrorType<unknown>>(
+ params?: CatalogSuppliersListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogSuppliersList>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCatalogSuppliersListQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const catalogSuppliersCreate = (
+    supplier: BodyType<NonReadonly<Supplier>>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<Supplier>(
+      {url: `/api/catalog/suppliers/`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: supplier, signal
+    },
+      );
+    }
+  
+
+
+export const getCatalogSuppliersCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogSuppliersCreate>>, TError,{data: BodyType<NonReadonly<Supplier>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogSuppliersCreate>>, TError,{data: BodyType<NonReadonly<Supplier>>}, TContext> => {
+
+const mutationKey = ['catalogSuppliersCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogSuppliersCreate>>, {data: BodyType<NonReadonly<Supplier>>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  catalogSuppliersCreate(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogSuppliersCreateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogSuppliersCreate>>>
+    export type CatalogSuppliersCreateMutationBody = BodyType<NonReadonly<Supplier>>
+    export type CatalogSuppliersCreateMutationError = ErrorType<unknown>
+
+    export const useCatalogSuppliersCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogSuppliersCreate>>, TError,{data: BodyType<NonReadonly<Supplier>>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogSuppliersCreate>>,
+        TError,
+        {data: BodyType<NonReadonly<Supplier>>},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogSuppliersCreateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    export const catalogSuppliersRetrieve = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return shopInstance<Supplier>(
+      {url: `/api/catalog/suppliers/${id}/`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getCatalogSuppliersRetrieveQueryKey = (id: number,) => {
+    return [`/api/catalog/suppliers/${id}/`] as const;
+    }
+
+    
+export const getCatalogSuppliersRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof catalogSuppliersRetrieve>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogSuppliersRetrieve>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCatalogSuppliersRetrieveQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof catalogSuppliersRetrieve>>> = ({ signal }) => catalogSuppliersRetrieve(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof catalogSuppliersRetrieve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CatalogSuppliersRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof catalogSuppliersRetrieve>>>
+export type CatalogSuppliersRetrieveQueryError = ErrorType<unknown>
+
+
+export function useCatalogSuppliersRetrieve<TData = Awaited<ReturnType<typeof catalogSuppliersRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogSuppliersRetrieve>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof catalogSuppliersRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof catalogSuppliersRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCatalogSuppliersRetrieve<TData = Awaited<ReturnType<typeof catalogSuppliersRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogSuppliersRetrieve>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof catalogSuppliersRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof catalogSuppliersRetrieve>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCatalogSuppliersRetrieve<TData = Awaited<ReturnType<typeof catalogSuppliersRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogSuppliersRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCatalogSuppliersRetrieve<TData = Awaited<ReturnType<typeof catalogSuppliersRetrieve>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof catalogSuppliersRetrieve>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCatalogSuppliersRetrieveQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const catalogSuppliersUpdate = (
+    id: number,
+    supplier: BodyType<NonReadonly<Supplier>>,
+ ) => {
+      
+      
+      return shopInstance<Supplier>(
+      {url: `/api/catalog/suppliers/${id}/`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: supplier
+    },
+      );
+    }
+  
+
+
+export const getCatalogSuppliersUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogSuppliersUpdate>>, TError,{id: number;data: BodyType<NonReadonly<Supplier>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogSuppliersUpdate>>, TError,{id: number;data: BodyType<NonReadonly<Supplier>>}, TContext> => {
+
+const mutationKey = ['catalogSuppliersUpdate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogSuppliersUpdate>>, {id: number;data: BodyType<NonReadonly<Supplier>>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  catalogSuppliersUpdate(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogSuppliersUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogSuppliersUpdate>>>
+    export type CatalogSuppliersUpdateMutationBody = BodyType<NonReadonly<Supplier>>
+    export type CatalogSuppliersUpdateMutationError = ErrorType<unknown>
+
+    export const useCatalogSuppliersUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogSuppliersUpdate>>, TError,{id: number;data: BodyType<NonReadonly<Supplier>>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogSuppliersUpdate>>,
+        TError,
+        {id: number;data: BodyType<NonReadonly<Supplier>>},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogSuppliersUpdateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    export const catalogSuppliersPartialUpdate = (
+    id: number,
+    patchedSupplier: BodyType<NonReadonly<PatchedSupplier>>,
+ ) => {
+      
+      
+      return shopInstance<Supplier>(
+      {url: `/api/catalog/suppliers/${id}/`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: patchedSupplier
+    },
+      );
+    }
+  
+
+
+export const getCatalogSuppliersPartialUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogSuppliersPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedSupplier>>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogSuppliersPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedSupplier>>}, TContext> => {
+
+const mutationKey = ['catalogSuppliersPartialUpdate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogSuppliersPartialUpdate>>, {id: number;data: BodyType<NonReadonly<PatchedSupplier>>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  catalogSuppliersPartialUpdate(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogSuppliersPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogSuppliersPartialUpdate>>>
+    export type CatalogSuppliersPartialUpdateMutationBody = BodyType<NonReadonly<PatchedSupplier>>
+    export type CatalogSuppliersPartialUpdateMutationError = ErrorType<unknown>
+
+    export const useCatalogSuppliersPartialUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogSuppliersPartialUpdate>>, TError,{id: number;data: BodyType<NonReadonly<PatchedSupplier>>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogSuppliersPartialUpdate>>,
+        TError,
+        {id: number;data: BodyType<NonReadonly<PatchedSupplier>>},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogSuppliersPartialUpdateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    export const catalogSuppliersDestroy = (
+    id: number,
+ ) => {
+      
+      
+      return shopInstance<void>(
+      {url: `/api/catalog/suppliers/${id}/`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getCatalogSuppliersDestroyMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogSuppliersDestroy>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogSuppliersDestroy>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['catalogSuppliersDestroy'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogSuppliersDestroy>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  catalogSuppliersDestroy(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CatalogSuppliersDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof catalogSuppliersDestroy>>>
+    
+    export type CatalogSuppliersDestroyMutationError = ErrorType<unknown>
+
+    export const useCatalogSuppliersDestroy = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogSuppliersDestroy>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof catalogSuppliersDestroy>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getCatalogSuppliersDestroyMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
  * ViewSet for Tag model with CRUD operations.
  */
 export const catalogTagsList = (

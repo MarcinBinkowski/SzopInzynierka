@@ -67,7 +67,6 @@ export function AddressForm({
             error={!!errors.address}
             style={styles.input}
             mode="outlined"
-            placeholder="123 Main Street, Apt 4B"
             multiline
             numberOfLines={2}
           />
@@ -91,7 +90,6 @@ export function AddressForm({
             error={!!errors.city}
             style={styles.input}
             mode="outlined"
-            placeholder="New York"
           />
         )}
       />
@@ -113,7 +111,6 @@ export function AddressForm({
             error={!!errors.postal_code}
             style={styles.input}
             mode="outlined"
-            placeholder="10001"
             keyboardType="default"
           />
         )}
@@ -194,7 +191,7 @@ export function AddressForm({
             onBlur={onBlur}
             style={styles.input}
             mode="outlined"
-            placeholder="Home, Office, etc."
+            placeholder="Home, Office..."
           />
         )}
       />

@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
-  BarChart3,
   Package,
   ShoppingBag,
   ChevronLeft,
@@ -17,19 +16,41 @@ import {
   Building2,
   FileText,
   ShoppingCart,
+  Ticket,
+  Receipt,
+  Truck,
+  Bell,
 } from "lucide-react"
 
 const navigation = [
-  // { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
+  // Catalog Management
   { name: "Products", href: "/catalog/products", icon: Package },
   { name: "Categories", href: "/catalog/categories", icon: FolderOpen },
   { name: "Tags", href: "/catalog/tags", icon: Tag },
   { name: "Manufacturers", href: "/catalog/manufacturers", icon: Building2 },
+  { name: "Suppliers", href: "/catalog/suppliers", icon: Building2 },
+  { name: "Deliveries", href: "/catalog/deliveries", icon: Package },
+  
+  // Checkout & Orders
   { name: "Orders", href: "/orders", icon: ShoppingCart },
-  { name: "Addresses", href: "/addresses", icon: MapPin },
-  { name: "Profiles", href: "/profiles", icon: Users },
-  { name: "Countries", href: "/countries", icon: Globe },
+  { name: "Coupons", href: "/checkout/coupons", icon: Ticket },
+  { name: "Invoices", href: "/checkout/invoices", icon: Receipt },
+  { name: "Shipping Methods", href: "/checkout/shipping-methods", icon: Truck },
+  { name: "Couriers", href: "/checkout/couriers", icon: Truck },
+  { name: "Shipments", href: "/checkout/shipments", icon: Truck },
+  { name: "Order Notes", href: "/checkout/order-notes", icon: FileText },
+  { name: "Payments", href: "/checkout/payments", icon: Receipt },
+  { name: "Coupon Redemptions", href: "/checkout/coupon-redemptions", icon: Ticket },
   { name: "Invoice Templates", href: "/invoice-templates", icon: FileText },
+  
+  // User Management
+  { name: "Profiles", href: "/profiles", icon: Users },
+  { name: "Addresses", href: "/addresses", icon: MapPin },
+  
+  // System
+  { name: "Countries", href: "/countries", icon: Globe },
+  { name: "Notifications", href: "/notifications/history", icon: Bell },
+  { name: "Notification Settings", href: "/notifications/preferences", icon: Bell },
 ]
 
 export default function Sidebar() {
@@ -46,12 +67,12 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="flex items-center justify-between p-4 border-b">
         {!collapsed && (
-          <div className="flex items-center space-x-2">
+          <Link to="/dashboard" className="flex items-center space-x-2">
             <div className="bg-blue-600 p-2 rounded-lg">
               <ShoppingBag className="h-6 w-6 text-white" />
             </div>
             <span className="text-xl font-bold text-gray-900">SportShop</span>
-          </div>
+          </Link>
         )}
         <Button variant="ghost" size="sm" onClick={() => setCollapsed(!collapsed)} className="p-2">
           {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}

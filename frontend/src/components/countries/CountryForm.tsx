@@ -1,22 +1,19 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Spinner } from "@/components/customui/spinner"
 import { geographicCountriesCreateBody, geographicCountriesUpdateBody } from "@/api/generated/shop/geographic/geographic.zod"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect } from "react"
 import type { Country } from '@/api/generated/shop/schemas'
 import { z } from "zod"
-import { toast } from "sonner"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { FormLayout } from "@/components/common/FormLayout"
+import { FormField } from "@/components/customui/FormField"
+import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/customui/Spinner"
+import { isFieldRequired } from "@/utils/zod"
 
-// Use the generated Zod schema types
-// CountryFormData is for create, but update is compatible
-// (id is readonly and not in the form)
-type CountryFormData = z.infer<typeof geographicCountriesCreateBody>
+type CountryCreateData = z.infer<typeof geographicCountriesCreateBody>
+type CountryUpdateData = z.infer<typeof geographicCountriesUpdateBody>
+type CountryFormData = CountryCreateData | CountryUpdateData
 
 interface CountryFormProps {
   title: string
@@ -34,112 +31,76 @@ export function CountryForm({
   initialData,
   onSubmit,
   submitButtonText,
-  isSubmitting: externalIsSubmitting,
+  isSubmitting,
   onCancel
 }: CountryFormProps) {
-  const isEditMode = !!initialData?.id
-  const schema = isEditMode ? geographicCountriesUpdateBody : geographicCountriesCreateBody
+  const schema = initialData?.id ? geographicCountriesUpdateBody : geographicCountriesCreateBody
   
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting: hookIsSubmitting, isValid },
-    reset
-  } = useForm<CountryFormData>({
+  const form = useForm<CountryFormData>({
     resolver: zodResolver(schema),
     defaultValues: initialData,
-    mode: 'onChange'
   })
 
-  const isSubmitting = externalIsSubmitting ?? hookIsSubmitting
-
-  // Reset form when initialData changes (for edit mode)
-  useEffect(() => {
-    if (initialData) {
-      reset(initialData)
-    }
-  }, [initialData, reset])
-
-  const onSubmitForm = async (data: CountryFormData) => {
-    try {
-      await onSubmit(data)
-    } catch (error) {
-        if (error instanceof Error) {
-            toast.error(`Form submission failed: ${error.message}`)
-          } else {
-            toast.error("An unexpected error occurred")
-          }    
-        }
-  }
+  const handleSubmit = form.handleSubmit(async (data: CountryFormData) => {
+    await onSubmit(data)
+  })
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="code">Country Code</Label>
-            <Input
-              id="code"
-              {...register('code')}
-              placeholder="Enter country code (e.g., US, GB, PL)"
-              disabled={isSubmitting}
-              maxLength={2}
-            />
-            {errors.code && (
-              <p className="text-sm text-red-500">{errors.code.message}</p>
-            )}
-            <p className="text-xs text-muted-foreground">
-              Two-letter ISO country code (e.g., US, GB, PL)
-            </p>
-          </div>
+    <FormLayout
+      title={title}
+      description={description}
+      onCancel={onCancel}
+      isSubmitting={isSubmitting}
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <FormField
+            label="Country Code"
+            id="code"
+            placeholder="Enter country code (e.g., US, GB, PL)"
+            register={form.register('code')}
+            error={form.formState.errors.code}
+            disabled={form.formState.isSubmitting}
+            required={isFieldRequired(schema, 'code')}
+          />
+          <p className="text-xs text-muted-foreground">
+            Two-letter ISO country code (e.g., US, GB, PL)
+          </p>
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="name">Country Name</Label>
-            <Input
-              id="name"
-              {...register('name')}
-              placeholder="Enter country name"
-              disabled={isSubmitting}
-              maxLength={100}
-            />
-            {errors.name && (
-              <p className="text-sm text-red-500">{errors.name.message}</p>
-            )}
-            <p className="text-xs text-muted-foreground">
-              Official country name in English
-            </p>
-          </div>
+        <div className="space-y-2">
+          <FormField
+            label="Country Name"
+            id="name"
+            placeholder="Enter country name"
+            register={form.register('name')}
+            error={form.formState.errors.name}
+            disabled={form.formState.isSubmitting}
+            required={isFieldRequired(schema, 'name')}
+          />
+          <p className="text-xs text-muted-foreground">
+            Official country name in English
+          </p>
+        </div>
 
-          <div className="flex gap-2 pt-4">
-            <Button
-              type="submit"
-              disabled={isSubmitting || !isValid}
-              className="flex-1"
-            >
-              {isSubmitting ? (
-                <>
-                  <Spinner size="sm" className="mr-2" />
-                  Saving...
-                </>
-              ) : (
-                submitButtonText
-              )}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onCancel}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+        {/* Form Actions */}
+        <div className="flex justify-end gap-2 pt-4">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Spinner className="mr-2 h-4 w-4" />
+                {submitButtonText}
+              </>
+            ) : (
+              submitButtonText
+            )}
+          </Button>
+        </div>
+      </form>
+    </FormLayout>
   )
 } 

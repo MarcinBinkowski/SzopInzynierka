@@ -12,7 +12,7 @@ export const SimpleCategoryFilter = ({ column }: SimpleCategoryFilterProps) => {
     }
   })
 
-  const categories = categoriesData?.results || []
+  const categories = (categoriesData as any)?.results || []
   const filterValue = column.getFilterValue()
 
   const handleChange = (event: any) => {
@@ -29,7 +29,7 @@ export const SimpleCategoryFilter = ({ column }: SimpleCategoryFilterProps) => {
           onChange={handleChange}
         >
           <MenuItem value="">All categories</MenuItem>
-          {categories.map((category) => (
+          {categories.map((category: any) => (
             <MenuItem key={category.id} value={category.id.toString()}>
               {category.name}
             </MenuItem>

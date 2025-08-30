@@ -16,11 +16,8 @@ function NewTagPage() {
 
   const handleSubmit = async (formData: TagFormData) => {
     try {
-      // Validate the form data using Zod schema
       const validatedData = catalogTagsCreateBody.parse(formData)
-      
       await createMutation.mutateAsync({ data: validatedData })
-      
       toast.success("Tag created successfully")
       navigate({ to: "/catalog/tags" })
     } catch (error) {
@@ -39,7 +36,7 @@ function NewTagPage() {
   return (
     <TagForm
       title="Create New Tag"
-      description="Add a new tag to your catalog"
+      description="Add a new tag to the catalog"
       onSubmit={handleSubmit}
       submitButtonText="Create Tag"
       isSubmitting={createMutation.isPending}

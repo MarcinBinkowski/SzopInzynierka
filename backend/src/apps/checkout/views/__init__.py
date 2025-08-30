@@ -2,6 +2,12 @@ from apps.checkout.views.cart import CartViewSet, CartItemViewSet
 from apps.checkout.views.payment import CreateCheckoutSessionView, ConfirmPaymentIntentView
 from apps.checkout.views.shipping_method import ShippingMethodViewSet
 from apps.checkout.views.invoice import InvoiceTemplateViewSet, InvoiceViewSet
+from apps.checkout.views.order import OrderViewSet
+from apps.checkout.views.courier import CourierViewSet
+from apps.checkout.views.shipment import ShipmentViewSet
+from apps.checkout.views.order_processing_note import OrderProcessingNoteViewSet
+from apps.checkout.views.payment_admin import PaymentViewSet
+from apps.checkout.views.coupon_redemption import CouponRedemptionViewSet
 
 __all__ = [
     "CartViewSet",
@@ -11,4 +17,10 @@ __all__ = [
     "ShippingMethodViewSet",
     "InvoiceTemplateViewSet",
     "InvoiceViewSet",
+    "OrderViewSet",
+    "CourierViewSet",
+    "ShipmentViewSet",
+    "OrderProcessingNoteViewSet",
+    "PaymentViewSet",
+    "CouponRedemptionViewSet",
 ]

@@ -6,8 +6,7 @@ import { catalogManufacturersUpdateBody } from "@/api/generated/shop/catalog/cat
 import { ManufacturerForm } from "@/components/manufacturers/ManufacturerForm"
 import { toast } from "sonner"
 import { z } from "zod"
-import { Spinner } from "@/components/customui/spinner"
-import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/customui/Spinner"
 
 // Use the generated Zod schema types
 type ManufacturerFormData = z.infer<typeof catalogManufacturersUpdateBody>
@@ -16,8 +15,7 @@ function EditManufacturerPage() {
   const navigate = useNavigate()
   const { manufacturerId } = useParams({ from: '/_authenticated/catalog/manufacturers/$manufacturerId/edit' })
   const updateMutation = useCatalogManufacturersUpdate()
-
-
+  
   const { data: manufacturer, isLoading, error } = useCatalogManufacturersRetrieve(
     parseInt(manufacturerId),
     {
@@ -29,9 +27,7 @@ function EditManufacturerPage() {
 
   const handleSubmit = async (formData: ManufacturerFormData) => {
     try {
-      // Validate the form data using Zod schema
       const validatedData = catalogManufacturersUpdateBody.parse(formData)
-      
       await updateMutation.mutateAsync({ 
         id: parseInt(manufacturerId), 
         data: validatedData 
@@ -54,48 +50,19 @@ function EditManufacturerPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <Spinner size="lg" />
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="text-center">
-          <h2 className="text-xl font-semibold text-red-600">Error Loading Manufacturer</h2>
-          <p className="text-muted-foreground mt-2">
-            {error instanceof Error ? error.message : "An unexpected error occurred"}
-          </p>
-          <Button
-            variant="outline"
-            onClick={() => navigate({ to: "/catalog/manufacturers" })}
-            className="mt-4"
-          >
-            Back to Manufacturers
-          </Button>
+      <div className="flex items-center justify-center h-64">
+        <div className="flex items-center space-x-2">
+          <Spinner size="lg" />
+          <span className="text-sm text-muted-foreground">Loading manufacturer...</span>
         </div>
       </div>
     )
   }
 
-  if (!manufacturer) {
+  if (error || !manufacturer) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="text-center">
-          <h2 className="text-xl font-semibold">Manufacturer Not Found</h2>
-          <p className="text-muted-foreground mt-2">
-            The manufacturer you're looking for doesn't exist.
-          </p>
-          <Button
-            variant="outline"
-            onClick={() => navigate({ to: "/catalog/manufacturers" })}
-            className="mt-4"
-          >
-            Back to Manufacturers
-          </Button>
-        </div>
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center text-red-600">Failed to load manufacturer</div>
       </div>
     )
   }

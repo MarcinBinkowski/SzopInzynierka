@@ -1,4 +1,6 @@
-import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate';
+import { AsyncPaginate } from 'react-select-async-paginate';
+import type { GroupBase, OptionsOrGroups } from 'react-select';
+import type { LoadOptions } from 'react-select-async-paginate';
 
 export interface OptionType {
   value: number;
@@ -7,7 +9,7 @@ export interface OptionType {
 
 interface AsyncPaginateSelectProps {
   value: OptionType | OptionType[] | null;
-  onChange: (option: any) => void;
+  onChange: (option: any) => void; // (you can tighten this later with OnChangeValue)
   isDisabled?: boolean;
   error?: string;
   placeholder?: string;
@@ -30,24 +32,33 @@ export function AsyncPaginateSelect({
   defaultOptions,
   instanceId,
 }: AsyncPaginateSelectProps) {
-  const loadOptions: LoadOptions<OptionType, any, { page?: number }> = async (
+  const loadOptions: LoadOptions<
+    OptionType,
+    GroupBase<OptionType>,
+    { page: number }
+  > = async (
     inputValue,
-    loadedOptions,
-    { page = 1 } = {}
+    _loadedOptions,
+    additional
   ) => {
+    const page = additional?.page ?? 1;
     const data = await fetcher({ search: inputValue, page });
+
+    const options: OptionsOrGroups<OptionType, GroupBase<OptionType>> =
+      (data.results?.map(mapOption) ?? []);
+
     return {
-      options: data.results?.map(mapOption) || [],
-      hasMore: !!data.next,
+      options,
+      hasMore: Boolean(data.next),
       additional: { page: page + 1 },
     };
   };
 
   return (
     <div>
-      <AsyncPaginate
+      <AsyncPaginate<OptionType, GroupBase<OptionType>, { page: number }, boolean>
         isMulti={isMulti}
-        value={value}
+        value={value as any}
         loadOptions={loadOptions}
         onChange={onChange}
         isClearable

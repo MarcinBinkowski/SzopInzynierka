@@ -4,7 +4,7 @@ import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router"
 import { useProfileProfilesRetrieve, useProfileProfilesUpdate } from "@/api/generated/shop/profile/profile"
 import { profileProfilesUpdateBody } from "@/api/generated/shop/profile/profile.zod"
 import { ProfileForm, type ProfileUpdateData } from "@/components/profiles/ProfileForm"
-import { Spinner } from "@/components/customui/spinner"
+import { Spinner } from "@/components/customui/Spinner"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -44,8 +44,8 @@ function EditProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto py-6">
-        <div className="flex items-center justify-center space-x-2">
+      <div className="flex items-center justify-center h-64">
+        <div className="flex items-center space-x-2">
           <Spinner size="lg" />
           <span className="text-sm text-muted-foreground">Loading profile...</span>
         </div>
@@ -55,7 +55,7 @@ function EditProfilePage() {
 
   if (error || !profile) {
     return (
-      <div className="container mx-auto py-6">
+      <div className="flex items-center justify-center h-64">
         <div className="text-center text-red-600">Failed to load profile</div>
       </div>
     )
@@ -63,7 +63,6 @@ function EditProfilePage() {
 
   return (
     <ProfileForm
-      key={`profile-edit-${profileId}`}
       title="Edit Profile"
       description="Update profile information"
       initialData={profile}

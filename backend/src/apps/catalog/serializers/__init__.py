@@ -22,6 +22,9 @@ from apps.catalog.serializers.notification import (
     NotificationPreferenceUpdateSerializer,
     NotificationHistorySerializer,
 )
+from apps.catalog.serializers.supplier import SupplierSerializer
+from apps.catalog.serializers.product_delivery import ProductDeliverySerializer
+
 
 __all__ = [
     "TagSerializer",
@@ -41,4 +44,6 @@ __all__ = [
     "NotificationPreferenceSerializer",
     "NotificationPreferenceUpdateSerializer", 
     "NotificationHistorySerializer",
+    "SupplierSerializer",
+    "ProductDeliverySerializer",
 ]

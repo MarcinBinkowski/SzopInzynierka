@@ -27,14 +27,15 @@ import type {
 import type {
   Address,
   AddressCreate,
-  AddressList,
   AddressUpdate,
+  PaginatedAddressListList,
   PaginatedProfileListList,
   PatchedAddress,
   PatchedAddressUpdate,
   PatchedProfile,
   PatchedProfileUpdate,
   Profile,
+  ProfileAddressesListParams,
   ProfileCreate,
   ProfileProfilesListParams,
   ProfileUpdate
@@ -74,33 +75,34 @@ type NonReadonly<T> = [T] extends [UnionToIntersection<T>] ? {
 
 
 export const profileAddressesList = (
-    
+    params?: ProfileAddressesListParams,
  signal?: AbortSignal
 ) => {
       
       
-      return shopInstance<AddressList[]>(
-      {url: `/api/profile/addresses/`, method: 'GET', signal
+      return shopInstance<PaginatedAddressListList>(
+      {url: `/api/profile/addresses/`, method: 'GET',
+        params, signal
     },
       );
     }
   
 
-export const getProfileAddressesListQueryKey = () => {
-    return [`/api/profile/addresses/`] as const;
+export const getProfileAddressesListQueryKey = (params?: ProfileAddressesListParams,) => {
+    return [`/api/profile/addresses/`, ...(params ? [params]: [])] as const;
     }
 
     
-export const getProfileAddressesListQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>>, }
+export const getProfileAddressesListQueryOptions = <TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = ErrorType<unknown>>(params?: ProfileAddressesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesListQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getProfileAddressesListQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesList>>> = ({ signal }) => profileAddressesList(signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof profileAddressesList>>> = ({ signal }) => profileAddressesList(params, signal);
 
       
 
@@ -114,7 +116,7 @@ export type ProfileAddressesListQueryError = ErrorType<unknown>
 
 
 export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>> & Pick<
+ params: undefined |  ProfileAddressesListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileAddressesList>>,
           TError,
@@ -124,7 +126,7 @@ export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profil
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>> & Pick<
+ params?: ProfileAddressesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof profileAddressesList>>,
           TError,
@@ -134,16 +136,16 @@ export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profil
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>>, }
+ params?: ProfileAddressesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useProfileAddressesList<TData = Awaited<ReturnType<typeof profileAddressesList>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>>, }
+ params?: ProfileAddressesListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profileAddressesList>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getProfileAddressesListQueryOptions(options)
+  const queryOptions = getProfileAddressesListQueryOptions(params,options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

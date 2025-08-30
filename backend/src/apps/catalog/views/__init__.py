@@ -8,6 +8,8 @@ from apps.catalog.views.notification import (
     NotificationPreferenceViewSet,
     NotificationHistoryViewSet,
 )
+from apps.catalog.views.supplier import SupplierViewSet
+from apps.catalog.views.product_delivery import ProductDeliveryViewSet
 
 __all__ = [
     "ProductViewSet",
@@ -18,4 +20,6 @@ __all__ = [
     "WishlistViewSet",
     "NotificationPreferenceViewSet",
     "NotificationHistoryViewSet",
+    "SupplierViewSet",
+    "ProductDeliveryViewSet",
 ]

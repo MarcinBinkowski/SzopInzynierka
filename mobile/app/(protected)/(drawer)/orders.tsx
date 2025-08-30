@@ -11,20 +11,23 @@ import { ScreenWrapper } from '@/components/layout/ScreenWrapper';
 import ScreenLoader from '@/components/common/ScreenLoader';
 import ErrorScreen from '@/components/common/ErrorScreen';
 import { router } from 'expo-router';
-import { useCheckoutOrdersMeRetrieve } from '@/api/generated/shop/checkout/checkout';
+import { useCheckoutOrdersList } from '@/api/generated/shop/checkout/checkout';
+import type { Order } from '@/api/generated/shop/schemas';
 
 export default function OrdersScreen() {
   const theme = useTheme();
   
   const { 
-    data: ordersResponse, 
+    data: ordersPage, 
     isLoading: ordersLoading, 
     error: ordersError, 
     refetch: refetchOrders 
-  } = useCheckoutOrdersMeRetrieve();
+  } = useCheckoutOrdersList({ page: 1, page_size: 50 });
   
-  // Extract orders from response
-  const orders = ordersResponse?.orders || [];
+  const results: any[] = Array.isArray((ordersPage as any)?.results) ? (ordersPage as any).results : [];
+  const orders: Order[] = results.length && results[0]?.orders
+    ? results.flatMap((r: any) => r.orders as Order[])
+    : (results as Order[]);
   
   const handleOrderPress = useCallback((orderId: number) => {
     router.push({ pathname: '/orders/[id]', params: { id: String(orderId) } });
@@ -92,7 +95,7 @@ export default function OrdersScreen() {
         </Card>
 
         {hasOrders ? (
-          orders.map((order) => (
+          orders.map((order: Order) => (
             <Card key={order.id} style={styles.orderCard} onPress={() => handleOrderPress(order.id)}>
               <Card.Content>
                 <View style={styles.orderHeader}>

@@ -39,7 +39,7 @@ function NewInvoiceTemplatePage() {
   return (
     <InvoiceTemplateForm
       title="Create New Invoice Template"
-      description="Add a new Jinja2 template for invoice PDF generation"
+      description="Add a new template for invoice generation"
       onSubmit={handleSubmit}
       submitButtonText="Create Template"
       isSubmitting={createMutation.isPending}

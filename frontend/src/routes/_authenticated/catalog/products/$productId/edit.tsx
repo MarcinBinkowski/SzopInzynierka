@@ -6,7 +6,7 @@ import { catalogProductsPartialUpdateBody } from "@/api/generated/shop/catalog/c
 import { ProductForm } from "@/components/products/ProductForm"
 import { toast } from "sonner"
 import { z } from "zod"
-import { Spinner } from "@/components/customui/spinner"
+import { Spinner } from "@/components/customui/Spinner"
 
 // Use the generated Zod schema types
 type ProductFormData = z.infer<typeof catalogProductsPartialUpdateBody>
@@ -55,16 +55,7 @@ function EditProductPage() {
   if (error || !product) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <h2 className="text-xl font-semibold text-gray-900">Product not found</h2>
-          <p className="text-gray-600 mt-2">The product you're looking for doesn't exist.</p>
-          <button
-            onClick={() => navigate({ to: "/catalog/products" })}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            Back to Products
-          </button>
-        </div>
+        <div className="text-center text-red-600">Failed to load product</div>
       </div>
     )
   }
@@ -76,7 +67,6 @@ function EditProductPage() {
       submitButtonText="Update Product"
       isSubmitting={updateMutation.isPending}
       onCancel={handleCancel}
-
     />
   )
 }

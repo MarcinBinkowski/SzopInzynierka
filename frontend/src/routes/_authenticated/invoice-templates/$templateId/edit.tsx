@@ -4,7 +4,7 @@ import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router"
 import { useCheckoutInvoiceTemplatesRetrieve, useCheckoutInvoiceTemplatesUpdate } from "@/api/generated/shop/checkout/checkout"
 import { checkoutInvoiceTemplatesUpdateBody } from "@/api/generated/shop/checkout/checkout.zod"
 import { InvoiceTemplateForm } from "@/components/invoice-templates/InvoiceTemplateForm"
-import { Spinner } from "@/components/customui/spinner"
+import { Spinner } from "@/components/customui/Spinner"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -44,8 +44,8 @@ function EditInvoiceTemplatePage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto py-6">
-        <div className="flex items-center justify-center space-x-2">
+      <div className="flex items-center justify-center h-64">
+        <div className="flex items-center space-x-2">
           <Spinner size="lg" />
           <span className="text-sm text-muted-foreground">Loading template...</span>
         </div>
@@ -55,7 +55,7 @@ function EditInvoiceTemplatePage() {
 
   if (error || !template) {
     return (
-      <div className="container mx-auto py-6">
+      <div className="flex items-center justify-center h-64">
         <div className="text-center text-red-600">Failed to load template</div>
       </div>
     )
@@ -63,7 +63,6 @@ function EditInvoiceTemplatePage() {
 
   return (
     <InvoiceTemplateForm
-      key={`template-edit-${templateId}`}
       title="Edit Invoice Template"
       description="Update template information and content"
       initialData={template}

@@ -1,18 +1,16 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Spinner } from "@/components/customui/spinner"
-import { DatePicker } from "@/components/customui/date-picker"
 import { profileProfilesCreateBody, profileProfilesUpdateBody } from "@/api/generated/shop/profile/profile.zod"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect } from "react"
 import type { Profile } from '@/api/generated/shop/schemas'
 import { z } from "zod"
-import { toast } from "sonner"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { FormLayout } from "@/components/common/FormLayout"
+import { FormField } from "@/components/customui/FormField"
+import { DateField } from "@/components/customui/DateField"
+import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/customui/Spinner"
+import { isFieldRequired } from "@/utils/zod"
 
 // Use the generated Zod schema types
 // ProfileFormData is for create, but update is compatible
@@ -36,153 +34,106 @@ export function ProfileForm({
   initialData,
   onSubmit,
   submitButtonText,
-  isSubmitting: externalIsSubmitting,
+  isSubmitting,
   onCancel
 }: ProfileFormProps) {
-  const isEditMode = !!initialData?.id
-  const schema = isEditMode ? profileProfilesUpdateBody : profileProfilesCreateBody
+  const schema = initialData?.id ? profileProfilesUpdateBody : profileProfilesCreateBody
   
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting: hookIsSubmitting, isValid },
-    reset,
-    setValue,
-    watch
-  } = useForm<ProfileFormData | ProfileUpdateData>({
+  const form = useForm<ProfileFormData | ProfileUpdateData>({
     resolver: zodResolver(schema),
     defaultValues: initialData,
-    mode: 'onChange'
   })
 
-  const isSubmitting = externalIsSubmitting ?? hookIsSubmitting
-
-  // Reset form when initialData changes (for edit mode)
-  useEffect(() => {
-    if (initialData) {
-      reset(initialData)
-    }
-  }, [initialData, reset])
-
-  const onSubmitForm = async (data: ProfileFormData | ProfileUpdateData) => {
-    try {
-      await onSubmit(data)
-    } catch (error) {
-        if (error instanceof Error) {
-            toast.error(`Form submission failed: ${error.message}`)
-          } else {
-            toast.error("An unexpected error occurred")
-          }    
-        }
-  }
+  const handleSubmit = form.handleSubmit(async (data: ProfileFormData | ProfileUpdateData) => {
+    await onSubmit(data)
+  })
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
-          {!initialData?.id && (
-            <div className="space-y-2">
-              <Label htmlFor="user">User ID</Label>
-              <Input
-                id="user"
-                type="number"
-                {...register('user', { valueAsNumber: true })}
-                placeholder="Enter user ID"
-                disabled={isSubmitting}
-              />
-              {'user' in errors && errors.user && (
-                <p className="text-sm text-red-500">{errors.user.message}</p>
-              )}
-            </div>
-          )}
-
+    <FormLayout
+      title={title}
+      description={description}
+      onCancel={onCancel}
+      submitButtonText={submitButtonText}
+      isSubmitting={isSubmitting}
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {!initialData?.id && (
           <div className="space-y-2">
-            <Label htmlFor="first_name">First Name</Label>
-            <Input
-              id="first_name"
-              {...register('first_name')}
-              placeholder="Enter first name"
-              disabled={isSubmitting}
+            <label htmlFor="user" className="text-sm font-medium">User ID</label>
+            <input
+              id="user"
+              type="number"
+              {...form.register('user' as any, { valueAsNumber: true })}
+              placeholder="Enter user ID"
+              disabled={form.formState.isSubmitting}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
-            {errors.first_name && (
-              <p className="text-sm text-red-500">{errors.first_name.message}</p>
-            )}
           </div>
+        )}
 
-          <div className="space-y-2">
-            <Label htmlFor="last_name">Last Name</Label>
-            <Input
-              id="last_name"
-              {...register('last_name')}
-              placeholder="Enter last name"
-              disabled={isSubmitting}
-            />
-            {errors.last_name && (
-              <p className="text-sm text-red-500">{errors.last_name.message}</p>
-            )}
-          </div>
+        <FormField
+          label="First Name"
+          id="first_name"
+          placeholder="Enter first name"
+          register={form.register('first_name')}
+          error={form.formState.errors.first_name}
+          disabled={form.formState.isSubmitting}
+          required={isFieldRequired(schema, 'first_name')}
+        />
 
-          <div className="space-y-2">
-            <Label htmlFor="date_of_birth">Date of Birth</Label>
-            <DatePicker
-              date={watch('date_of_birth') ? new Date(watch('date_of_birth')!) : undefined}
-              onDateChange={(date) => {
-                setValue('date_of_birth', date ? date.toISOString().split('T')[0] : null)
-              }}
-              placeholder="Select date of birth"
-              disabled={isSubmitting}
-            />
-            {errors.date_of_birth && (
-              <p className="text-sm text-red-500">{errors.date_of_birth.message}</p>
-            )}
-          </div>
+        <FormField
+          label="Last Name"
+          id="last_name"
+          placeholder="Enter last name"
+          register={form.register('last_name')}
+          error={form.formState.errors.last_name}
+          disabled={form.formState.isSubmitting}
+          required={isFieldRequired(schema, 'last_name')}
+        />
 
-          <div className="space-y-2">
-            <Label htmlFor="phone_number">Phone Number</Label>
-            <Input
-              id="phone_number"
-              {...register('phone_number')}
-              placeholder="Enter phone number with country code"
-              disabled={isSubmitting}
-            />
-            {errors.phone_number && (
-              <p className="text-sm text-red-500">{errors.phone_number.message}</p>
-            )}
-            <p className="text-xs text-muted-foreground">
-              Include country code (e.g., +1234567890)
-            </p>
-          </div>
+        <DateField
+          label="Date of Birth"
+          id="date_of_birth"
+          date={form.watch('date_of_birth') ? new Date(form.watch('date_of_birth')!) : null}
+          onDateChange={(date) => {
+            form.setValue('date_of_birth', date ? date.toISOString().split('T')[0] : null)
+          }}
+          placeholder="Select date of birth"
+          error={form.formState.errors.date_of_birth}
+          disabled={form.formState.isSubmitting}
+        />
 
-          <div className="flex gap-2 pt-4">
-            <Button
-              type="submit"
-              disabled={isSubmitting || !isValid}
-              className="flex-1"
-            >
-              {isSubmitting ? (
-                <>
-                  <Spinner size="sm" className="mr-2" />
-                  Saving...
-                </>
-              ) : (
-                submitButtonText
-              )}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onCancel}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+        <FormField
+          label="Phone Number"
+          id="phone_number"
+          placeholder="Enter phone number with country code"
+          register={form.register('phone_number')}
+          error={form.formState.errors.phone_number}
+          disabled={form.formState.isSubmitting}
+          required={isFieldRequired(schema, 'phone_number')}
+        />
+        <p className="text-xs text-muted-foreground">
+          Include country code (e.g., +1234567890)
+        </p>
+
+        {/* Form Actions */}
+        <div className="flex justify-end gap-2 pt-4">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Spinner className="mr-2 h-4 w-4" />
+                {submitButtonText}
+              </>
+            ) : (
+              submitButtonText
+            )}
+          </Button>
+        </div>
+      </form>
+    </FormLayout>
   )
 } 

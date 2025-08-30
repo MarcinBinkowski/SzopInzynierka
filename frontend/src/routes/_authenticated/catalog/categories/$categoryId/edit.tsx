@@ -4,7 +4,7 @@ import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router"
 import { useCatalogCategoriesRetrieve, useCatalogCategoriesUpdate } from "@/api/generated/shop/catalog/catalog"
 import { catalogCategoriesUpdateBody } from "@/api/generated/shop/catalog/catalog.zod"
 import { CategoryForm } from "@/components/categories/CategoryForm"
-import { Spinner } from "@/components/customui/spinner"
+import { Spinner } from "@/components/customui/Spinner"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -45,8 +45,8 @@ function EditCategoryPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto py-6">
-        <div className="flex items-center justify-center space-x-2">
+      <div className="flex items-center justify-center h-64">
+        <div className="flex items-center space-x-2">
           <Spinner size="lg" />
           <span className="text-sm text-muted-foreground">Loading category...</span>
         </div>
@@ -56,7 +56,7 @@ function EditCategoryPage() {
 
   if (error || !category) {
     return (
-      <div className="container mx-auto py-6">
+      <div className="flex items-center justify-center h-64">
         <div className="text-center text-red-600">Failed to load category</div>
       </div>
     )
@@ -64,7 +64,6 @@ function EditCategoryPage() {
 
   return (
     <CategoryForm
-      key={`category-edit-${categoryId}`}
       title="Edit Category"
       description="Update category information"
       initialData={category}

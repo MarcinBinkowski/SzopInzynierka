@@ -196,6 +196,164 @@ paths:
               schema:
                 $ref: '#/components/schemas/Category'
           description: ''
+  /api/catalog/deliveries/:
+    get:
+      operationId: catalog_deliveries_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - catalog
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductDeliveryList'
+          description: ''
+    post:
+      operationId: catalog_deliveries_create
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDelivery'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductDelivery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductDelivery'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDelivery'
+          description: ''
+  /api/catalog/deliveries/{id}/:
+    get:
+      operationId: catalog_deliveries_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Product Delivery.
+        required: true
+      tags:
+      - catalog
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDelivery'
+          description: ''
+    put:
+      operationId: catalog_deliveries_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Product Delivery.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDelivery'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductDelivery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductDelivery'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDelivery'
+          description: ''
+    patch:
+      operationId: catalog_deliveries_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Product Delivery.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProductDelivery'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProductDelivery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProductDelivery'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDelivery'
+          description: ''
+    delete:
+      operationId: catalog_deliveries_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Product Delivery.
+        required: true
+      tags:
+      - catalog
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/catalog/images/:
     get:
       operationId: catalog_images_list
@@ -1108,6 +1266,164 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductDetail'
           description: ''
+  /api/catalog/suppliers/:
+    get:
+      operationId: catalog_suppliers_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - catalog
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSupplierList'
+          description: ''
+    post:
+      operationId: catalog_suppliers_create
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: ''
+  /api/catalog/suppliers/{id}/:
+    get:
+      operationId: catalog_suppliers_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Supplier.
+        required: true
+      tags:
+      - catalog
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: ''
+    put:
+      operationId: catalog_suppliers_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Supplier.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: ''
+    patch:
+      operationId: catalog_suppliers_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Supplier.
+        required: true
+      tags:
+      - catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSupplier'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSupplier'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSupplier'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: ''
+    delete:
+      operationId: catalog_suppliers_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Supplier.
+        required: true
+      tags:
+      - catalog
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/catalog/tags/:
     get:
       operationId: catalog_tags_list
@@ -1836,6 +2152,58 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaymentConfirmationResponse'
           description: ''
+  /api/checkout/coupon-redemptions/:
+    get:
+      operationId: checkout_coupon_redemptions_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCouponRedemptionList'
+          description: ''
+  /api/checkout/coupon-redemptions/{id}/:
+    get:
+      operationId: checkout_coupon_redemptions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Coupon Redemption.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CouponRedemption'
+          description: ''
   /api/checkout/coupons/:
     get:
       operationId: checkout_coupons_list
@@ -2076,6 +2444,164 @@ paths:
               schema:
                 $ref: '#/components/schemas/CouponValidationResponse'
           description: ''
+  /api/checkout/couriers/:
+    get:
+      operationId: checkout_couriers_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCourierList'
+          description: ''
+    post:
+      operationId: checkout_couriers_create
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Courier'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Courier'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Courier'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Courier'
+          description: ''
+  /api/checkout/couriers/{id}/:
+    get:
+      operationId: checkout_couriers_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Courier.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Courier'
+          description: ''
+    put:
+      operationId: checkout_couriers_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Courier.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Courier'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Courier'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Courier'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Courier'
+          description: ''
+    patch:
+      operationId: checkout_couriers_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Courier.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCourier'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCourier'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCourier'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Courier'
+          description: ''
+    delete:
+      operationId: checkout_couriers_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Courier.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/checkout/create_checkout_session/:
     post:
       operationId: checkout_create_checkout_session_create
@@ -2104,6 +2630,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/CheckoutSessionResponse'
           description: ''
+  /api/checkout/dashboard/:
+    get:
+      operationId: checkout_dashboard_retrieve
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
   /api/checkout/invoice-templates/:
     get:
       operationId: checkout_invoice_templates_list
@@ -2483,6 +3020,37 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/checkout/invoices/debug_template/:
+    get:
+      operationId: checkout_invoices_debug_template_retrieve
+      description: Debug template rendering for a specific order
+      summary: Debug template rendering
+      parameters:
+      - in: query
+        name: order_id
+        schema:
+          type: integer
+        description: ID of the order to debug
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateDebugResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderNotFound'
+          description: ''
   /api/checkout/invoices/download_by_order/:
     get:
       operationId: checkout_invoices_download_by_order_retrieve
@@ -2773,10 +3341,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CartItem'
           description: ''
-  /api/checkout/orders/:
+  /api/checkout/order-notes/:
     get:
-      operationId: checkout_orders_list
-      description: ViewSet for user orders.
+      operationId: checkout_order_notes_list
       parameters:
       - name: page
         required: false
@@ -2800,7 +3367,167 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedOrderList'
+                $ref: '#/components/schemas/PaginatedOrderProcessingNoteList'
+          description: ''
+    post:
+      operationId: checkout_order_notes_create
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderProcessingNote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderProcessingNote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderProcessingNote'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderProcessingNote'
+          description: ''
+  /api/checkout/order-notes/{id}/:
+    get:
+      operationId: checkout_order_notes_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Order Processing Note.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderProcessingNote'
+          description: ''
+    put:
+      operationId: checkout_order_notes_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Order Processing Note.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderProcessingNote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderProcessingNote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderProcessingNote'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderProcessingNote'
+          description: ''
+    patch:
+      operationId: checkout_order_notes_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Order Processing Note.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderProcessingNote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderProcessingNote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderProcessingNote'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderProcessingNote'
+          description: ''
+    delete:
+      operationId: checkout_order_notes_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Order Processing Note.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/checkout/orders/:
+    get:
+      operationId: checkout_orders_list
+      description: Retrieve a list of orders for the current user
+      summary: Get current user's orders
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrdersListResponseList'
           description: ''
   /api/checkout/orders/{id}/:
     get:
@@ -2825,11 +3552,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrderDetail'
           description: ''
-  /api/checkout/orders/me/:
+  /api/checkout/orders/export.csv:
     get:
-      operationId: checkout_orders_me_retrieve
-      description: Retrieve a list of orders for the current user
-      summary: Get current user's orders
+      operationId: checkout_orders_export.csv_retrieve
+      description: Download CSV of orders for the given period (24h, 7d, 30d, lifetime)
+      summary: Export orders CSV
+      parameters:
+      - in: query
+        name: period
+        schema:
+          type: string
+        description: 24h | 7d | 30d | lifetime
       tags:
       - checkout
       security:
@@ -2840,12 +3573,333 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrdersListResponse'
+                type: string
+                format: binary
+          description: CSV file (text/csv)
+  /api/checkout/payments/:
+    get:
+      operationId: checkout_payments_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPaymentList'
           description: ''
+    post:
+      operationId: checkout_payments_create
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Payment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Payment'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+          description: ''
+  /api/checkout/payments/{id}/:
+    get:
+      operationId: checkout_payments_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this payment.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+          description: ''
+    put:
+      operationId: checkout_payments_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this payment.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Payment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Payment'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+          description: ''
+    patch:
+      operationId: checkout_payments_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this payment.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPayment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPayment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPayment'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+          description: ''
+    delete:
+      operationId: checkout_payments_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this payment.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/checkout/shipments/:
+    get:
+      operationId: checkout_shipments_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedShipmentList'
+          description: ''
+    post:
+      operationId: checkout_shipments_create
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Shipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Shipment'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shipment'
+          description: ''
+  /api/checkout/shipments/{id}/:
+    get:
+      operationId: checkout_shipments_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Shipment.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shipment'
+          description: ''
+    put:
+      operationId: checkout_shipments_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Shipment.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Shipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Shipment'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shipment'
+          description: ''
+    patch:
+      operationId: checkout_shipments_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Shipment.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedShipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedShipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedShipment'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shipment'
+          description: ''
+    delete:
+      operationId: checkout_shipments_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Shipment.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/checkout/shipping-methods/:
     get:
       operationId: checkout_shipping_methods_list
-      description: ViewSet for ShippingMethod model - read-only for users.
+      description: |-
+        ViewSet for ShippingMethod model.
+
+        - Authenticated users: can list and retrieve
+        - Admin users: full CRUD (create, update, delete)
       tags:
       - checkout
       security:
@@ -2860,10 +3914,45 @@ paths:
                 items:
                   $ref: '#/components/schemas/ShippingMethod'
           description: ''
+    post:
+      operationId: checkout_shipping_methods_create
+      description: |-
+        ViewSet for ShippingMethod model.
+
+        - Authenticated users: can list and retrieve
+        - Admin users: full CRUD (create, update, delete)
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShippingMethod'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ShippingMethod'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ShippingMethod'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingMethod'
+          description: ''
   /api/checkout/shipping-methods/{id}/:
     get:
       operationId: checkout_shipping_methods_retrieve
-      description: ViewSet for ShippingMethod model - read-only for users.
+      description: |-
+        ViewSet for ShippingMethod model.
+
+        - Authenticated users: can list and retrieve
+        - Admin users: full CRUD (create, update, delete)
       parameters:
       - in: path
         name: id
@@ -2883,6 +3972,103 @@ paths:
               schema:
                 $ref: '#/components/schemas/ShippingMethod'
           description: ''
+    put:
+      operationId: checkout_shipping_methods_update
+      description: |-
+        ViewSet for ShippingMethod model.
+
+        - Authenticated users: can list and retrieve
+        - Admin users: full CRUD (create, update, delete)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Shipping Method.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShippingMethod'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ShippingMethod'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ShippingMethod'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingMethod'
+          description: ''
+    patch:
+      operationId: checkout_shipping_methods_partial_update
+      description: |-
+        ViewSet for ShippingMethod model.
+
+        - Authenticated users: can list and retrieve
+        - Admin users: full CRUD (create, update, delete)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Shipping Method.
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedShippingMethod'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedShippingMethod'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedShippingMethod'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingMethod'
+          description: ''
+    delete:
+      operationId: checkout_shipping_methods_destroy
+      description: |-
+        ViewSet for ShippingMethod model.
+
+        - Authenticated users: can list and retrieve
+        - Admin users: full CRUD (create, update, delete)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Shipping Method.
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/geographic/countries/:
     get:
       operationId: geographic_countries_list
@@ -3059,6 +4245,18 @@ paths:
         schema:
           type: integer
         required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
       tags:
       - profile
       security:
@@ -3069,9 +4267,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AddressList'
+                $ref: '#/components/schemas/PaginatedAddressListList'
           description: ''
     post:
       operationId: profile_addresses_create
@@ -4223,6 +5419,41 @@ components:
       - name
       - valid_from
       - valid_until
+    CouponRedemption:
+      type: object
+      description: Serializer for coupon redemption tracking.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        coupon:
+          allOf:
+          - $ref: '#/components/schemas/Coupon'
+          readOnly: true
+        discount_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        original_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        final_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+      required:
+      - coupon
+      - created_at
+      - discount_amount
+      - final_total
+      - id
+      - original_total
     CouponRemoveResponse:
       type: object
       description: Serializer for coupon removal response.
@@ -4255,6 +5486,31 @@ components:
       - applied_discount
       - cart_total
       - coupon
+    Courier:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Courier company name
+          maxLength: 100
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - created_at
+      - id
+      - name
+      - updated_at
     CreateCheckoutSession:
       type: object
       description: Serializer for creating payment intent (PaymentSheet).
@@ -4711,6 +5967,45 @@ components:
       - quantity
       - total_price
       - unit_price
+    OrderNotFound:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+      - error
+    OrderProcessingNote:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+          description: Order this note relates to
+        staff_member:
+          type: integer
+          description: Staff member who created this note
+        note:
+          type: string
+          description: Note content
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - created_at
+      - id
+      - note
+      - order
+      - staff_member
+      - updated_at
     OrderStatusEnum:
       enum:
       - pending
@@ -4732,6 +6027,29 @@ components:
             $ref: '#/components/schemas/Order'
       required:
       - orders
+    PaginatedAddressListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressList'
     PaginatedCartListList:
       type: object
       required:
@@ -4778,6 +6096,52 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Coupon'
+    PaginatedCouponRedemptionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CouponRedemption'
+    PaginatedCourierList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Courier'
     PaginatedNotificationHistoryList:
       type: object
       required:
@@ -4801,7 +6165,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NotificationHistory'
-    PaginatedOrderList:
+    PaginatedOrderProcessingNoteList:
       type: object
       required:
       - count
@@ -4823,7 +6187,76 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/Order'
+            $ref: '#/components/schemas/OrderProcessingNote'
+    PaginatedOrdersListResponseList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrdersListResponse'
+    PaginatedPaymentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+    PaginatedProductDeliveryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDelivery'
     PaginatedProductListList:
       type: object
       required:
@@ -4870,6 +6303,52 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProfileList'
+    PaginatedShipmentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Shipment'
+    PaginatedSupplierList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplier'
     PaginatedTagList:
       type: object
       required:
@@ -5169,6 +6648,26 @@ components:
           maximum: 2147483647
           minimum: 0
           description: Maximum uses per user
+    PatchedCourier:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Courier company name
+          maxLength: 100
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
     PatchedInvoice:
       type: object
       description: Serializer for invoices.
@@ -5280,6 +6779,104 @@ components:
         price_drop_alerts_enabled:
           type: boolean
           description: Receive alerts when wishlist items go on sale
+    PatchedOrderProcessingNote:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+          description: Order this note relates to
+        staff_member:
+          type: integer
+          description: Staff member who created this note
+        note:
+          type: string
+          description: Note content
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+    PatchedPayment:
+      type: object
+      description: Serializer for Payment model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        status:
+          allOf:
+          - $ref: '#/components/schemas/PaymentStatusEnum'
+          description: |-
+            Current status of the payment
+
+            * `pending` - Pending
+            * `completed` - Completed
+            * `failed` - Failed
+            * `canceled` - Canceled
+        stripe_payment_intent_id:
+          type: string
+          nullable: true
+          maxLength: 255
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+    PatchedProductDelivery:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        supplier:
+          type: integer
+          description: Supplier who delivered the products
+        product:
+          type: integer
+          description: Product that was delivered
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 1
+          description: Quantity of products delivered
+        delivery_date:
+          type: string
+          format: date-time
+          description: When the delivery was received
+        cost_per_unit:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Cost per unit for this delivery
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
     PatchedProductDetail:
       type: object
       description: Detailed serializer for product detail views.
@@ -5525,6 +7122,88 @@ components:
           description: 'Phone number in international format. Supports digits, spaces,
             hyphens, parentheses, and optional ''+'' prefix. Example: +48131012012'
           pattern: ^\+?[\d\s\-\(\)]+$
+    PatchedShipment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+          description: Order this shipment is for
+        shipping_method:
+          type: integer
+          description: Shipping method used
+        courier:
+          type: integer
+          description: Courier company handling the shipment
+        shipped_at:
+          type: string
+          format: date-time
+          description: When the package was shipped
+        delivered_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the package was delivered
+        shipping_address:
+          type: string
+          description: Shipping address at time of shipment
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+    PatchedShippingMethod:
+      type: object
+      description: Serializer for ShippingMethod model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Name of the shipping method (e.g., 'Standard', 'Express')
+          maxLength: 100
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Shipping cost
+    PatchedSupplier:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Supplier company name
+          maxLength: 100
+        contact_email:
+          type: string
+          format: email
+          description: Primary contact email
+          maxLength: 254
+        phone:
+          type: string
+          description: Contact phone number
+          maxLength: 20
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
     PatchedTag:
       type: object
       description: Serializer for Tag model.
@@ -5570,6 +7249,48 @@ components:
           format: date-time
           readOnly: true
           description: Timestamp when the record was created
+    Payment:
+      type: object
+      description: Serializer for Payment model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        status:
+          allOf:
+          - $ref: '#/components/schemas/PaymentStatusEnum'
+          description: |-
+            Current status of the payment
+
+            * `pending` - Pending
+            * `completed` - Completed
+            * `failed` - Failed
+            * `canceled` - Canceled
+        stripe_payment_intent_id:
+          type: string
+          nullable: true
+          maxLength: 255
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - amount
+      - created_at
+      - id
+      - updated_at
     PaymentConfirmationResponse:
       type: object
       description: Serializer for payment confirmation response.
@@ -5595,6 +7316,18 @@ components:
       - order_number
       - payment_id
       - success
+    PaymentStatusEnum:
+      enum:
+      - pending
+      - completed
+      - failed
+      - canceled
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `completed` - Completed
+        * `failed` - Failed
+        * `canceled` - Canceled
     ProductCreate:
       type: object
       description: Serializer for creating products.
@@ -5672,6 +7405,51 @@ components:
       - price
       - sku
       - slug
+    ProductDelivery:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        supplier:
+          type: integer
+          description: Supplier who delivered the products
+        product:
+          type: integer
+          description: Product that was delivered
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 1
+          description: Quantity of products delivered
+        delivery_date:
+          type: string
+          format: date-time
+          description: When the delivery was received
+        cost_per_unit:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Cost per unit for this delivery
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - cost_per_unit
+      - created_at
+      - delivery_date
+      - id
+      - product
+      - quantity
+      - supplier
+      - updated_at
     ProductDetail:
       type: object
       description: Detailed serializer for product detail views.
@@ -6163,6 +7941,52 @@ components:
           description: 'Phone number in international format. Supports digits, spaces,
             hyphens, parentheses, and optional ''+'' prefix. Example: +48131012012'
           pattern: ^\+?[\d\s\-\(\)]+$
+    Shipment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+          description: Order this shipment is for
+        shipping_method:
+          type: integer
+          description: Shipping method used
+        courier:
+          type: integer
+          description: Courier company handling the shipment
+        shipped_at:
+          type: string
+          format: date-time
+          description: When the package was shipped
+        delivered_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the package was delivered
+        shipping_address:
+          type: string
+          description: Shipping address at time of shipment
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - courier
+      - created_at
+      - id
+      - order
+      - shipped_at
+      - shipping_address
+      - shipping_method
+      - updated_at
     ShippingMethod:
       type: object
       description: Serializer for ShippingMethod model.
@@ -6183,6 +8007,40 @@ components:
       - id
       - name
       - price
+    Supplier:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Supplier company name
+          maxLength: 100
+        contact_email:
+          type: string
+          format: email
+          description: Primary contact email
+          maxLength: 254
+        phone:
+          type: string
+          description: Contact phone number
+          maxLength: 20
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was last updated
+      required:
+      - created_at
+      - id
+      - name
+      - updated_at
     Tag:
       type: object
       description: Serializer for Tag model.
@@ -6215,6 +8073,17 @@ components:
       - name
       - slug
       - updated_at
+    TemplateDebugResponse:
+      type: object
+      properties:
+        context:
+          type: object
+          additionalProperties: {}
+        rendered_html:
+          type: string
+      required:
+      - context
+      - rendered_html
     TemplateValidationError:
       type: object
       properties:

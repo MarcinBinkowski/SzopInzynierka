@@ -16,15 +16,10 @@ function NewAddressPage() {
   const navigate = useNavigate()
   const createMutation = useProfileAddressesCreate()
 
-
   const handleSubmit = async (formData: AddressFormData) => {
     try {
-      // Validate the form data using Zod schema
       const validatedData = profileAddressesCreateBody.parse(formData)
-      
       await createMutation.mutateAsync({ data: validatedData })
-      
-      
       toast.success("Address created successfully")
       navigate({ to: "/addresses" })
     } catch (error) {
@@ -43,7 +38,7 @@ function NewAddressPage() {
   return (
     <AddressForm
       title="Create New Address"
-      description="Add a new shipping or billing address"
+      description="Add a new address to your account"
       onSubmit={handleSubmit}
       submitButtonText="Create Address"
       isSubmitting={createMutation.isPending}

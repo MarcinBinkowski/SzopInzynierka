@@ -14,26 +14,35 @@ export const profileAddressesListParams = zod.object({
   "id": zod.coerce.number()
 })
 
-export const profileAddressesListResponseProfileFirstNameMax = 150;
-export const profileAddressesListResponseProfileLastNameMax = 150;
-export const profileAddressesListResponseLabelMax = 50;
+export const profileAddressesListQueryParams = zod.object({
+  "page": zod.coerce.number().optional().describe('A page number within the paginated result set.'),
+  "page_size": zod.coerce.number().optional().describe('Number of results to return per page.')
+})
+
+export const profileAddressesListResponseResultsItemProfileFirstNameMax = 150;
+export const profileAddressesListResponseResultsItemProfileLastNameMax = 150;
+export const profileAddressesListResponseResultsItemLabelMax = 50;
 
 
-export const profileAddressesListResponseItem = zod.object({
+export const profileAddressesListResponse = zod.object({
+  "count": zod.number(),
+  "next": zod.url().nullish(),
+  "previous": zod.url().nullish(),
+  "results": zod.array(zod.object({
   "id": zod.number(),
   "profile": zod.object({
   "id": zod.number(),
   "user_email": zod.string(),
   "display_name": zod.string(),
-  "first_name": zod.string().max(profileAddressesListResponseProfileFirstNameMax).optional().describe('User\'s first name'),
-  "last_name": zod.string().max(profileAddressesListResponseProfileLastNameMax).optional().describe('User\'s last name')
+  "first_name": zod.string().max(profileAddressesListResponseResultsItemProfileFirstNameMax).optional().describe('User\'s first name'),
+  "last_name": zod.string().max(profileAddressesListResponseResultsItemProfileLastNameMax).optional().describe('User\'s last name')
 }).describe('Minimal profile serializer for address responses.'),
   "full_address": zod.string(),
-  "label": zod.string().max(profileAddressesListResponseLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
+  "label": zod.string().max(profileAddressesListResponseResultsItemLabelMax).optional().describe('Optional label like \'Home\', \'Office\', etc.'),
   "is_default": zod.boolean().optional().describe('Whether this is the default address'),
   "created_at": zod.iso.datetime({}).describe('Timestamp when the record was created')
+}))
 })
-export const profileAddressesListResponse = zod.array(profileAddressesListResponseItem)
 
 /**
  * Create a new address. Profile field is optional - if not provided, uses current user's profile.

@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.request import Request
@@ -6,10 +6,13 @@ from drf_spectacular.utils import extend_schema
 from apps.checkout.models.order import Order
 from apps.checkout.serializers.order import OrderSerializer, OrderDetailSerializer
 from drf_spectacular.utils import inline_serializer
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Sum, Count
 
 
 class OrderViewSet(viewsets.ReadOnlyModelViewSet):
-    """ViewSet for user orders."""
+    """ViewSet for viewing orders (read-only)."""
     
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = OrderSerializer
@@ -19,7 +22,7 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
         return Order.objects.filter(user=self.request.user)
     
     def get_serializer_class(self):
-        """Use detail serializer for retrieve action."""
+        """Use appropriate serializer for different actions."""
         if self.action == 'retrieve':
             return OrderDetailSerializer
         return OrderSerializer
@@ -46,10 +49,6 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
             ),
         }
     )
-    @action(detail=False, methods=['get'])
-    def me(self, request: Request):
-        """Get current user's orders."""
-        orders = self.get_queryset().order_by('-created_at')
-        serializer = self.get_serializer(orders, many=True)
-        return Response({'orders': serializer.data})
-    
+    def list(self, request, *args, **kwargs):
+        """List orders for the current user."""
+        return super().list(request, *args, **kwargs)
