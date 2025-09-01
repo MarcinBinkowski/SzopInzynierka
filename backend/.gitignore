@@ -196,3 +196,5 @@ cython_debug/
 *.pyc
 
 .DS_Store
+
+celerybeat-schedule*

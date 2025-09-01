@@ -1225,30 +1225,6 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/catalog/products/{id}/related/:
-    get:
-      operationId: catalog_products_related_retrieve
-      description: Get related products based on category and tags.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this product.
-        required: true
-      tags:
-      - catalog
-      security:
-      - cookieAuth: []
-      - tokenAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductDetail'
-          description: ''
   /api/catalog/products/on_sale/:
     get:
       operationId: catalog_products_on_sale_retrieve
@@ -2633,6 +2609,14 @@ paths:
   /api/checkout/dashboard/:
     get:
       operationId: checkout_dashboard_retrieve
+      description: Get dashboard statistics for the given period (24h, 7d, 30d, lifetime)
+      summary: Dashboard analytics
+      parameters:
+      - in: query
+        name: period
+        schema:
+          type: string
+        description: 24h | 7d | 30d | lifetime
       tags:
       - checkout
       security:
@@ -2640,7 +2624,7 @@ paths:
       - tokenAuth: []
       responses:
         '200':
-          description: No response body
+          description: Dashboard statistics
   /api/checkout/invoice-templates/:
     get:
       operationId: checkout_invoice_templates_list

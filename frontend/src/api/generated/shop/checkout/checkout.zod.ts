@@ -1730,6 +1730,14 @@ export const checkoutCreateCheckoutSessionCreateResponse = zod.object({
 }).describe('Serializer for payment intent response (PaymentSheet).')
 
 /**
+ * Get dashboard statistics for the given period (24h, 7d, 30d, lifetime)
+ * @summary Dashboard analytics
+ */
+export const checkoutDashboardRetrieveQueryParams = zod.object({
+  "period": zod.coerce.string().optional().describe('24h | 7d | 30d | lifetime')
+})
+
+/**
  * ViewSet for managing invoice templates.
  */
 export const checkoutInvoiceTemplatesListResponseNameMax = 100;

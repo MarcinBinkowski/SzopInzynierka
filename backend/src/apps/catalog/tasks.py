@@ -28,12 +28,10 @@ def send_wishlist_notification(
     except (User.DoesNotExist, Product.DoesNotExist):
         return
 
-    # Check if simulator relay is configured
     if not getattr(settings, 'SIMULATOR_PUSH_RELAY_URL', None):
         logger.warning("SIMULATOR_PUSH_RELAY_URL not configured - skipping notification")
         return
 
-    # Preferences check
     try:
         pref = user.notification_preference
     except NotificationPreference.DoesNotExist:
@@ -72,7 +70,6 @@ def send_wishlist_notification(
         "product_name": product.name,
     }
 
-    # Send via simulator service
     service = SimulatorNotificationService()
     service.send_notification(
         title=title,

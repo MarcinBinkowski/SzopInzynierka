@@ -1,3 +1,4 @@
+import pdb
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -33,12 +34,10 @@ class ProductViewSet(viewsets.ModelViewSet):
         """Optimize queryset based on action and user permissions."""
         queryset = super().get_queryset()
 
-        # Always optimize with related data
         queryset = queryset.select_related("category").prefetch_related(
             "tags", "images"
         )
 
-        # Annotate with effective_price and case-insensitive name for sorting
         now = timezone.now()
         queryset = queryset.annotate(
             effective_price=Case(
@@ -48,10 +47,8 @@ class ProductViewSet(viewsets.ModelViewSet):
             ),
             name_lower=Lower("name")
         )
-
         if not self.request.user.is_staff:
             queryset = queryset.available()
-
         return queryset
 
     def get_serializer_class(self):
@@ -63,13 +60,6 @@ class ProductViewSet(viewsets.ModelViewSet):
         else:
             return ProductDetailSerializer
 
-    def perform_create(self, serializer) -> None:
-        """Handle product creation."""
-        serializer.save()
-
-    def perform_update(self, serializer) -> None:
-        """Handle product updates."""
-        serializer.save()
 
     @action(detail=False, methods=["get"])
     def on_sale(self, request) -> Response:
@@ -88,21 +78,3 @@ class ProductViewSet(viewsets.ModelViewSet):
         )
         return Response(serializer.data)
 
-
-
-    @action(detail=True, methods=["get"])
-    def related(self, request, slug: str = None) -> Response:
-        """Get related products based on category and tags."""
-        product = self.get_object()
-
-        # Find products in same category with similar tags
-        related_products = (
-            Product.objects.available()
-            .filter(category=product.category)
-            .exclude(pk=product.pk)[:5]
-        )
-
-        serializer = ProductListSerializer(
-            related_products, many=True, context={"request": request}
-        )
-        return Response(serializer.data)

@@ -16,6 +16,14 @@ from apps.checkout.models.order_item import OrderItem
 class DashboardAnalyticsView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary="Dashboard analytics",
+        description="Get dashboard statistics for the given period (24h, 7d, 30d, lifetime)",
+        parameters=[
+            OpenApiParameter(name='period', type=OpenApiTypes.STR, location=OpenApiParameter.QUERY, required=False, description='24h | 7d | 30d | lifetime')
+        ],
+        responses={200: OpenApiResponse(description='Dashboard statistics')}
+    )
     def get(self, request):
         period = request.query_params.get("period", "7d")
         now = timezone.now()
@@ -57,7 +65,6 @@ class DashboardAnalyticsView(APIView):
 
         used = qs.filter(applied_coupon__isnull=False).count()
         coupon_usage = {"used": used, "total": total_orders}
-
         data = {
             "period": period,
             "orders_count": total_orders,

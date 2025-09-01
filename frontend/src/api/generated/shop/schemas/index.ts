@@ -33,6 +33,7 @@ export * from './checkoutCouponRedemptionsListParams';
 export * from './checkoutCouponsActiveListParams';
 export * from './checkoutCouponsListParams';
 export * from './checkoutCouriersListParams';
+export * from './checkoutDashboardRetrieveParams';
 export * from './checkoutInvoiceTemplatesListParams';
 export * from './checkoutInvoicesDebugTemplateRetrieveParams';
 export * from './checkoutInvoicesDownloadByOrderRetrieveParams';

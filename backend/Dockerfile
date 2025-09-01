@@ -32,7 +32,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY src/ ./src/
-
+COPY notify.py ./src/notify.py
 ENV PYTHONPATH=/app/src
 
 WORKDIR /app/src

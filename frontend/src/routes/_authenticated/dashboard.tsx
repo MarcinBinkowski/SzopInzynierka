@@ -29,13 +29,15 @@ function DashboardPage() {
   const [period, setPeriod] = useState<PeriodKey>('7d')
   const orders: Order[] = (data?.results ?? []) as unknown as Order[]
 
-  const { data: stats, isLoading: statsLoading } = useCheckoutDashboardRetrieve({
-    query: {
-      queryKey: [...getCheckoutDashboardRetrieveQueryKey(), { period }],
-      queryFn: ({ signal }) => checkoutDashboardRetrieve(signal),
-      staleTime: 0,
-    },
-  })
+  const { data: stats, isLoading: statsLoading } = useCheckoutDashboardRetrieve(
+    { period },
+    {
+      query: {
+        queryKey: [...getCheckoutDashboardRetrieveQueryKey(), { period }],
+        staleTime: 0,
+      },
+    }
+  )
 
   const filtered = useMemo(() => {
     if (period === 'lifetime') return orders

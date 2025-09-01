@@ -33,6 +33,7 @@ import type {
   CheckoutCouponsActiveListParams,
   CheckoutCouponsListParams,
   CheckoutCouriersListParams,
+  CheckoutDashboardRetrieveParams,
   CheckoutInvoicesDebugTemplateRetrieveParams,
   CheckoutInvoicesDownloadByOrderRetrieveParams,
   CheckoutItemsListParams,
@@ -2185,34 +2186,39 @@ const {mutation: mutationOptions} = options ?
 
       return useMutation(mutationOptions , queryClient);
     }
-    export const checkoutDashboardRetrieve = (
-    
+    /**
+ * Get dashboard statistics for the given period (24h, 7d, 30d, lifetime)
+ * @summary Dashboard analytics
+ */
+export const checkoutDashboardRetrieve = (
+    params?: CheckoutDashboardRetrieveParams,
  signal?: AbortSignal
 ) => {
       
       
       return shopInstance<void>(
-      {url: `/api/checkout/dashboard/`, method: 'GET', signal
+      {url: `/api/checkout/dashboard/`, method: 'GET',
+        params, signal
     },
       );
     }
   
 
-export const getCheckoutDashboardRetrieveQueryKey = () => {
-    return [`/api/checkout/dashboard/`] as const;
+export const getCheckoutDashboardRetrieveQueryKey = (params?: CheckoutDashboardRetrieveParams,) => {
+    return [`/api/checkout/dashboard/`, ...(params ? [params]: [])] as const;
     }
 
     
-export const getCheckoutDashboardRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError, TData>>, }
+export const getCheckoutDashboardRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError = ErrorType<unknown>>(params?: CheckoutDashboardRetrieveParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getCheckoutDashboardRetrieveQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getCheckoutDashboardRetrieveQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkoutDashboardRetrieve>>> = ({ signal }) => checkoutDashboardRetrieve(signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkoutDashboardRetrieve>>> = ({ signal }) => checkoutDashboardRetrieve(params, signal);
 
       
 
@@ -2226,7 +2232,7 @@ export type CheckoutDashboardRetrieveQueryError = ErrorType<unknown>
 
 
 export function useCheckoutDashboardRetrieve<TData = Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError, TData>> & Pick<
+ params: undefined |  CheckoutDashboardRetrieveParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof checkoutDashboardRetrieve>>,
           TError,
@@ -2236,7 +2242,7 @@ export function useCheckoutDashboardRetrieve<TData = Awaited<ReturnType<typeof c
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useCheckoutDashboardRetrieve<TData = Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError, TData>> & Pick<
+ params?: CheckoutDashboardRetrieveParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof checkoutDashboardRetrieve>>,
           TError,
@@ -2246,16 +2252,19 @@ export function useCheckoutDashboardRetrieve<TData = Awaited<ReturnType<typeof c
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useCheckoutDashboardRetrieve<TData = Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError, TData>>, }
+ params?: CheckoutDashboardRetrieveParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Dashboard analytics
+ */
 
 export function useCheckoutDashboardRetrieve<TData = Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError, TData>>, }
+ params?: CheckoutDashboardRetrieveParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkoutDashboardRetrieve>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getCheckoutDashboardRetrieveQueryOptions(options)
+  const queryOptions = getCheckoutDashboardRetrieveQueryOptions(params,options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

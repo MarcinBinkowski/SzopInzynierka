@@ -8,23 +8,44 @@ import { useColorScheme } from 'react-native';
 import { en, registerTranslation } from 'react-native-paper-dates';
 import { useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
+import { useAuthStore } from "@/stores/authStore";
 
 registerTranslation('en', en);
 
+// suppress due to usage of simulator
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
+  handleNotification: async (notification) => {
+    try {
+      const currentUserId = useAuthStore.getState().session?.data?.user?.id;
+      const data: any = notification?.request?.content?.data ?? {};
+      const payloadUserId = data?.user_id ?? null;
+
+      const matchesUser = !payloadUserId || String(payloadUserId) === String(currentUserId ?? "");
+
+      return {
+        shouldShowAlert: matchesUser,
+        shouldPlaySound: matchesUser,
+        shouldSetBadge: matchesUser,
+        shouldShowBanner: matchesUser,
+        shouldShowList: matchesUser,
+      };
+    } catch {
+      return {
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+        shouldShowBanner: true,
+        shouldShowList: true,
+      };
+    }
+  },
 });
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5,
+      staleTime: 1000 * 10,
+      gcTime: 1000 * 10,
       retry: 1,
     },
   },

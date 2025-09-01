@@ -36,7 +36,6 @@ export default function MainScreen() {
 
 
 
-  // We'll need to fetch category name when needed, for now just show the ID
   const selectedCategoryName = selectedCategory ? `Category ${selectedCategory}` : 'All Categories';
 
   const productQuery = useProductQuery({
