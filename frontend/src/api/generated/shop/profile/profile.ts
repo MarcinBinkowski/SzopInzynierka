@@ -528,7 +528,7 @@ const {mutation: mutationOptions} = options ?
       return useMutation(mutationOptions , queryClient);
     }
     /**
- * Get the default address for the current user or specified profile.
+ * Get the default address for the current user.
  */
 export const profileAddressesDefaultRetrieve = (
     
@@ -611,6 +611,9 @@ export function useProfileAddressesDefaultRetrieve<TData = Awaited<ReturnType<ty
 
 
 
+/**
+ * Get address summary for the current user.
+ */
 export const profileAddressesSummaryRetrieve = (
     
  signal?: AbortSignal
@@ -693,7 +696,7 @@ export function useProfileAddressesSummaryRetrieve<TData = Awaited<ReturnType<ty
 
 
 /**
- * Unset the default address for the current user or specified profile.
+ * Unset the default address for the current user.
  */
 export const profileAddressesUnsetDefaultPartialUpdate = (
     patchedAddress: BodyType<NonReadonly<PatchedAddress>>,

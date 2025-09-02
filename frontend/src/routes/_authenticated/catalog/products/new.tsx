@@ -15,15 +15,21 @@ function NewProductPage() {
   const createMutation = useCatalogProductsCreate()
 
   const handleSubmit = async (formData: ProductCreateData) => {
+    console.log('New product handleSubmit called with:', formData)
     try {
       // Validate the form data using Zod schema
+      console.log('Validating with Zod...')
       const validatedData = catalogProductsCreateBody.parse(formData)
+      console.log('Validation successful, data:', validatedData)
       
+      console.log('Calling API...')
       await createMutation.mutateAsync({ data: validatedData })
       
+      console.log('API call successful')
       toast.success("Product created successfully")
       navigate({ to: "/catalog/products" })
     } catch (error) {
+      console.error('Error in handleSubmit:', error)
       if (error instanceof Error) {
         toast.error(`Failed to create product: ${error.message}`)
       } else {

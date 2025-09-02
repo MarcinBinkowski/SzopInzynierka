@@ -5,6 +5,7 @@
  * API for ShopDjango project
  * OpenAPI spec version: 1.0.0
  */
+import type { RoleEnum } from './roleEnum';
 import type { PatchedProfileShippingAddress } from './patchedProfileShippingAddress';
 import type { PatchedProfileBillingAddress } from './patchedProfileBillingAddress';
 
@@ -33,6 +34,11 @@ export interface PatchedProfile {
    * @pattern ^\+?[\d\s\-\(\)]+$
    */
   phone_number?: string;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  role?: RoleEnum;
   /** Whether profile has all required information for checkout */
   readonly profile_completed?: boolean;
   readonly display_name?: string;

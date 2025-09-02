@@ -41,7 +41,14 @@ class CartItemAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Item Information",
-            {"fields": ("cart", "product", "quantity", "unit_price",)},
+            {
+                "fields": (
+                    "cart",
+                    "product",
+                    "quantity",
+                    "unit_price",
+                )
+            },
         ),
         (
             "Calculated Fields",

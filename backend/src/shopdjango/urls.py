@@ -29,8 +29,3 @@ urlpatterns = [
     path("api/geographic/", include("apps.geographic.urls")),
     path("api/checkout/", include("apps.checkout.urls")),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    # Also serve static files if needed
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

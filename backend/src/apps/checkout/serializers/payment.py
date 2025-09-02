@@ -1,18 +1,15 @@
 from rest_framework import serializers
-from decimal import Decimal
 
-from apps.checkout.models import Payment, Cart
+from apps.checkout.models import Payment
 from apps.profile.models import Address
 from apps.checkout.models import ShippingMethod
 
 
 class CreateCheckoutSessionSerializer(serializers.Serializer):
     """Serializer for creating payment intent (PaymentSheet)."""
-    
+
     currency = serializers.CharField(
-        default="usd",
-        max_length=3,
-        help_text="Currency code (default: usd)"
+        default="usd", max_length=3, help_text="Currency code (default: usd)"
     )
     shipping_address_id = serializers.IntegerField(
         help_text="ID of the shipping address to use for this order"
@@ -23,13 +20,10 @@ class CreateCheckoutSessionSerializer(serializers.Serializer):
 
     def validate_shipping_address_id(self, value):
         """Validate that the shipping address exists and belongs to the user."""
-        request = self.context.get('request')
+        request = self.context.get("request")
         if request and request.user:
             try:
-                Address.objects.get(
-                    id=value,
-                    profile__user=request.user
-                )
+                Address.objects.get(id=value, profile__user=request.user)
                 return value
             except Address.DoesNotExist:
                 raise serializers.ValidationError("Shipping address not found")
@@ -45,32 +39,30 @@ class CreateCheckoutSessionSerializer(serializers.Serializer):
 
     def set_shipping_on_cart(self, cart):
         """Set shipping address and method on the cart."""
-        shipping_address_id = self.validated_data.get('shipping_address_id')
-        shipping_method_id = self.validated_data.get('shipping_method_id')
-        
+        shipping_address_id = self.validated_data.get("shipping_address_id")
+        shipping_method_id = self.validated_data.get("shipping_method_id")
+
         if shipping_address_id:
             address = Address.objects.get(id=shipping_address_id)
             cart.shipping_address = address
-        
+
         if shipping_method_id:
             shipping_method = ShippingMethod.objects.get(id=shipping_method_id)
             cart.shipping_method = shipping_method
-        
+
         cart.save()
         return cart
 
 
 class ConfirmPaymentSerializer(serializers.Serializer):
     """Serializer for confirming payment."""
-    
-    session_id = serializers.CharField(
-        help_text="Stripe checkout session ID"
-    )
+
+    session_id = serializers.CharField(help_text="Stripe checkout session ID")
 
 
 class CheckoutSessionResponseSerializer(serializers.Serializer):
     """Serializer for payment intent response (PaymentSheet)."""
-    
+
     client_secret = serializers.CharField()
     payment_intent_id = serializers.CharField()
     payment_id = serializers.IntegerField()
@@ -78,7 +70,7 @@ class CheckoutSessionResponseSerializer(serializers.Serializer):
 
 class PaymentConfirmationResponseSerializer(serializers.Serializer):
     """Serializer for payment confirmation response."""
-    
+
     success = serializers.BooleanField()
     payment_id = serializers.IntegerField()
     order_number = serializers.CharField()
@@ -89,7 +81,7 @@ class PaymentConfirmationResponseSerializer(serializers.Serializer):
 
 class PaymentSerializer(serializers.ModelSerializer):
     """Serializer for Payment model."""
-    
+
     class Meta:
         model = Payment
         fields = [
@@ -105,4 +97,4 @@ class PaymentSerializer(serializers.ModelSerializer):
             "id",
             "created_at",
             "updated_at",
-        ] 
+        ]

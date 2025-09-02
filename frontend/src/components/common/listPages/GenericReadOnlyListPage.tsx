@@ -14,7 +14,6 @@ import { useNavigate } from "@tanstack/react-router";
 import { RowActions } from "@/components/common/listPageHelpers/RowActions";
 import { useServerSideTable } from "@/hooks/useServerSideTable";
 
-// Minimal helper types for list hook
 export type Paginated<T> = { results: T[]; count?: number };
 export type ListHookResult<T> = {
   data: T[] | Paginated<T> | undefined;

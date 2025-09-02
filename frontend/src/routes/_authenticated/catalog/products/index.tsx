@@ -53,6 +53,7 @@ function ProductsPage() {
       onAdd={() => navigate({ to: "/catalog/products/new" })}
       onEdit={(row) => navigate({ to: `/catalog/products/${row.id}/edit` })}
       onDelete={handleDelete}
+      entityType="general"
     />
   )
 }

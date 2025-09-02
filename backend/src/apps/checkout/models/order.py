@@ -35,7 +35,7 @@ class Order(TimestampedModel):
         default=OrderStatus.PENDING,
         help_text="Current status of the order",
     )
-    
+
     # Pricing
     subtotal = models.DecimalField(
         max_digits=10,
@@ -53,34 +53,34 @@ class Order(TimestampedModel):
         decimal_places=2,
         help_text="Total amount including shipping",
     )
-    
+
     # Relationships
     payment = models.OneToOneField(
-        'Payment',
+        "Payment",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='order',
+        related_name="order",
         help_text="Payment associated with this order",
     )
     shipping_address = models.ForeignKey(
-        'profile.Address',
+        "profile.Address",
         on_delete=models.PROTECT,
-        related_name='orders',
+        related_name="orders",
         help_text="Shipping address for this order",
     )
     shipping_method = models.ForeignKey(
-        'ShippingMethod',
+        "ShippingMethod",
         on_delete=models.PROTECT,
-        related_name='orders',
+        related_name="orders",
         help_text="Shipping method used for this order",
     )
     applied_coupon = models.ForeignKey(
-        'Coupon',
+        "Coupon",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='orders',
+        related_name="orders",
         help_text="Applied coupon to this order",
     )
     coupon_discount = models.DecimalField(
@@ -89,7 +89,7 @@ class Order(TimestampedModel):
         default=Decimal("0.00"),
         help_text="Discount amount from applied coupon",
     )
-    
+
     # Additional info
     notes = models.TextField(
         blank=True,
@@ -134,7 +134,7 @@ class Order(TimestampedModel):
             coupon_discount=cart.coupon_discount,
             status=cls.OrderStatus.CONFIRMED,
         )
-        
+
         # Create order items from cart items
         for cart_item in cart.items.all():
             OrderItem.objects.create(
@@ -144,10 +144,11 @@ class Order(TimestampedModel):
                 unit_price=cart_item.unit_price,
                 total_price=cart_item.total_price,
             )
-        
+
         # Create coupon redemption if coupon was applied
         if cart.applied_coupon:
             from apps.checkout.models.coupon import CouponRedemption
+
             CouponRedemption.objects.create(
                 user=cart.user,
                 coupon=cart.applied_coupon,
@@ -156,5 +157,5 @@ class Order(TimestampedModel):
                 original_total=cart.total_before_coupon,
                 final_total=cart.total,
             )
-        
-        return order 
+
+        return order

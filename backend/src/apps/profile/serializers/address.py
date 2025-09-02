@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from apps.profile.permissions import get_user_role
 from django.contrib.auth import get_user_model
 
 from apps.profile.models import Address, Profile
@@ -99,7 +100,8 @@ class AddressCreateSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
 
         if "profile" in data and request and hasattr(request, "user"):
-            if not request.user.is_staff:
+            role = get_user_role(getattr(request, "user", None))
+            if role != Profile.Role.ADMIN:
                 raise serializers.ValidationError(
                     {
                         "profile": "Only admin users can specify profile. Regular users must use their own profile."

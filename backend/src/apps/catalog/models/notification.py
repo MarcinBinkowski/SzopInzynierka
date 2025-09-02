@@ -6,24 +6,23 @@ from apps.catalog.models.product import Product
 
 class NotificationPreference(TimestampedModel):
     """Model for user notification preferences."""
-    
+
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="notification_preference",
-        help_text="User who owns these preferences"
+        help_text="User who owns these preferences",
     )
-    
+
     # Notification types
     stock_alerts_enabled = models.BooleanField(
         default=False,
-        help_text="Receive alerts when out-of-stock wishlist items become available"
+        help_text="Receive alerts when out-of-stock wishlist items become available",
     )
     price_drop_alerts_enabled = models.BooleanField(
-        default=False,
-        help_text="Receive alerts when wishlist items go on sale"
+        default=False, help_text="Receive alerts when wishlist items go on sale"
     )
-    
+
     class Meta:
         verbose_name = "Notification Preference"
         verbose_name_plural = "Notification Preferences"
@@ -39,33 +38,27 @@ class NotificationType(models.TextChoices):
 
 class NotificationHistory(TimestampedModel):
     """History of sent notifications for analytics and avoiding duplicates."""
-    
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="notification_history",
-        help_text="User who received notification"
+        help_text="User who received notification",
     )
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
         related_name="notification_history",
-        help_text="Product the notification was about"
+        help_text="Product the notification was about",
     )
     notification_type = models.CharField(
         max_length=20,
         choices=NotificationType.choices,
-        help_text="Type of notification sent"
-    )
-    
-    title = models.CharField(
-        max_length=255,
-        help_text="Notification title"
-    )
-    body = models.TextField(
-        help_text="Notification body text"
+        help_text="Type of notification sent",
     )
 
+    title = models.CharField(max_length=255, help_text="Notification title")
+    body = models.TextField(help_text="Notification body text")
 
     class Meta:
         verbose_name = "Notification History"

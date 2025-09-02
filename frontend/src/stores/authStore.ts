@@ -1,23 +1,38 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { AuthenticatedResponse } from '@/api/generated/auth/schemas'
+import { Profile } from '@/api/generated/shop/schemas/profile'
+
+export const USER_ROLES = {
+  ADMIN: 1,
+  EMPLOYEE: 2, 
+  USER: 3,
+} as const
+
+export type UserRole = typeof USER_ROLES[keyof typeof USER_ROLES]
 
 interface AuthState {
   session: AuthenticatedResponse | null
+  profile: Profile | null
   setSession: (session: AuthenticatedResponse | null) => void
+  setProfile: (profile: Profile | null) => void
   clearSession: () => void
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get, api) => ({
       session: null,
+      profile: null,
       setSession: (session) => set({ session }),
-      clearSession: () => set({ session: null }),
+      setProfile: (profile) => set({ profile }),
+      clearSession: () => {
+        set({ session: null, profile: null })
+      },
     }),
     {
       name: 'auth-session',
-      partialize: (state) => ({ session: state.session }),
+      partialize: (state) => ({ session: state.session, profile: state.profile }),
     }
   )
 )
@@ -28,12 +43,42 @@ export const useIsAuthenticated = () =>
 export const useCurrentUser = () => 
   useAuthStore(state => state.session?.data?.user ?? null)
 
-export const useUserEmail = () => 
-  useAuthStore(state => state.session?.data?.user?.email ?? null)
+// Role-based selectors
+export const useUserRole = (): UserRole => 
+  useAuthStore(state => state.profile?.role ?? USER_ROLES.USER)
 
-export const useUserDisplayName = () => 
-  useAuthStore(state => 
-    state.session?.data?.user?.username || 
-    state.session?.data?.user?.email || 
-    null
-  )
+export const useIsAdmin = () => 
+  useAuthStore(state => state.profile?.role === USER_ROLES.ADMIN)
+
+export const useIsEmployee = () => 
+  useAuthStore(state => state.profile?.role === USER_ROLES.EMPLOYEE)
+
+export const useIsUser = () => 
+  useAuthStore(state => state.profile?.role === USER_ROLES.USER)
+
+export const useIsStaff = () => 
+  useAuthStore(state => {
+    const role = state.profile?.role
+    return role === USER_ROLES.ADMIN || role === USER_ROLES.EMPLOYEE
+  })
+
+export const useCanCreate = () => 
+  useAuthStore(state => state.profile?.role === USER_ROLES.ADMIN)
+
+export const useCanCreateShipments = () => 
+  useAuthStore(state => {
+    const role = state.profile?.role
+    return role === USER_ROLES.ADMIN || role === USER_ROLES.EMPLOYEE
+  })
+
+export const useCanManageOrders = () => 
+  useAuthStore(state => {
+    const role = state.profile?.role
+    return role === USER_ROLES.ADMIN || role === USER_ROLES.EMPLOYEE
+  })
+
+export const useCanManageOrderNotes = () => 
+  useAuthStore(state => {
+    const role = state.profile?.role
+    return role === USER_ROLES.ADMIN || role === USER_ROLES.EMPLOYEE
+  })

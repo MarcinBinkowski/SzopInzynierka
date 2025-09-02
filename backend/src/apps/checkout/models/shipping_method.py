@@ -1,4 +1,3 @@
-from decimal import Decimal
 from django.db import models
 
 from apps.common.models import TimestampedModel
@@ -20,7 +19,7 @@ class ShippingMethod(TimestampedModel):
     courier = models.ForeignKey(
         Courier,
         on_delete=models.PROTECT,
-        related_name='shipping_methods',
+        related_name="shipping_methods",
         help_text="Courier company providing this shipping method",
     )
 
@@ -30,4 +29,4 @@ class ShippingMethod(TimestampedModel):
         verbose_name_plural = "Shipping Methods"
 
     def __str__(self) -> str:
-        return f"{self.name} - ${self.price} via {self.courier.name}" 
+        return f"{self.name} - ${self.price} via {self.courier.name}"

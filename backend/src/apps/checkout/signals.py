@@ -1,6 +1,5 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.core.exceptions import ValidationError
 import logging
 
 from apps.checkout.models import Order
@@ -19,6 +18,10 @@ def create_invoice_on_order_creation(sender, instance, created, **kwargs):
         return
     try:
         invoice = InvoiceCreationService.create_invoice_for_order(instance)
-        logger.info(f"Automatically created invoice {invoice.invoice_number} for order {instance.order_number}")
+        logger.info(
+            f"Automatically created invoice {invoice.invoice_number} for order {instance.order_number}"
+        )
     except Exception as e:
-        logger.error(f"Failed to create invoice for order {instance.order_number}: {str(e)}")
+        logger.error(
+            f"Failed to create invoice for order {instance.order_number}: {str(e)}"
+        )

@@ -2,13 +2,14 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from apps.catalog.models import ProductImage
 from apps.catalog.serializers import (
     ProductImageSerializer,
 )
+from apps.profile.models import Profile
+from apps.profile.permissions import ReadOnlyOrRoles
 
 
 class ProductImageViewSet(viewsets.ModelViewSet):
@@ -16,7 +17,9 @@ class ProductImageViewSet(viewsets.ModelViewSet):
 
     queryset = ProductImage.objects.all()
     serializer_class = ProductImageSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        return [ReadOnlyOrRoles({Profile.Role.ADMIN})]
 
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ["product", "is_primary"]

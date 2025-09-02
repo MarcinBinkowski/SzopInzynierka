@@ -8,4 +8,4 @@ class CatalogConfig(AppConfig):
 
     def ready(self):
         # Import signals to register them
-        import apps.catalog.signals
+        pass

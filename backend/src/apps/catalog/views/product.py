@@ -1,9 +1,7 @@
-import pdb
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from apps.catalog.models import Product
@@ -16,18 +14,29 @@ from apps.catalog.filters import ProductFilter
 from django.db.models import Case, When, F, DecimalField
 from django.db.models.functions import Lower
 from django.utils import timezone
+from apps.profile.models import Profile
+from apps.profile.permissions import get_user_role, ReadOnlyOrRoles
 
 
 class ProductViewSet(viewsets.ModelViewSet):
     """ViewSet for Product model with advanced CRUD operations."""
 
     queryset = Product.objects.all()
-    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        return [ReadOnlyOrRoles({Profile.Role.ADMIN})]
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
     search_fields = ["name"]
-    ordering_fields = ["name_lower", "price", "original_price", "created_at", "updated_at", "effective_price"]
+    ordering_fields = [
+        "name_lower",
+        "price",
+        "original_price",
+        "created_at",
+        "updated_at",
+        "effective_price",
+    ]
     ordering = ["-created_at"]
 
     def get_queryset(self):
@@ -45,9 +54,10 @@ class ProductViewSet(viewsets.ModelViewSet):
                 default=F("original_price"),
                 output_field=DecimalField(max_digits=10, decimal_places=2),
             ),
-            name_lower=Lower("name")
+            name_lower=Lower("name"),
         )
-        if not self.request.user.is_staff:
+        role = get_user_role(getattr(self.request, "user", None))
+        if role not in {Profile.Role.ADMIN, Profile.Role.EMPLOYEE}:
             queryset = queryset.available()
         return queryset
 
@@ -59,7 +69,6 @@ class ProductViewSet(viewsets.ModelViewSet):
             return ProductListSerializer
         else:
             return ProductDetailSerializer
-
 
     @action(detail=False, methods=["get"])
     def on_sale(self, request) -> Response:
@@ -77,4 +86,3 @@ class ProductViewSet(viewsets.ModelViewSet):
             products, many=True, context={"request": request}
         )
         return Response(serializer.data)
-

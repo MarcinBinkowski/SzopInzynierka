@@ -1,7 +1,6 @@
 from decimal import Decimal
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
 
 from apps.common.models import TimestampedModel
 
@@ -32,27 +31,27 @@ class Cart(TimestampedModel):
         help_text="Current status of the cart",
     )
     shipping_address = models.ForeignKey(
-        'profile.Address',
+        "profile.Address",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='carts',
+        related_name="carts",
         help_text="Selected shipping address for this cart",
     )
     shipping_method = models.ForeignKey(
-        'ShippingMethod',
+        "ShippingMethod",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='carts',
+        related_name="carts",
         help_text="Selected shipping method for this cart",
     )
     applied_coupon = models.ForeignKey(
-        'Coupon',
+        "Coupon",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='carts',
+        related_name="carts",
         help_text="Applied coupon to this cart",
     )
     coupon_discount = models.DecimalField(
@@ -112,7 +111,10 @@ class Cart(TimestampedModel):
         return self.item_count == 0
 
     @classmethod
-    def get_or_create_active_cart(cls, user: User,) -> "Cart":
+    def get_or_create_active_cart(
+        cls,
+        user: User,
+    ) -> "Cart":
         """Get existing active cart or create new one."""
         if user.is_authenticated:
             cart, created = cls.objects.get_or_create(

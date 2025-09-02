@@ -3,7 +3,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('checkout', '0008_alter_shippingmethod_courier'),
+        ("checkout", "0008_alter_shippingmethod_courier"),
     ]
 
     operations = [
@@ -33,9 +33,8 @@ class Migration(migrations.Migration):
             """,
             reverse_sql="""
             DROP FUNCTION IF EXISTS update_order_status_on_shipment();
-            """
+            """,
         ),
-        
         migrations.RunSQL(
             sql="""
             -- Trigger that automatically calls the function when shipment changes
@@ -46,7 +45,6 @@ class Migration(migrations.Migration):
             """,
             reverse_sql="""
             DROP TRIGGER IF EXISTS shipment_status_trigger ON checkout_shipment;
-            """
+            """,
         ),
-        
-    ] 
+    ]

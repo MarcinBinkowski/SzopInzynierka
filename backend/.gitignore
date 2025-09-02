@@ -197,4 +197,5 @@ cython_debug/
 
 .DS_Store
 
-celerybeat-schedule*
+celerybeat-schedule
+.relay.pid

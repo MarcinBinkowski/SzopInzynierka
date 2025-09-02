@@ -1,12 +1,6 @@
-from decimal import Decimal
-from typing import Any
-
 from django.contrib import admin
-from django.db import models
-from django.forms import TextInput
 from django.http import HttpRequest
 from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 
 from apps.catalog.models import Product
 

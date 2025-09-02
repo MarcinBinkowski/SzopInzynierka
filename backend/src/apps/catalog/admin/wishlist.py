@@ -58,7 +58,7 @@ class WishlistItemAdmin(admin.ModelAdmin):
     def user_display(self, obj: WishlistItem) -> str:
         """Display user information."""
         return format_html(
-            '<strong>{}</strong><br><small>{}</small>',
+            "<strong>{}</strong><br><small>{}</small>",
             obj.user.email,
             obj.user.username,
         )
@@ -68,7 +68,7 @@ class WishlistItemAdmin(admin.ModelAdmin):
     def product_display(self, obj: WishlistItem) -> str:
         """Display product information."""
         return format_html(
-            '<strong>{}</strong><br><small>SKU: {}</small>',
+            "<strong>{}</strong><br><small>SKU: {}</small>",
             obj.product.name,
             obj.product.sku,
         )
@@ -134,4 +134,4 @@ class WishlistItemAdmin(admin.ModelAdmin):
             super()
             .get_queryset(request)
             .select_related("user", "product", "product__category")
-        ) 
+        )

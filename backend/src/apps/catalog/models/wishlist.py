@@ -6,18 +6,18 @@ from apps.catalog.models.product import Product
 
 class WishlistItem(TimestampedModel):
     """Model for tracking user's wishlist items."""
-    
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="wishlist_items",
-        help_text="User who added this item to wishlist"
+        help_text="User who added this item to wishlist",
     )
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
         related_name="wishlist_items",
-        help_text="Product in the wishlist"
+        help_text="Product in the wishlist",
     )
 
     class Meta:
@@ -31,4 +31,4 @@ class WishlistItem(TimestampedModel):
         ]
 
     def __str__(self) -> str:
-        return f"{self.user.email} - {self.product.name}" 
+        return f"{self.user.email} - {self.product.name}"

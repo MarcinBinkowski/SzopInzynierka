@@ -26,18 +26,32 @@ router.register(r"items", CartItemViewSet, basename="cart-item")
 router.register(r"shipping-methods", ShippingMethodViewSet, basename="shipping-method")
 router.register(r"couriers", CourierViewSet, basename="courier")
 router.register(r"shipments", ShipmentViewSet, basename="shipment")
-router.register(r"order-notes", OrderProcessingNoteViewSet, basename="order-processing-note")
+router.register(
+    r"order-notes", OrderProcessingNoteViewSet, basename="order-processing-note"
+)
 router.register(r"orders", OrderViewSet, basename="order")
 router.register(r"payments", PaymentViewSet, basename="payment")
-router.register(r"coupon-redemptions", CouponRedemptionViewSet, basename="coupon-redemption")
+router.register(
+    r"coupon-redemptions", CouponRedemptionViewSet, basename="coupon-redemption"
+)
 router.register(r"coupons", CouponViewSet, basename="coupon")
-router.register(r"invoice-templates", InvoiceTemplateViewSet, basename="invoice-template")
+router.register(
+    r"invoice-templates", InvoiceTemplateViewSet, basename="invoice-template"
+)
 router.register(r"invoices", InvoiceViewSet, basename="invoice")
 
 urlpatterns = [
     path("orders/export.csv", OrdersExportCsvView.as_view(), name="orders_export_csv"),
     path("dashboard/", DashboardAnalyticsView.as_view(), name="dashboard_analytics"),
     path("", include(router.urls)),
-    path("create_checkout_session/", CreateCheckoutSessionView.as_view(), name="create_checkout_session"),
-    path("confirm_payment_intent/", ConfirmPaymentIntentView.as_view(), name="confirm_payment_intent"),
+    path(
+        "create_checkout_session/",
+        CreateCheckoutSessionView.as_view(),
+        name="create_checkout_session",
+    ),
+    path(
+        "confirm_payment_intent/",
+        ConfirmPaymentIntentView.as_view(),
+        name="confirm_payment_intent",
+    ),
 ]

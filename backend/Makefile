@@ -1,8 +1,11 @@
-.PHONY: up down
+.PHONY: build up down
 
 RELAY_PORT := 5055
 RELAY_HOST := 0.0.0.0
 RELAY_PID  := .relay.pid
+
+build:
+	@docker compose build
 
 up:
 	@nohup env HOST=$(RELAY_HOST) PORT=$(RELAY_PORT) python3 notify.py >/dev/null 2>&1 & echo $$! > $(RELAY_PID)

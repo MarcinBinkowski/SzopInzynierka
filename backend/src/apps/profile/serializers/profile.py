@@ -58,6 +58,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "last_name",
             "date_of_birth",
             "phone_number",
+            "role",
             "profile_completed",
             "display_name",
             "full_name",

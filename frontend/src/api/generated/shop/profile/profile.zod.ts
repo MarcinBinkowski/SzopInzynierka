@@ -223,7 +223,7 @@ export const profileAddressesSetDefaultPartialUpdateResponse = zod.object({
 })
 
 /**
- * Get the default address for the current user or specified profile.
+ * Get the default address for the current user.
  */
 export const profileAddressesDefaultRetrieveParams = zod.object({
   "id": zod.coerce.number()
@@ -259,6 +259,9 @@ export const profileAddressesDefaultRetrieveResponse = zod.object({
   "updated_at": zod.string().datetime({}).describe('Timestamp when the record was last updated')
 })
 
+/**
+ * Get address summary for the current user.
+ */
 export const profileAddressesSummaryRetrieveParams = zod.object({
   "id": zod.coerce.number()
 })
@@ -294,7 +297,7 @@ export const profileAddressesSummaryRetrieveResponse = zod.object({
 })
 
 /**
- * Unset the default address for the current user or specified profile.
+ * Unset the default address for the current user.
  */
 export const profileAddressesUnsetDefaultPartialUpdateParams = zod.object({
   "id": zod.coerce.number()
@@ -408,6 +411,7 @@ export const profileProfilesRetrieveResponse = zod.object({
   "last_name": zod.string().max(profileProfilesRetrieveResponseLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesRetrieveResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional(),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
   "full_name": zod.string(),
@@ -493,7 +497,8 @@ export const profileProfilesUpdateCompletionStatusCreateBody = zod.object({
   "first_name": zod.string().max(profileProfilesUpdateCompletionStatusCreateBodyFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesUpdateCompletionStatusCreateBodyLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
-  "phone_number": zod.string().regex(profileProfilesUpdateCompletionStatusCreateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
+  "phone_number": zod.string().regex(profileProfilesUpdateCompletionStatusCreateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional()
 }).describe('Serializer for user profile management.')
 
 export const profileProfilesUpdateCompletionStatusCreateResponseFirstNameMax = 150;
@@ -507,6 +512,7 @@ export const profileProfilesUpdateCompletionStatusCreateResponse = zod.object({
   "last_name": zod.string().max(profileProfilesUpdateCompletionStatusCreateResponseLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesUpdateCompletionStatusCreateResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional(),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
   "full_name": zod.string(),
@@ -534,6 +540,7 @@ export const profileProfilesAddressesSummaryRetrieveResponse = zod.object({
   "last_name": zod.string().max(profileProfilesAddressesSummaryRetrieveResponseLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesAddressesSummaryRetrieveResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional(),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
   "full_name": zod.string(),
@@ -561,6 +568,7 @@ export const profileProfilesCheckoutStatusRetrieveResponse = zod.object({
   "last_name": zod.string().max(profileProfilesCheckoutStatusRetrieveResponseLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesCheckoutStatusRetrieveResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional(),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
   "full_name": zod.string(),
@@ -588,6 +596,7 @@ export const profileProfilesCompletionRequirementsRetrieveResponse = zod.object(
   "last_name": zod.string().max(profileProfilesCompletionRequirementsRetrieveResponseLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesCompletionRequirementsRetrieveResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional(),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
   "full_name": zod.string(),
@@ -613,7 +622,8 @@ export const profileProfilesMarkCompletedPartialUpdateBody = zod.object({
   "first_name": zod.string().max(profileProfilesMarkCompletedPartialUpdateBodyFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesMarkCompletedPartialUpdateBodyLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
-  "phone_number": zod.string().regex(profileProfilesMarkCompletedPartialUpdateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
+  "phone_number": zod.string().regex(profileProfilesMarkCompletedPartialUpdateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional()
 }).describe('Serializer for user profile management.')
 
 export const profileProfilesMarkCompletedPartialUpdateResponseFirstNameMax = 150;
@@ -627,6 +637,7 @@ export const profileProfilesMarkCompletedPartialUpdateResponse = zod.object({
   "last_name": zod.string().max(profileProfilesMarkCompletedPartialUpdateResponseLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesMarkCompletedPartialUpdateResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional(),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
   "full_name": zod.string(),
@@ -654,6 +665,7 @@ export const profileProfilesMeRetrieveResponse = zod.object({
   "last_name": zod.string().max(profileProfilesMeRetrieveResponseLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesMeRetrieveResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional(),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
   "full_name": zod.string(),
@@ -679,7 +691,8 @@ export const profileProfilesMePartialUpdateBody = zod.object({
   "first_name": zod.string().max(profileProfilesMePartialUpdateBodyFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesMePartialUpdateBodyLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
-  "phone_number": zod.string().regex(profileProfilesMePartialUpdateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
+  "phone_number": zod.string().regex(profileProfilesMePartialUpdateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional()
 }).describe('Serializer for user profile management.')
 
 export const profileProfilesMePartialUpdateResponseFirstNameMax = 150;
@@ -693,6 +706,7 @@ export const profileProfilesMePartialUpdateResponse = zod.object({
   "last_name": zod.string().max(profileProfilesMePartialUpdateResponseLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
   "phone_number": zod.string().regex(profileProfilesMePartialUpdateResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional(),
   "profile_completed": zod.boolean().describe('Whether profile has all required information for checkout'),
   "display_name": zod.string(),
   "full_name": zod.string(),

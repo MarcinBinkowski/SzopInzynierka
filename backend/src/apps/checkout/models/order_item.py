@@ -1,4 +1,3 @@
-from decimal import Decimal
 from django.db import models
 
 from apps.common.models import TimestampedModel
@@ -9,15 +8,15 @@ class OrderItem(TimestampedModel):
     """Individual item in an order."""
 
     order = models.ForeignKey(
-        'Order',
+        "Order",
         on_delete=models.CASCADE,
-        related_name='items',
+        related_name="items",
         help_text="Order this item belongs to",
     )
     product = models.ForeignKey(
         Product,
         on_delete=models.PROTECT,
-        related_name='order_items',
+        related_name="order_items",
         help_text="Product that was ordered",
     )
     quantity = models.PositiveIntegerField(
@@ -44,9 +43,11 @@ class OrderItem(TimestampedModel):
         ]
 
     def __str__(self) -> str:
-        return f"{self.quantity}x {self.product.name} in Order {self.order.order_number}"
+        return (
+            f"{self.quantity}x {self.product.name} in Order {self.order.order_number}"
+        )
 
     def save(self, *args, **kwargs) -> None:
         # Calculate total_price based on quantity and unit_price
         self.total_price = self.unit_price * self.quantity
-        super().save(*args, **kwargs) 
+        super().save(*args, **kwargs)

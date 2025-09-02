@@ -1,5 +1,6 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, SAFE_METHODS
+from apps.profile.models import Profile
+from apps.profile.permissions import ReadOnlyOrRoles, get_user_role
 
 from apps.checkout.models import OrderProcessingNote
 from apps.checkout.serializers import OrderProcessingNoteSerializer
@@ -14,8 +15,10 @@ class OrderProcessingNoteViewSet(viewsets.ModelViewSet):
     ordering = ["-created_at"]
 
     def get_permissions(self):
-        if self.request.method in SAFE_METHODS:
-            return [IsAuthenticated()]
-        return [IsAdminUser()]
+        return [ReadOnlyOrRoles({Profile.Role.EMPLOYEE, Profile.Role.ADMIN})]
 
-
+    def get_queryset(self):
+        role = get_user_role(getattr(self.request, "user", None))
+        if role in {Profile.Role.ADMIN, Profile.Role.EMPLOYEE}:
+            return self.queryset
+        return self.queryset.filter(order__user=self.request.user)

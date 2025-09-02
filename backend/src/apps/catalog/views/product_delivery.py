@@ -1,8 +1,9 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, SAFE_METHODS
 
 from apps.catalog.models import ProductDelivery
 from apps.catalog.serializers import ProductDeliverySerializer
+from apps.profile.models import Profile
+from apps.profile.permissions import ReadOnlyOrRoles
 
 
 class ProductDeliveryViewSet(viewsets.ModelViewSet):
@@ -14,8 +15,4 @@ class ProductDeliveryViewSet(viewsets.ModelViewSet):
     ordering = ["-delivery_date"]
 
     def get_permissions(self):
-        if self.request.method in SAFE_METHODS:
-            return [IsAuthenticated()]
-        return [IsAdminUser()]
-
-
+        return [ReadOnlyOrRoles({Profile.Role.ADMIN})]

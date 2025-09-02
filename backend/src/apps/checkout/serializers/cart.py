@@ -77,31 +77,28 @@ class CartItemCreateSerializer(serializers.ModelSerializer):
             if value > product.stock_quantity:
                 raise serializers.ValidationError(
                     f"Requested quantity ({value}) exceeds available stock ({product.stock_quantity})"
-                )   
+                )
         return value
 
 
 class CartItemQuantitySerializer(serializers.Serializer):
     """Serializer for cart item quantity operations."""
-    
+
     amount = serializers.IntegerField(
-        default=1,
-        min_value=1,
-        help_text="Amount to increase/decrease quantity by"
+        default=1, min_value=1, help_text="Amount to increase/decrease quantity by"
     )
 
 
 class CartItemUpdateQuantitySerializer(serializers.Serializer):
     """Serializer for updating cart item quantity."""
-    
+
     quantity = serializers.IntegerField(
-        min_value=1,
-        help_text="New quantity for the cart item"
+        min_value=1, help_text="New quantity for the cart item"
     )
 
     def validate_quantity(self, value: int) -> int:
         """Validate quantity against product stock."""
-        cart_item = self.context.get('cart_item')
+        cart_item = self.context.get("cart_item")
         if cart_item and cart_item.product.stock_quantity:
             if value > cart_item.product.stock_quantity:
                 raise serializers.ValidationError(
@@ -112,21 +109,20 @@ class CartItemUpdateQuantitySerializer(serializers.Serializer):
 
 class CartShippingAddressSerializer(serializers.Serializer):
     """Serializer for setting shipping address on cart."""
-    
+
     address_id = serializers.IntegerField(
         help_text="ID of the shipping address to set on the cart"
     )
 
     def validate_address_id(self, value):
         """Validate that the shipping address exists and belongs to the user."""
-        request = self.context.get('request')
+        request = self.context.get("request")
         if request and request.user:
             try:
                 from apps.profile.models import Address
+
                 Address.objects.get(
-                    id=value,
-                    profile__user=request.user,
-                    address_type='shipping'
+                    id=value, profile__user=request.user, address_type="shipping"
                 )
                 return value
             except Address.DoesNotExist:
@@ -136,7 +132,7 @@ class CartShippingAddressSerializer(serializers.Serializer):
 
 class CartShippingMethodSerializer(serializers.Serializer):
     """Serializer for setting shipping method on cart."""
-    
+
     shipping_method_id = serializers.IntegerField(
         help_text="ID of the shipping method to set on the cart"
     )
@@ -145,6 +141,7 @@ class CartShippingMethodSerializer(serializers.Serializer):
         """Validate that the shipping method exists."""
         try:
             from apps.checkout.models import ShippingMethod
+
             ShippingMethod.objects.get(id=value)
             return value
         except ShippingMethod.DoesNotExist:

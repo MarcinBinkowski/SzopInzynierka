@@ -7,7 +7,11 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 
 from apps.catalog.models.product import Product
-from apps.catalog.models.notification import NotificationPreference, NotificationHistory, NotificationType
+from apps.catalog.models.notification import (
+    NotificationPreference,
+    NotificationHistory,
+    NotificationType,
+)
 from apps.catalog.services.notification_service import SimulatorNotificationService
 
 logger = logging.getLogger(__name__)
@@ -28,8 +32,10 @@ def send_wishlist_notification(
     except (User.DoesNotExist, Product.DoesNotExist):
         return
 
-    if not getattr(settings, 'SIMULATOR_PUSH_RELAY_URL', None):
-        logger.warning("SIMULATOR_PUSH_RELAY_URL not configured - skipping notification")
+    if not getattr(settings, "SIMULATOR_PUSH_RELAY_URL", None):
+        logger.warning(
+            "SIMULATOR_PUSH_RELAY_URL not configured - skipping notification"
+        )
         return
 
     try:
@@ -38,10 +44,16 @@ def send_wishlist_notification(
         return
 
     # Check user preferences
-    if notification_type == NotificationType.STOCK_AVAILABLE and not pref.stock_alerts_enabled:
+    if (
+        notification_type == NotificationType.STOCK_AVAILABLE
+        and not pref.stock_alerts_enabled
+    ):
         return
 
-    if notification_type == NotificationType.PRICE_DROP and not pref.price_drop_alerts_enabled:
+    if (
+        notification_type == NotificationType.PRICE_DROP
+        and not pref.price_drop_alerts_enabled
+    ):
         return
 
     # Build content

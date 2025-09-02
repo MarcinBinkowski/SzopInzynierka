@@ -1,6 +1,4 @@
 from django.db import models
-from django.core.exceptions import ValidationError
-from typing import TYPE_CHECKING
 
 from apps.common.models import TimestampedModel
 from apps.geographic.models import Country
@@ -95,9 +93,9 @@ class Address(TimestampedModel):
 
     def save(self, *args, **kwargs) -> None:
         if self.is_default:
-            Address.objects.filter(
-                profile=self.profile, is_default=True
-            ).exclude(pk=self.pk).update(is_default=False)
+            Address.objects.filter(profile=self.profile, is_default=True).exclude(
+                pk=self.pk
+            ).update(is_default=False)
 
         super().save(*args, **kwargs)
 

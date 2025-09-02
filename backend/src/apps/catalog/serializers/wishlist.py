@@ -6,10 +6,15 @@ from apps.catalog.serializers.product import ProductListSerializer
 
 class WishlistItemSerializer(serializers.ModelSerializer):
     """Serializer for WishlistItem model."""
-    
+
     product = ProductListSerializer(read_only=True)
     product_id = serializers.PrimaryKeyRelatedField(
-        queryset=Product.objects.filter(status__in=[Product.ProductStatus.ACTIVE, Product.ProductStatus.OUT_OF_STOCK]),
+        queryset=Product.objects.filter(
+            status__in=[
+                Product.ProductStatus.ACTIVE,
+                Product.ProductStatus.OUT_OF_STOCK,
+            ]
+        ),
         source="product",
         write_only=True,
     )
@@ -27,7 +32,7 @@ class WishlistItemSerializer(serializers.ModelSerializer):
 
 class WishlistItemCreateSerializer(serializers.ModelSerializer):
     """Serializer for creating wishlist items."""
-    
+
     product_id = serializers.PrimaryKeyRelatedField(
         queryset=Product.objects,
         source="product",
@@ -39,17 +44,17 @@ class WishlistItemCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         """Check if product is already in user's wishlist."""
-        user = self.context['request'].user
-        product = attrs['product']
+        user = self.context["request"].user
+        product = attrs["product"]
         if WishlistItem.objects.filter(user=user, product=product).exists():
             raise serializers.ValidationError("Product is already in your wishlist.")
-        
+
         return attrs
 
 
 class WishlistCheckSerializer(serializers.Serializer):
     """Serializer for wishlist check response."""
-    
+
     product_id = serializers.IntegerField()
     is_in_wishlist = serializers.BooleanField()
     wishlist_item_id = serializers.IntegerField(required=False, allow_null=True)

@@ -5,7 +5,7 @@ from apps.catalog.models.product_image import ProductImage
 
 class ProductImageSerializer(serializers.ModelSerializer):
     """Serializer for ProductImage model."""
-    
+
     image_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -21,7 +21,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = ["id", "image_url", "created_at", "updated_at"]
-    
+
     def get_image_url(self, obj: ProductImage) -> str | None:
         """Get full URL of the image."""
         if obj.image:

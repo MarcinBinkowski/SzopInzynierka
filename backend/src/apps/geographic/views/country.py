@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import OrderingFilter, SearchFilter
 
 from apps.geographic.models import Country
@@ -12,6 +12,8 @@ from apps.geographic.serializers import (
     CountryUpdateSerializer,
 )
 from drf_spectacular.utils import extend_schema, OpenApiParameter
+from apps.profile.models import Profile
+from apps.profile.permissions import ReadOnlyOrRoles
 
 if TYPE_CHECKING:
     from apps.geographic.models import Country
@@ -40,7 +42,4 @@ class CountryViewSet(viewsets.ModelViewSet):
         return serializer_map.get(self.action, CountrySerializer)
 
     def get_permissions(self):
-        """Use admin permissions for write operations."""
-        if self.action in ["create", "update", "partial_update", "destroy"]:
-            return [IsAdminUser()]
-        return [IsAuthenticated()]
+        return [ReadOnlyOrRoles({Profile.Role.ADMIN})]

@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.response import Response
 
 from apps.catalog.models import Tag
@@ -9,6 +9,8 @@ from apps.catalog.serializers import (
     ProductListSerializer,
     TagSerializer,
 )
+from apps.profile.models import Profile
+from apps.profile.permissions import RolesAllowed
 
 
 class TagViewSet(viewsets.ModelViewSet):
@@ -16,7 +18,12 @@ class TagViewSet(viewsets.ModelViewSet):
 
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        # Read-only for authenticated users; writes require admin
+        if self.request.method in SAFE_METHODS:
+            return [IsAuthenticated()]
+        return [RolesAllowed({Profile.Role.ADMIN})]
 
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["name"]

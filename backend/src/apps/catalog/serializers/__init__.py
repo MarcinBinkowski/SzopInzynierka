@@ -42,7 +42,7 @@ __all__ = [
     "WishlistItemCreateSerializer",
     "WishlistCheckSerializer",
     "NotificationPreferenceSerializer",
-    "NotificationPreferenceUpdateSerializer", 
+    "NotificationPreferenceUpdateSerializer",
     "NotificationHistorySerializer",
     "SupplierSerializer",
     "ProductDeliverySerializer",

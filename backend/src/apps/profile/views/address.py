@@ -3,7 +3,9 @@ from typing import TYPE_CHECKING
 from django.db.models import QuerySet
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
+from apps.profile.permissions import get_user_role
+from apps.profile.models import Profile
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -36,8 +38,8 @@ class AddressViewSet(viewsets.ModelViewSet):
         return super().create(request, *args, **kwargs)
 
     def get_queryset(self) -> QuerySet[Address]:
-        # Admin can see all addresses, regular users only their own
-        if self.request.user.is_staff:
+        role = get_user_role(getattr(self.request, "user", None))
+        if role in [Profile.Role.ADMIN, Profile.Role.EMPLOYEE]:
             return Address.objects.all()
 
         profile = getattr(self.request.user, "profile", None)
@@ -54,21 +56,12 @@ class AddressViewSet(viewsets.ModelViewSet):
         }
         return serializer_map.get(self.action, AddressSerializer)
 
-    def get_permissions(self):
-        """Use admin permissions for admin actions."""
-        if (
-            self.action in ["create", "update", "partial_update", "destroy"]
-            and self.request.user.is_staff
-        ):
-            return [IsAdminUser()]
-        return [IsAuthenticated()]
 
     def perform_create(self, serializer) -> None:
-        if self.request.user.is_staff:
-            # Admin can create addresses for any profile
+        role = get_user_role(getattr(self.request, "user", None))
+        if role == Profile.Role.ADMIN:
             serializer.save()
         else:
-            # Regular users can only create addresses for their own profile
             profile = self.request.user.profile
             serializer.save(profile=profile)
 
@@ -85,27 +78,8 @@ class AddressViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["get"])
     def default(self, request: Request) -> Response:
-        """Get the default address for the current user or specified profile."""
-        if request.user.is_staff:
-            # Admin needs to specify profile
-            profile_id = request.query_params.get("profile_id")
-            if not profile_id:
-                return Response(
-                    {"detail": "profile_id parameter required for admin access"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            try:
-                from apps.profile.models import Profile
-
-                profile = Profile.objects.get(id=profile_id)
-            except Profile.DoesNotExist:
-                return Response(
-                    {"detail": "Profile not found"},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-        else:
-            profile = request.user.profile
-
+        """Get the default address for the current user."""
+        profile = request.user.profile
         address = Address.objects.get_default_for_profile(profile)
 
         if not address:
@@ -121,9 +95,9 @@ class AddressViewSet(viewsets.ModelViewSet):
     def set_default(self, request: Request, pk: str | None = None) -> Response:
         address = self.get_object()
 
-        Address.objects.filter(
-            profile=address.profile, is_default=True
-        ).exclude(id=address.id).update(is_default=False)
+        Address.objects.filter(profile=address.profile, is_default=True).exclude(
+            id=address.id
+        ).update(is_default=False)
 
         address.is_default = True
         address.save()
@@ -133,26 +107,8 @@ class AddressViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["patch"])
     def unset_default(self, request: Request) -> Response:
-        """Unset the default address for the current user or specified profile."""
-        if request.user.is_staff:
-            # Admin needs to specify profile
-            profile_id = request.data.get("profile_id")
-            if not profile_id:
-                return Response(
-                    {"error": "profile_id is required for admin access"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            try:
-                from apps.profile.models import Profile
-
-                profile = Profile.objects.get(id=profile_id)
-            except Profile.DoesNotExist:
-                return Response(
-                    {"error": "Profile not found"},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-        else:
-            profile = request.user.profile
+        """Unset the default address for the current user."""
+        profile = request.user.profile
 
         updated_count = (
             Address.objects.for_profile(profile)
@@ -169,25 +125,8 @@ class AddressViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["get"])
     def summary(self, request: Request) -> Response:
-        if request.user.is_staff:
-            # Admin needs to specify profile
-            profile_id = request.query_params.get("profile_id")
-            if not profile_id:
-                return Response(
-                    {"detail": "profile_id parameter required for admin access"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            try:
-                from apps.profile.models import Profile
-
-                profile = Profile.objects.get(id=profile_id)
-            except Profile.DoesNotExist:
-                return Response(
-                    {"detail": "Profile not found"},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-        else:
-            profile: "Profile" = request.user.profile
+        """Get address summary for the current user."""
+        profile = request.user.profile
 
         addresses = Address.objects.for_profile(profile)
         default_address = Address.objects.get_default_for_profile(profile)

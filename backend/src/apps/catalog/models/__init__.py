@@ -13,13 +13,13 @@ from apps.catalog.models.notification import (
 
 
 __all__ = [
-    "Category", 
-    "Manufacturer", 
-    "Product", 
-    "ProductImage", 
+    "Category",
+    "Manufacturer",
+    "Product",
+    "ProductImage",
     "Supplier",
     "ProductDelivery",
-    "Tag", 
+    "Tag",
     "WishlistItem",
     "NotificationPreference",
     "NotificationHistory",

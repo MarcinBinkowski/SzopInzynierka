@@ -13,13 +13,14 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Search, LogOut } from "lucide-react"
+import { useAuth } from "@/hooks/useAuth"
 
 export default function Header() {
-  const navigate = useNavigate()
+  const { logout } = useAuth()
 
   const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated")
-    navigate({ to: "/login" })
+    console.log('Header logout clicked')
+    logout()
   }
 
   return (

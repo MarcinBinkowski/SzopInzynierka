@@ -36,7 +36,9 @@ def detect_product_changes(sender, instance, created, **kwargs):
         return
 
     stock_became_available = (
-        previous_stock == 0 and instance.stock_quantity > 0 and instance.status == Product.ProductStatus.ACTIVE
+        previous_stock == 0
+        and instance.stock_quantity > 0
+        and instance.status == Product.ProductStatus.ACTIVE
     )
 
     price_dropped = False
@@ -48,13 +50,13 @@ def detect_product_changes(sender, instance, created, **kwargs):
     if not (stock_became_available or price_dropped):
         return
 
-    wishlist_items = WishlistItem.objects.filter(product=instance).select_related("user")
+    wishlist_items = WishlistItem.objects.filter(product=instance).select_related(
+        "user"
+    )
 
     for wishlist_item in wishlist_items:
         user = wishlist_item.user
-        pref = NotificationPreference.objects.get(
-            user=user
-        )
+        pref = NotificationPreference.objects.get(user=user)
 
         if stock_became_available and pref.stock_alerts_enabled:
             print(f"Sending stock alert to {user.email}")

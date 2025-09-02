@@ -7,7 +7,7 @@ from apps.catalog.models.notification import (
 
 class NotificationPreferenceSerializer(serializers.ModelSerializer):
     """Serializer for NotificationPreference model."""
-    
+
     class Meta:
         model = NotificationPreference
         fields = [
@@ -22,21 +22,21 @@ class NotificationPreferenceSerializer(serializers.ModelSerializer):
 
 class NotificationPreferenceUpdateSerializer(serializers.ModelSerializer):
     """Serializer for updating notification preferences."""
-    
+
     class Meta:
         model = NotificationPreference
         fields = [
-            "stock_alerts_enabled", 
+            "stock_alerts_enabled",
             "price_drop_alerts_enabled",
         ]
 
 
 class NotificationHistorySerializer(serializers.ModelSerializer):
     """Serializer for NotificationHistory model."""
-    
+
     product_name = serializers.CharField(source="product.name", read_only=True)
     product_image = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = NotificationHistory
         fields = [
@@ -55,7 +55,7 @@ class NotificationHistorySerializer(serializers.ModelSerializer):
             "product_image",
             "created_at",
         ]
-    
+
     def get_product_image(self, obj):
         """Get the first product image URL."""
         first_image = obj.product.images.first()

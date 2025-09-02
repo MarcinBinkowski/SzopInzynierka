@@ -1,10 +1,9 @@
-from typing import TYPE_CHECKING
-
 from django.db import models
 from django.db.models import QuerySet
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from apps.profile.permissions import get_user_role
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -29,13 +28,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
     filter_backends = [SearchFilter, OrderingFilter]
 
     def get_queryset(self) -> QuerySet[Profile]:
-        user = self.request.user
-        if user.is_superuser:
+        role = get_user_role(getattr(self.request, "user", None))
+        if role in [Profile.Role.ADMIN, Profile.Role.EMPLOYEE]:
             return Profile.objects.select_related("user").prefetch_related("addresses")
 
         try:
             return (
-                Profile.objects.filter(user=user)
+                Profile.objects.filter(user=self.request.user)
                 .select_related("user")
                 .prefetch_related("addresses")
             )

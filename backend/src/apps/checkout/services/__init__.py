@@ -4,6 +4,6 @@ from apps.checkout.services.invoice_template_service import InvoiceTemplateServi
 
 __all__ = [
     "CouponService",
-    "TemplateValidator", 
+    "TemplateValidator",
     "InvoiceTemplateService",
-] 
+]

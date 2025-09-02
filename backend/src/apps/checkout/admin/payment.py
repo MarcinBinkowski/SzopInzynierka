@@ -39,7 +39,11 @@ class PaymentAdmin(admin.ModelAdmin):
         (
             "Stripe Information",
             {
-                "fields": ("stripe_payment_intent_id", "stripe_charge_id", "stripe_customer_id"),
+                "fields": (
+                    "stripe_payment_intent_id",
+                    "stripe_charge_id",
+                    "stripe_customer_id",
+                ),
                 "classes": ("collapse",),
             },
         ),
@@ -75,4 +79,4 @@ class PaymentAdmin(admin.ModelAdmin):
         """Display amount with formatting."""
         return format_html("${:.2f}", obj.amount)
 
-    amount_display.short_description = "Amount" 
+    amount_display.short_description = "Amount"

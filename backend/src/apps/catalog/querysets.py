@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.db.models import F
 
 if TYPE_CHECKING:
-    from apps.catalog.models.product import Product
+    pass
 
 
 class ProductQuerySet(models.QuerySet["Product"]):

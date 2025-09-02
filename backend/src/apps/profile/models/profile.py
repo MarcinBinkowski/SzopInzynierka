@@ -8,15 +8,18 @@ from apps.common.models import TimestampedModel
 class Profile(TimestampedModel):
     """Extended user profile with personal information."""
 
-    # User relationship
+    class Role(models.IntegerChoices):
+        ADMIN = 1
+        EMPLOYEE = 2
+        USER = 3
+
     user: models.OneToOneField = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="profile",
         help_text="Associated user account",
     )
-
-    # Personal Information
+    role = models.IntegerField(choices=Role.choices, default=Role.USER)
     first_name: models.CharField = models.CharField(
         max_length=150,
         blank=True,
@@ -34,7 +37,6 @@ class Profile(TimestampedModel):
         max_length=20, blank=True, help_text="Primary phone number with country code"
     )
 
-    # Profile completion status
     profile_completed: models.BooleanField = models.BooleanField(
         default=False,
         help_text="Whether profile has all required information for checkout",

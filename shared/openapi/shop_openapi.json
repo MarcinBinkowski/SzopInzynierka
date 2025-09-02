@@ -26,7 +26,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -79,7 +78,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -188,7 +186,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -378,7 +375,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -431,7 +427,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -1081,7 +1076,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -1132,7 +1126,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -1234,7 +1227,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -1434,7 +1426,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -1485,7 +1476,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -1594,7 +1584,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -2149,7 +2138,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -2172,7 +2160,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -2183,7 +2170,7 @@ paths:
   /api/checkout/coupons/:
     get:
       operationId: checkout_coupons_list
-      description: Full CRUD ViewSet for coupon management.
+      description: Override list to explicitly deny access to non-admins.
       parameters:
       - name: page
         required: false
@@ -2344,36 +2331,6 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/checkout/coupons/active/:
-    get:
-      operationId: checkout_coupons_active_list
-      description: Get list of active coupons for users
-      summary: Get active coupons
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      - name: page_size
-        required: false
-        in: query
-        description: Number of results to return per page.
-        schema:
-          type: integer
-      tags:
-      - checkout
-      security:
-      - cookieAuth: []
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedCouponList'
-          description: ''
   /api/checkout/coupons/remove/:
     post:
       operationId: checkout_coupons_remove_create
@@ -2634,7 +2591,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -2664,7 +2620,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '201':
           content:
@@ -2688,7 +2643,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -2723,7 +2677,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -2757,7 +2710,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -2780,7 +2732,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '204':
           description: No response body
@@ -2813,7 +2764,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -2837,7 +2787,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -2854,7 +2803,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -2884,7 +2832,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '201':
           content:
@@ -2908,7 +2855,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -2943,7 +2889,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -2977,7 +2922,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -3000,41 +2944,9 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '204':
           description: No response body
-  /api/checkout/invoices/debug_template/:
-    get:
-      operationId: checkout_invoices_debug_template_retrieve
-      description: Debug template rendering for a specific order
-      summary: Debug template rendering
-      parameters:
-      - in: query
-        name: order_id
-        schema:
-          type: integer
-        description: ID of the order to debug
-        required: true
-      tags:
-      - checkout
-      security:
-      - cookieAuth: []
-      - tokenAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TemplateDebugResponse'
-          description: ''
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderNotFound'
-          description: ''
   /api/checkout/invoices/download_by_order/:
     get:
       operationId: checkout_invoices_download_by_order_retrieve
@@ -3052,7 +2964,6 @@ paths:
       security:
       - cookieAuth: []
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -3513,6 +3424,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedOrdersListResponseList'
           description: ''
+    post:
+      operationId: checkout_orders_create
+      description: 'Orders: users read their own; employees/admins full CRUD across
+        all.'
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
   /api/checkout/orders/{id}/:
     get:
       operationId: checkout_orders_retrieve
@@ -3536,6 +3475,91 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrderDetail'
           description: ''
+    put:
+      operationId: checkout_orders_update
+      description: 'Orders: users read their own; employees/admins full CRUD across
+        all.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    patch:
+      operationId: checkout_orders_partial_update
+      description: 'Orders: users read their own; employees/admins full CRUD across
+        all.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    delete:
+      operationId: checkout_orders_destroy
+      description: 'Orders: users read their own; employees/admins full CRUD across
+        all.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - checkout
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/checkout/orders/export.csv:
     get:
       operationId: checkout_orders_export.csv_retrieve
@@ -3879,11 +3903,6 @@ paths:
   /api/checkout/shipping-methods/:
     get:
       operationId: checkout_shipping_methods_list
-      description: |-
-        ViewSet for ShippingMethod model.
-
-        - Authenticated users: can list and retrieve
-        - Admin users: full CRUD (create, update, delete)
       tags:
       - checkout
       security:
@@ -3900,11 +3919,6 @@ paths:
           description: ''
     post:
       operationId: checkout_shipping_methods_create
-      description: |-
-        ViewSet for ShippingMethod model.
-
-        - Authenticated users: can list and retrieve
-        - Admin users: full CRUD (create, update, delete)
       tags:
       - checkout
       requestBody:
@@ -3932,11 +3946,6 @@ paths:
   /api/checkout/shipping-methods/{id}/:
     get:
       operationId: checkout_shipping_methods_retrieve
-      description: |-
-        ViewSet for ShippingMethod model.
-
-        - Authenticated users: can list and retrieve
-        - Admin users: full CRUD (create, update, delete)
       parameters:
       - in: path
         name: id
@@ -3958,11 +3967,6 @@ paths:
           description: ''
     put:
       operationId: checkout_shipping_methods_update
-      description: |-
-        ViewSet for ShippingMethod model.
-
-        - Authenticated users: can list and retrieve
-        - Admin users: full CRUD (create, update, delete)
       parameters:
       - in: path
         name: id
@@ -3996,11 +4000,6 @@ paths:
           description: ''
     patch:
       operationId: checkout_shipping_methods_partial_update
-      description: |-
-        ViewSet for ShippingMethod model.
-
-        - Authenticated users: can list and retrieve
-        - Admin users: full CRUD (create, update, delete)
       parameters:
       - in: path
         name: id
@@ -4033,11 +4032,6 @@ paths:
           description: ''
     delete:
       operationId: checkout_shipping_methods_destroy
-      description: |-
-        ViewSet for ShippingMethod model.
-
-        - Authenticated users: can list and retrieve
-        - Admin users: full CRUD (create, update, delete)
       parameters:
       - in: path
         name: id
@@ -4422,7 +4416,7 @@ paths:
   /api/profile/addresses/default/:
     get:
       operationId: profile_addresses_default_retrieve
-      description: Get the default address for the current user or specified profile.
+      description: Get the default address for the current user.
       parameters:
       - in: path
         name: id
@@ -4444,6 +4438,7 @@ paths:
   /api/profile/addresses/summary/:
     get:
       operationId: profile_addresses_summary_retrieve
+      description: Get address summary for the current user.
       parameters:
       - in: path
         name: id
@@ -4465,7 +4460,7 @@ paths:
   /api/profile/addresses/unset_default/:
     patch:
       operationId: profile_addresses_unset_default_partial_update
-      description: Unset the default address for the current user or specified profile.
+      description: Unset the default address for the current user.
       parameters:
       - in: path
         name: id
@@ -5951,13 +5946,6 @@ components:
       - quantity
       - total_price
       - unit_price
-    OrderNotFound:
-      type: object
-      properties:
-        error:
-          type: string
-      required:
-      - error
     OrderProcessingNote:
       type: object
       properties:
@@ -6763,6 +6751,52 @@ components:
         price_drop_alerts_enabled:
           type: boolean
           description: Receive alerts when wishlist items go on sale
+    PatchedOrder:
+      type: object
+      description: Serializer for order list view.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order_number:
+          type: string
+          description: Unique order number
+          maxLength: 50
+        status:
+          allOf:
+          - $ref: '#/components/schemas/OrderStatusEnum'
+          description: |-
+            Current status of the order
+
+            * `pending` - Pending
+            * `confirmed` - Confirmed
+            * `shipped` - Shipped
+            * `delivered` - Delivered
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Subtotal of all items
+        shipping_cost:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Shipping cost
+        coupon_discount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Discount amount from applied coupon
+        total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Total amount including shipping
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp when the record was created
     PatchedOrderProcessingNote:
       type: object
       properties:
@@ -7047,6 +7081,11 @@ components:
           description: 'Phone number in international format. Supports digits, spaces,
             hyphens, parentheses, and optional ''+'' prefix. Example: +48131012012'
           pattern: ^\+?[\d\s\-\(\)]+$
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          minimum: -2147483648
+          maximum: 2147483647
         profile_completed:
           type: boolean
           readOnly: true
@@ -7763,6 +7802,11 @@ components:
           description: 'Phone number in international format. Supports digits, spaces,
             hyphens, parentheses, and optional ''+'' prefix. Example: +48131012012'
           pattern: ^\+?[\d\s\-\(\)]+$
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          minimum: -2147483648
+          maximum: 2147483647
         profile_completed:
           type: boolean
           readOnly: true
@@ -7925,6 +7969,16 @@ components:
           description: 'Phone number in international format. Supports digits, spaces,
             hyphens, parentheses, and optional ''+'' prefix. Example: +48131012012'
           pattern: ^\+?[\d\s\-\(\)]+$
+    RoleEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      type: integer
+      description: |-
+        * `1` - Admin
+        * `2` - Employee
+        * `3` - User
     Shipment:
       type: object
       properties:
@@ -8057,17 +8111,6 @@ components:
       - name
       - slug
       - updated_at
-    TemplateDebugResponse:
-      type: object
-      properties:
-        context:
-          type: object
-          additionalProperties: {}
-        rendered_html:
-          type: string
-      required:
-      - context
-      - rendered_html
     TemplateValidationError:
       type: object
       properties:

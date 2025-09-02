@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from django.db.models import QuerySet
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.filters import OrderingFilter, SearchFilter
 
 from apps.catalog.models import Manufacturer
@@ -13,6 +13,8 @@ from apps.catalog.serializers import (
     ManufacturerUpdateSerializer,
 )
 from drf_spectacular.utils import extend_schema, OpenApiParameter
+from apps.profile.models import Profile
+from apps.profile.permissions import RolesAllowed, get_user_role
 
 if TYPE_CHECKING:
     from apps.catalog.models import Manufacturer
@@ -28,12 +30,13 @@ class ManufacturerViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "description"]
     filter_backends = [SearchFilter, OrderingFilter]
     pagination_class = None
+
     def get_queryset(self) -> QuerySet[Manufacturer]:
         """Filter queryset based on user permissions."""
         queryset = Manufacturer.objects.all()
 
-        # Only show active manufacturers for non-admin users
-        if not self.request.user.is_staff:
+        role = get_user_role(getattr(self.request, "user", None))
+        if role not in {Profile.Role.ADMIN, Profile.Role.EMPLOYEE}:
             queryset = queryset.filter(is_active=True)
 
         return queryset
@@ -49,7 +52,7 @@ class ManufacturerViewSet(viewsets.ModelViewSet):
         return serializer_map.get(self.action, ManufacturerSerializer)
 
     def get_permissions(self):
-        """Use admin permissions for write operations."""
-        if self.action in ["create", "update", "partial_update", "destroy"]:
-            return [IsAdminUser()]
-        return [IsAuthenticated()]
+        # Read-only for authenticated users; writes require admin
+        if self.request.method in SAFE_METHODS:
+            return [IsAuthenticated()]
+        return [RolesAllowed({Profile.Role.ADMIN})]

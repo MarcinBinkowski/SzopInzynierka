@@ -1,6 +1,5 @@
 import django_filters
-from django.db import models
-from datetime import date, datetime
+from datetime import datetime
 
 from apps.catalog.models import Product
 

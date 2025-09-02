@@ -1,12 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import type { MRT_ColumnDef } from "material-react-table"
-import { GenericReadOnlyListPage } from "@/components/common/listPages"
+import { CrudListPage } from "@/components/common/listPages"
 import { useCheckoutShipmentsList } from "@/api/generated/shop/checkout/checkout"
 import type { Shipment } from "@/api/generated/shop/schemas"
 import { useMemo } from "react"
 import { createDateColumn } from "@/components/common/listPageHelpers/columnHelpers"
 
 function ShipmentsPage() {
+  const navigate = useNavigate()
+  
   const columns = useMemo<MRT_ColumnDef<Shipment>[]>(() => [
     { accessorKey: "id", header: "ID" },
     { accessorKey: "order", header: "Order" },
@@ -16,16 +18,33 @@ function ShipmentsPage() {
     createDateColumn("delivered_at", "Delivered"),
   ], [])
 
-  function useListHook(params: { page?: number; page_size?: number }) {
-    const { data, isLoading } = useCheckoutShipmentsList({ page: params.page, page_size: params.page_size })
-    return { data, isLoading, refetch: () => {} }
+  const useData = (params: any) => {
+    const { data, isLoading } = useCheckoutShipmentsList(params)
+    return { data, isLoading }
+  }
+
+  const handleAdd = () => {
+    navigate({ to: '/checkout/shipments/new' })
+  }
+
+  const handleEdit = (shipment: Shipment) => {
+    navigate({ to: `/checkout/shipments/${shipment.id}/edit` })
+  }
+
+  const handleDelete = (shipment: Shipment) => {
+    // TODO: Implement delete functionality
+    console.log('Delete shipment:', shipment.id)
   }
 
   return (
-    <GenericReadOnlyListPage<Shipment>
+    <CrudListPage<Shipment>
       title="Shipments"
       columns={columns}
-      useListHook={useListHook as any}
+      useData={useData}
+      onAdd={handleAdd}
+      onEdit={handleEdit}
+      onDelete={handleDelete}
+      entityType="shipment"
     />
   )
 }

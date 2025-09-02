@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db import models
-from django.forms import TextInput, Textarea
+from django.forms import Textarea
 from django.utils.html import format_html
 
 from apps.checkout.models import Cart

@@ -32,6 +32,7 @@ function OrderNotesPage() {
       onAdd={() => navigate({ to: "/checkout/order-notes/new" })}
       onEdit={(row) => navigate({ to: `/checkout/order-notes/${row.id}/edit` })}
       onDelete={handleDelete}
+      entityType="order-note"
     />
   )
 }
