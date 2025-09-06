@@ -14,7 +14,7 @@ from rest_framework import serializers
 
 from apps.checkout.models import InvoiceTemplate, Invoice, Order
 from apps.profile.models import Profile
-from apps.profile.permissions import RolesAllowed, ReadOnlyOrRoles, get_user_role
+from apps.profile.permissions import ReadOnlyOrRoles, get_user_role
 from apps.checkout.serializers.invoice import (
     InvoiceTemplateSerializer,
     InvoiceSerializer,

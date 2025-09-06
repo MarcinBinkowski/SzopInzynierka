@@ -39,7 +39,6 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
-
   web:
     build: .
     container_name: shopdjango-web
@@ -85,19 +84,6 @@ services:
       SIMULATOR_PUSH_RELAY_URL: http://host.docker.internal:5055/notify
     depends_on:
       - db
-      - redis
-
-  celery-beat:
-    build: .
-    container_name: shopdjango-celery-beat
-    command: celery -A shopdjango beat --loglevel=INFO
-    volumes:
-      - ./src:/app/src
-    environment:
-      CELERY_BROKER_URL: redis://shopdjango-redis:6379/0
-      CELERY_RESULT_BACKEND: redis://shopdjango-redis:6379/1
-      SIMULATOR_PUSH_RELAY_URL: http://host.docker.internal:5055/notify
-    depends_on:
       - redis
 
 

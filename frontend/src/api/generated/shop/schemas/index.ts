@@ -19,6 +19,7 @@ export * from './cartList';
 export * from './cartStatusEnum';
 export * from './catalogCategoriesListParams';
 export * from './catalogDeliveriesListParams';
+export * from './catalogImagesCreateBody';
 export * from './catalogImagesListParams';
 export * from './catalogManufacturersListParams';
 export * from './catalogNotificationsHistoryListParams';

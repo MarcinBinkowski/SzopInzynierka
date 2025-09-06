@@ -10,6 +10,7 @@ import { FormField } from "@/components/customui/FormField"
 import { DateField } from "@/components/customui/DateField"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/customui/Spinner"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { isFieldRequired } from "@/utils/zod"
 
 // Use the generated Zod schema types
@@ -43,6 +44,13 @@ export function ProfileForm({
     resolver: zodResolver(schema),
     defaultValues: initialData,
   })
+
+  // Role options based on Profile.Role enum (1=ADMIN, 2=EMPLOYEE, 3=USER)
+  const roleOptions = [
+    { value: 1, label: "Admin" },
+    { value: 2, label: "Employee" },
+    { value: 3, label: "User" },
+  ]
 
   const handleSubmit = form.handleSubmit(async (data: ProfileFormData | ProfileUpdateData) => {
     await onSubmit(data)
@@ -115,6 +123,36 @@ export function ProfileForm({
         <p className="text-xs text-muted-foreground">
           Include country code (e.g., +1234567890)
         </p>
+
+        {initialData?.id && (
+          <div className="space-y-2">
+            <label htmlFor="role" className="text-sm font-medium">
+              Role {isFieldRequired(schema, 'role') && <span className="text-red-500">*</span>}
+            </label>
+            <Select
+              value={form.watch('role')?.toString() || ""}
+              onValueChange={(value) => form.setValue('role', parseInt(value))}
+              disabled={form.formState.isSubmitting}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select a role" />
+              </SelectTrigger>
+              <SelectContent>
+                {roleOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value.toString()}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {form.formState.errors.role && (
+              <p className="text-sm text-red-600">{form.formState.errors.role.message}</p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              Change the user's access level
+            </p>
+          </div>
+        )}
 
         {/* Form Actions */}
         <div className="flex justify-end gap-2 pt-4">

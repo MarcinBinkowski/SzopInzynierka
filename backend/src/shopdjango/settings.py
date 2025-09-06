@@ -162,32 +162,44 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
 STATIC_URL = "static/"
 
-# Media files configuration - MinIO Object Storage
-USE_S3 = os.environ.get("AWS_S3_ENDPOINT_URL") is not None
+MINIO_PUBLIC_ENDPOINT = os.environ.get(
+    "MINIO_PUBLIC_ENDPOINT", "http://localhost:9000"
+)  # used for presigned URLs
+MINIO_INTERNAL_ENDPOINT = os.environ.get(
+    "MINIO_INTERNAL_ENDPOINT",
+    os.environ.get("AWS_S3_ENDPOINT_URL", "http://shopdjango-minio:9000"),
+)  # used for server->MinIO calls
 
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "minioadmin")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "minioadmin123")
 AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", "product-images")
-AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL")
-AWS_S3_CUSTOM_DOMAIN = None
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
-AWS_DEFAULT_ACL = 'public-read'
-AWS_S3_FILE_OVERWRITE = False
-AWS_QUERYSTRING_AUTH = False
-
-# Use S3 for media files
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/"
-
-# Auto-create bucket if it doesn't exist
+AWS_S3_REGION_NAME = "us-east-1"
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+AWS_S3_ADDRESSING_STYLE = "path"  # important for localhost/minio
+AWS_S3_USE_SSL = False
+AWS_S3_VERIFY = False
 AWS_S3_CREATE_BUCKET = True
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_QUERYSTRING_AUTH = True
+AWS_QUERYSTRING_EXPIRE = int(os.environ.get("AWS_QUERYSTRING_EXPIRE", "3600"))
+AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+
+# Storage backend -> use the INTERNAL endpoint so uploads/listing work from Django
+AWS_S3_ENDPOINT_URL = MINIO_INTERNAL_ENDPOINT
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage"
+    },  # media -> MinIO
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+}
+
+# Do NOT set AWS_S3_CUSTOM_DOMAIN or AWS_S3_URL_PROTOCOL with signed URLs.
+# MEDIA_URL isn't used for signed URLs, but keep a fallback:
+MEDIA_URL = "/media/"
 
 
 # Default primary key field type
@@ -285,10 +297,6 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "http://localhost:3000",
-]
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
 ]
 
 

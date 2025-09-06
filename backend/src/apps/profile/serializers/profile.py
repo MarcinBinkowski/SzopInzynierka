@@ -142,6 +142,7 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
             "last_name",
             "date_of_birth",
             "phone_number",
+            "role",
         ]
 
     def validate_phone_number(self, value: str) -> str:
@@ -155,6 +156,19 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Invalid phone number format")
 
         return value.strip()
+    
+    def validate_role(self, value: int) -> int:
+        """Validate role change - only admins can change roles."""
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            from apps.profile.permissions import get_user_role
+            user_role = get_user_role(request.user)
+            
+            # Only admins can change roles
+            if user_role != Profile.Role.ADMIN:
+                raise serializers.ValidationError("Only administrators can change user roles.")
+        
+        return value
 
     def update(self, instance: Profile, validated_data: dict[str, Any]) -> Profile:
         for attr, value in validated_data.items():

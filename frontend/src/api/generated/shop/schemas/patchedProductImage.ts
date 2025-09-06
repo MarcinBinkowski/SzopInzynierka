@@ -11,10 +11,12 @@
  */
 export interface PatchedProductImage {
   readonly id?: number;
+  /** Associated product */
+  product?: number;
   /** Product image */
   image?: string;
   /**
-   * Get full URL of the image.
+   * Get browser-accessible pre-signed URL for the image.
    * @nullable
    */
   readonly image_url?: string | null;

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.catalog.models.product_image import ProductImage
+from shopdjango.utils import presign_download
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -12,6 +13,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
         model = ProductImage
         fields = [
             "id",
+            "product",
             "image",
             "image_url",
             "alt_text",
@@ -23,10 +25,8 @@ class ProductImageSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "image_url", "created_at", "updated_at"]
 
     def get_image_url(self, obj: ProductImage) -> str | None:
-        """Get full URL of the image."""
+        """Get browser-accessible pre-signed URL for the image."""
         if obj.image:
-            request = self.context.get("request")
-            if request:
-                return request.build_absolute_uri(obj.image.url)
-            return obj.image.url
+            # Use presign_download to get a localhost URL that the browser can access
+            return presign_download(obj.image.name, expires=3600, as_attachment=False)
         return None

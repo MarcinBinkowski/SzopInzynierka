@@ -9,6 +9,7 @@ from apps.catalog.serializers.category import CategorySerializer
 from apps.catalog.serializers.manufacturer import ManufacturerSerializer
 from apps.catalog.serializers.product_image import ProductImageSerializer
 from apps.catalog.serializers.tag import TagSerializer
+from shopdjango.utils import presign_download
 
 
 class ProductListSerializer(serializers.ModelSerializer):
@@ -61,10 +62,7 @@ class ProductListSerializer(serializers.ModelSerializer):
         """Get URL of primary product image."""
         primary_image = obj.images.filter(is_primary=True).first()
         if primary_image and primary_image.image:
-            request = self.context.get("request")
-            if request:
-                return request.build_absolute_uri(primary_image.image.url)
-            return primary_image.image.url
+            return presign_download(primary_image.image.name, expires=3600, as_attachment=False)
         return None
 
 

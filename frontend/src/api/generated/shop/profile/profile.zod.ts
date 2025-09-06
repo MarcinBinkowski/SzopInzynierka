@@ -437,7 +437,8 @@ export const profileProfilesUpdateBody = zod.object({
   "first_name": zod.string().max(profileProfilesUpdateBodyFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesUpdateBodyLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
-  "phone_number": zod.string().regex(profileProfilesUpdateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
+  "phone_number": zod.string().regex(profileProfilesUpdateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional()
 })
 
 export const profileProfilesUpdateResponseFirstNameMax = 150;
@@ -449,7 +450,8 @@ export const profileProfilesUpdateResponse = zod.object({
   "first_name": zod.string().max(profileProfilesUpdateResponseFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesUpdateResponseLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
-  "phone_number": zod.string().regex(profileProfilesUpdateResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
+  "phone_number": zod.string().regex(profileProfilesUpdateResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional()
 })
 
 export const profileProfilesPartialUpdateParams = zod.object({
@@ -465,7 +467,8 @@ export const profileProfilesPartialUpdateBody = zod.object({
   "first_name": zod.string().max(profileProfilesPartialUpdateBodyFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesPartialUpdateBodyLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
-  "phone_number": zod.string().regex(profileProfilesPartialUpdateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
+  "phone_number": zod.string().regex(profileProfilesPartialUpdateBodyPhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional()
 })
 
 export const profileProfilesPartialUpdateResponseFirstNameMax = 150;
@@ -477,7 +480,8 @@ export const profileProfilesPartialUpdateResponse = zod.object({
   "first_name": zod.string().max(profileProfilesPartialUpdateResponseFirstNameMax).optional().describe('User\'s first name'),
   "last_name": zod.string().max(profileProfilesPartialUpdateResponseLastNameMax).optional().describe('User\'s last name'),
   "date_of_birth": zod.string().date().nullish().describe('User\'s date of birth (optional)'),
-  "phone_number": zod.string().regex(profileProfilesPartialUpdateResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012')
+  "phone_number": zod.string().regex(profileProfilesPartialUpdateResponsePhoneNumberRegExp).optional().describe('Phone number in international format. Supports digits, spaces, hyphens, parentheses, and optional \'+\' prefix. Example: +48131012012'),
+  "role": zod.literal(1).or(zod.literal(2)).or(zod.literal(3)).describe('* `1` - Admin\n* `2` - Employee\n* `3` - User').optional()
 })
 
 export const profileProfilesDestroyParams = zod.object({

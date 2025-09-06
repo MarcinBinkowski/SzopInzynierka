@@ -320,8 +320,9 @@ export const catalogImagesListResponseSortOrderMax = 2147483647;
 
 export const catalogImagesListResponseItem = zod.object({
   "id": zod.number(),
+  "product": zod.number().describe('Associated product'),
   "image": zod.string().url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
+  "image_url": zod.string().nullable().describe('Get browser-accessible pre-signed URL for the image.'),
   "alt_text": zod.string().max(catalogImagesListResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesListResponseSortOrderMin).max(catalogImagesListResponseSortOrderMax).optional().describe('Display order of images'),
@@ -331,20 +332,18 @@ export const catalogImagesListResponseItem = zod.object({
 export const catalogImagesListResponse = zod.array(catalogImagesListResponseItem)
 
 /**
- * ViewSet for ProductImage model with CRUD operations.
+ * Create a new product image with file upload.
  */
 export const catalogImagesCreateBodyAltTextMax = 255;
-export const catalogImagesCreateBodySortOrderMin = 0;
-
-export const catalogImagesCreateBodySortOrderMax = 2147483647;
-
+export const catalogImagesCreateBodyIsPrimaryDefault = false;export const catalogImagesCreateBodySortOrderDefault = 0;
 
 export const catalogImagesCreateBody = zod.object({
-  "image": zod.string().url().describe('Product image'),
+  "image": zod.instanceof(File).describe('Image file to upload'),
+  "product": zod.number().describe('Product ID'),
   "alt_text": zod.string().max(catalogImagesCreateBodyAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
-  "sort_order": zod.number().min(catalogImagesCreateBodySortOrderMin).max(catalogImagesCreateBodySortOrderMax).optional().describe('Display order of images')
-}).describe('Serializer for ProductImage model.')
+  "sort_order": zod.number().optional().describe('Display order of images')
+})
 
 /**
  * ViewSet for ProductImage model with CRUD operations.
@@ -361,8 +360,9 @@ export const catalogImagesRetrieveResponseSortOrderMax = 2147483647;
 
 export const catalogImagesRetrieveResponse = zod.object({
   "id": zod.number(),
+  "product": zod.number().describe('Associated product'),
   "image": zod.string().url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
+  "image_url": zod.string().nullable().describe('Get browser-accessible pre-signed URL for the image.'),
   "alt_text": zod.string().max(catalogImagesRetrieveResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesRetrieveResponseSortOrderMin).max(catalogImagesRetrieveResponseSortOrderMax).optional().describe('Display order of images'),
@@ -384,6 +384,7 @@ export const catalogImagesUpdateBodySortOrderMax = 2147483647;
 
 
 export const catalogImagesUpdateBody = zod.object({
+  "product": zod.number().describe('Associated product'),
   "image": zod.string().url().describe('Product image'),
   "alt_text": zod.string().max(catalogImagesUpdateBodyAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
@@ -398,8 +399,9 @@ export const catalogImagesUpdateResponseSortOrderMax = 2147483647;
 
 export const catalogImagesUpdateResponse = zod.object({
   "id": zod.number(),
+  "product": zod.number().describe('Associated product'),
   "image": zod.string().url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
+  "image_url": zod.string().nullable().describe('Get browser-accessible pre-signed URL for the image.'),
   "alt_text": zod.string().max(catalogImagesUpdateResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesUpdateResponseSortOrderMin).max(catalogImagesUpdateResponseSortOrderMax).optional().describe('Display order of images'),
@@ -421,6 +423,7 @@ export const catalogImagesPartialUpdateBodySortOrderMax = 2147483647;
 
 
 export const catalogImagesPartialUpdateBody = zod.object({
+  "product": zod.number().optional().describe('Associated product'),
   "image": zod.string().url().optional().describe('Product image'),
   "alt_text": zod.string().max(catalogImagesPartialUpdateBodyAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
@@ -435,8 +438,9 @@ export const catalogImagesPartialUpdateResponseSortOrderMax = 2147483647;
 
 export const catalogImagesPartialUpdateResponse = zod.object({
   "id": zod.number(),
+  "product": zod.number().describe('Associated product'),
   "image": zod.string().url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
+  "image_url": zod.string().nullable().describe('Get browser-accessible pre-signed URL for the image.'),
   "alt_text": zod.string().max(catalogImagesPartialUpdateResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesPartialUpdateResponseSortOrderMin).max(catalogImagesPartialUpdateResponseSortOrderMax).optional().describe('Display order of images'),
@@ -465,6 +469,7 @@ export const catalogImagesSetPrimaryCreateBodySortOrderMax = 2147483647;
 
 
 export const catalogImagesSetPrimaryCreateBody = zod.object({
+  "product": zod.number().describe('Associated product'),
   "image": zod.string().url().describe('Product image'),
   "alt_text": zod.string().max(catalogImagesSetPrimaryCreateBodyAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
@@ -479,8 +484,9 @@ export const catalogImagesSetPrimaryCreateResponseSortOrderMax = 2147483647;
 
 export const catalogImagesSetPrimaryCreateResponse = zod.object({
   "id": zod.number(),
+  "product": zod.number().describe('Associated product'),
   "image": zod.string().url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
+  "image_url": zod.string().nullable().describe('Get browser-accessible pre-signed URL for the image.'),
   "alt_text": zod.string().max(catalogImagesSetPrimaryCreateResponseAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogImagesSetPrimaryCreateResponseSortOrderMin).max(catalogImagesSetPrimaryCreateResponseSortOrderMax).optional().describe('Display order of images'),
@@ -883,8 +889,9 @@ export const catalogProductsRetrieveResponse = zod.object({
   "is_available": zod.boolean().describe('Check if product is available for purchase.'),
   "images": zod.array(zod.object({
   "id": zod.number(),
+  "product": zod.number().describe('Associated product'),
   "image": zod.string().url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
+  "image_url": zod.string().nullable().describe('Get browser-accessible pre-signed URL for the image.'),
   "alt_text": zod.string().max(catalogProductsRetrieveResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsRetrieveResponseImagesItemSortOrderMin).max(catalogProductsRetrieveResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
@@ -1015,8 +1022,9 @@ export const catalogProductsUpdateResponse = zod.object({
   "is_available": zod.boolean().describe('Check if product is available for purchase.'),
   "images": zod.array(zod.object({
   "id": zod.number(),
+  "product": zod.number().describe('Associated product'),
   "image": zod.string().url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
+  "image_url": zod.string().nullable().describe('Get browser-accessible pre-signed URL for the image.'),
   "alt_text": zod.string().max(catalogProductsUpdateResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsUpdateResponseImagesItemSortOrderMin).max(catalogProductsUpdateResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
@@ -1147,8 +1155,9 @@ export const catalogProductsPartialUpdateResponse = zod.object({
   "is_available": zod.boolean().describe('Check if product is available for purchase.'),
   "images": zod.array(zod.object({
   "id": zod.number(),
+  "product": zod.number().describe('Associated product'),
   "image": zod.string().url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
+  "image_url": zod.string().nullable().describe('Get browser-accessible pre-signed URL for the image.'),
   "alt_text": zod.string().max(catalogProductsPartialUpdateResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsPartialUpdateResponseImagesItemSortOrderMin).max(catalogProductsPartialUpdateResponseImagesItemSortOrderMax).optional().describe('Display order of images'),
@@ -1251,8 +1260,9 @@ export const catalogProductsOnSaleRetrieveResponse = zod.object({
   "is_available": zod.boolean().describe('Check if product is available for purchase.'),
   "images": zod.array(zod.object({
   "id": zod.number(),
+  "product": zod.number().describe('Associated product'),
   "image": zod.string().url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
+  "image_url": zod.string().nullable().describe('Get browser-accessible pre-signed URL for the image.'),
   "alt_text": zod.string().max(catalogProductsOnSaleRetrieveResponseImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(catalogProductsOnSaleRetrieveResponseImagesItemSortOrderMin).max(catalogProductsOnSaleRetrieveResponseImagesItemSortOrderMax).optional().describe('Display order of images'),

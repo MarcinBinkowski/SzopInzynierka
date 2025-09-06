@@ -5,6 +5,7 @@
  * API for ShopDjango project
  * OpenAPI spec version: 1.0.0
  */
+import type { RoleEnum } from './roleEnum';
 
 export interface ProfileUpdate {
   /**
@@ -27,4 +28,9 @@ export interface ProfileUpdate {
    * @pattern ^\+?[\d\s\-\(\)]+$
    */
   phone_number?: string;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  role?: RoleEnum;
 }

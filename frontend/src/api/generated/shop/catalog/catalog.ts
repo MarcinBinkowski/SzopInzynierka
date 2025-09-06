@@ -27,6 +27,7 @@ import type {
 import type {
   CatalogCategoriesListParams,
   CatalogDeliveriesListParams,
+  CatalogImagesCreateBody,
   CatalogImagesListParams,
   CatalogManufacturersListParams,
   CatalogProductsListParams,
@@ -1063,18 +1064,30 @@ export function useCatalogImagesList<TData = Awaited<ReturnType<typeof catalogIm
 
 
 /**
- * ViewSet for ProductImage model with CRUD operations.
+ * Create a new product image with file upload.
  */
 export const catalogImagesCreate = (
-    productImage: BodyType<NonReadonly<ProductImage>>,
+    catalogImagesCreateBody: BodyType<CatalogImagesCreateBody>,
  signal?: AbortSignal
 ) => {
       
-      
+      const formData = new FormData();
+formData.append(`image`, catalogImagesCreateBody.image)
+formData.append(`product`, catalogImagesCreateBody.product.toString())
+if(catalogImagesCreateBody.alt_text !== undefined) {
+ formData.append(`alt_text`, catalogImagesCreateBody.alt_text)
+ }
+if(catalogImagesCreateBody.is_primary !== undefined) {
+ formData.append(`is_primary`, catalogImagesCreateBody.is_primary.toString())
+ }
+if(catalogImagesCreateBody.sort_order !== undefined) {
+ formData.append(`sort_order`, catalogImagesCreateBody.sort_order.toString())
+ }
+
       return shopInstance<ProductImage>(
       {url: `/api/catalog/images/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: productImage, signal
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData, signal
     },
       );
     }
@@ -1082,8 +1095,8 @@ export const catalogImagesCreate = (
 
 
 export const getCatalogImagesCreateMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesCreate>>, TError,{data: BodyType<NonReadonly<ProductImage>>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof catalogImagesCreate>>, TError,{data: BodyType<NonReadonly<ProductImage>>}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesCreate>>, TError,{data: BodyType<CatalogImagesCreateBody>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof catalogImagesCreate>>, TError,{data: BodyType<CatalogImagesCreateBody>}, TContext> => {
 
 const mutationKey = ['catalogImagesCreate'];
 const {mutation: mutationOptions} = options ?
@@ -1095,7 +1108,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogImagesCreate>>, {data: BodyType<NonReadonly<ProductImage>>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof catalogImagesCreate>>, {data: BodyType<CatalogImagesCreateBody>}> = (props) => {
           const {data} = props ?? {};
 
           return  catalogImagesCreate(data,)
@@ -1107,15 +1120,15 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CatalogImagesCreateMutationResult = NonNullable<Awaited<ReturnType<typeof catalogImagesCreate>>>
-    export type CatalogImagesCreateMutationBody = BodyType<NonReadonly<ProductImage>>
+    export type CatalogImagesCreateMutationBody = BodyType<CatalogImagesCreateBody>
     export type CatalogImagesCreateMutationError = ErrorType<unknown>
 
     export const useCatalogImagesCreate = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesCreate>>, TError,{data: BodyType<NonReadonly<ProductImage>>}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof catalogImagesCreate>>, TError,{data: BodyType<CatalogImagesCreateBody>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof catalogImagesCreate>>,
         TError,
-        {data: BodyType<NonReadonly<ProductImage>>},
+        {data: BodyType<CatalogImagesCreateBody>},
         TContext
       > => {
 

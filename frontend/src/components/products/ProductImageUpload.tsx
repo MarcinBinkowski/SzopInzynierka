@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -13,48 +13,65 @@ import {
 } from "@/api/generated/shop/catalog/catalog"
 import { toast } from "sonner"
 import { Upload, X, Star, StarOff, Image } from "lucide-react"
-// import { useDropzone } from "react-dropzone" // TODO: Install react-dropzone
 
 interface ProductImageUploadProps {
-  productId: number // Now required since component only shows on edit
+  productId: number
   disabled?: boolean
 }
 
 export function ProductImageUpload({ productId, disabled }: ProductImageUploadProps) {
   const [dragActive, setDragActive] = useState(false)
-  
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
   // API hooks
-  const { data: images, refetch } = useCatalogImagesList(
-    { product: productId }
-  )
-  
+  const { data: images, refetch } = useCatalogImagesList({ product: productId })
   const createMutation = useCatalogImagesCreate()
   const deleteMutation = useCatalogImagesDestroy()
   const setPrimaryMutation = useCatalogImagesSetPrimaryCreate()
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    for (const file of acceptedFiles) {
+  const uploadFiles = useCallback(
+    async (files: File[]) => {
+      if (!files.length) return
+
+      // optional: basic validation
+      const MAX_MB = 10
+      const accepted = files.filter(f => {
+        const okType = f.type.startsWith("image/")
+        const okSize = f.size <= MAX_MB * 1024 * 1024
+        if (!okType) toast.error(`${f.name}: not an image`)
+        if (!okSize) toast.error(`${f.name}: over ${MAX_MB}MB`)
+        return okType && okSize
+      })
+
       try {
-        const formData = new FormData()
-        formData.append("image", file)
-        formData.append("product", String(productId))
-        formData.append("alt_text", file.name.split('.')[0])
-        
-        await createMutation.mutateAsync({ data: formData as any })
-        toast.success(`Uploaded ${file.name}`)
-      } catch (error) {
-        console.error("Upload error:", error)
-        toast.error(`Failed to upload ${file.name}`)
+        for (const file of accepted) {
+          const alt = file.name.replace(/\.[^.]+$/, "")
+          // 👇 KEY CHANGE: pass plain object; generator sends multipart/form-data for File fields
+          await createMutation.mutateAsync({
+            data: {
+              image: file,
+              product: productId,
+              alt_text: alt,
+            } as any, // keep if your generator types 'image' as File
+          })
+          toast.success(`Uploaded ${file.name}`)
+        }
+      } catch (err) {
+        console.error("Upload error:", err)
+        toast.error("Some uploads failed")
+      } finally {
+        refetch()
       }
-    }
-    
-    refetch()
-  }, [productId, createMutation, refetch])
+    },
+    [createMutation, productId, refetch]
+  )
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
-    if (files) {
-      onDrop(Array.from(files))
+    if (files?.length) {
+      uploadFiles(Array.from(files))
+      // allow selecting the same file again later
+      event.currentTarget.value = ""
     }
   }
 
@@ -71,14 +88,8 @@ export function ProductImageUpload({ productId, disabled }: ProductImageUploadPr
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     setDragActive(false)
-    
-    const files = Array.from(e.dataTransfer.files).filter(file => 
-      file.type.startsWith('image/')
-    )
-    
-    if (files.length > 0) {
-      onDrop(files)
-    }
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith("image/"))
+    uploadFiles(files)
   }
 
   const handleDelete = async (imageId: number) => {
@@ -86,7 +97,7 @@ export function ProductImageUpload({ productId, disabled }: ProductImageUploadPr
       await deleteMutation.mutateAsync({ id: imageId })
       toast.success("Image deleted")
       refetch()
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete image")
     }
   }
@@ -96,10 +107,17 @@ export function ProductImageUpload({ productId, disabled }: ProductImageUploadPr
       await setPrimaryMutation.mutateAsync({ id: imageId })
       toast.success("Primary image updated")
       refetch()
-    } catch (error) {
+    } catch {
       toast.error("Failed to set primary image")
     }
   }
+
+  const busy =
+    (createMutation as any).isPending ||
+    (deleteMutation as any).isPending ||
+    (setPrimaryMutation as any).isPending
+
+  const isDisabled = disabled || !!busy
 
   return (
     <div className="space-y-4">
@@ -114,16 +132,17 @@ export function ProductImageUpload({ productId, disabled }: ProductImageUploadPr
               dragActive
                 ? "border-blue-400 bg-blue-50"
                 : "border-gray-300 hover:border-gray-400"
-            } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+            } ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             <input 
+              ref={fileInputRef}
               type="file"
               multiple
               accept="image/*"
               onChange={handleFileSelect}
               className="sr-only"
               id="image-upload"
-              disabled={disabled}
+              disabled={isDisabled}
             />
             <Upload className="mx-auto mb-2 text-gray-400" width="40" height="40" />
             <p className="text-sm text-gray-600 mb-1">
@@ -134,8 +153,8 @@ export function ProductImageUpload({ productId, disabled }: ProductImageUploadPr
               type="button" 
               variant="outline" 
               className="mt-2"
-              disabled={disabled}
-              onClick={() => document.getElementById('image-upload')?.click()}
+              disabled={isDisabled}
+              onClick={() => fileInputRef.current?.click()}
             >
               Select Images
             </Button>
@@ -171,7 +190,7 @@ export function ProductImageUpload({ productId, disabled }: ProductImageUploadPr
                       variant={image.is_primary ? "secondary" : "outline"}
                       onClick={() => handleSetPrimary(image.id)}
                       className="h-6 w-6 p-0"
-                      disabled={disabled}
+                      disabled={isDisabled}
                     >
                       {image.is_primary ? <StarOff className="h-3 w-3" /> : <Star className="h-3 w-3" />}
                     </Button>
@@ -181,7 +200,7 @@ export function ProductImageUpload({ productId, disabled }: ProductImageUploadPr
                       variant="destructive"
                       onClick={() => handleDelete(image.id)}
                       className="h-6 w-6 p-0"
-                      disabled={disabled}
+                      disabled={isDisabled}
                     >
                       <X className="h-3 w-3" />
                     </Button>
@@ -198,7 +217,7 @@ export function ProductImageUpload({ productId, disabled }: ProductImageUploadPr
                     placeholder="Alt text..."
                     defaultValue={image.alt_text}
                     className="text-xs"
-                    disabled={disabled}
+                    disabled={isDisabled}
                     onBlur={(e) => {
                       // TODO: Update alt text on blur
                       console.log("Update alt text:", e.target.value)

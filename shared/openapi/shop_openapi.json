@@ -386,21 +386,37 @@ paths:
           description: ''
     post:
       operationId: catalog_images_create
-      description: ViewSet for ProductImage model with CRUD operations.
+      description: Create a new product image with file upload.
       tags:
       - catalog
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProductImage'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ProductImage'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/ProductImage'
-        required: true
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: Image file to upload
+                product:
+                  type: integer
+                  description: Product ID
+                alt_text:
+                  type: string
+                  description: Alternative text for the image
+                  maxLength: 255
+                is_primary:
+                  type: boolean
+                  description: Whether this is the primary product image
+                  default: false
+                sort_order:
+                  type: integer
+                  description: Display order of images
+                  default: 0
+              required:
+              - image
+              - product
       security:
       - cookieAuth: []
       - tokenAuth: []
@@ -7025,6 +7041,9 @@ components:
         id:
           type: integer
           readOnly: true
+        product:
+          type: integer
+          description: Associated product
         image:
           type: string
           format: uri
@@ -7032,7 +7051,7 @@ components:
         image_url:
           type: string
           nullable: true
-          description: Get full URL of the image.
+          description: Get browser-accessible pre-signed URL for the image.
           readOnly: true
         alt_text:
           type: string
@@ -7145,6 +7164,11 @@ components:
           description: 'Phone number in international format. Supports digits, spaces,
             hyphens, parentheses, and optional ''+'' prefix. Example: +48131012012'
           pattern: ^\+?[\d\s\-\(\)]+$
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          minimum: -2147483648
+          maximum: 2147483647
     PatchedShipment:
       type: object
       properties:
@@ -7623,6 +7647,9 @@ components:
         id:
           type: integer
           readOnly: true
+        product:
+          type: integer
+          description: Associated product
         image:
           type: string
           format: uri
@@ -7630,7 +7657,7 @@ components:
         image_url:
           type: string
           nullable: true
-          description: Get full URL of the image.
+          description: Get browser-accessible pre-signed URL for the image.
           readOnly: true
         alt_text:
           type: string
@@ -7659,6 +7686,7 @@ components:
       - id
       - image
       - image_url
+      - product
       - updated_at
     ProductList:
       type: object
@@ -7969,6 +7997,11 @@ components:
           description: 'Phone number in international format. Supports digits, spaces,
             hyphens, parentheses, and optional ''+'' prefix. Example: +48131012012'
           pattern: ^\+?[\d\s\-\(\)]+$
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          minimum: -2147483648
+          maximum: 2147483647
     RoleEnum:
       enum:
       - 1

@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema
 
 from apps.catalog.models import ProductImage
 from apps.catalog.serializers import (
@@ -31,6 +32,42 @@ class ProductImageViewSet(viewsets.ModelViewSet):
         """Optimize queryset with select_related."""
         queryset = super().get_queryset()
         return queryset.select_related("product")
+
+    @extend_schema(
+        request={
+            "multipart/form-data": {
+                "type": "object",
+                "properties": {
+                    "image": {
+                        "type": "string",
+                        "format": "binary",
+                        "description": "Image file to upload",
+                    },
+                    "product": {"type": "integer", "description": "Product ID"},
+                    "alt_text": {
+                        "type": "string",
+                        "description": "Alternative text for the image",
+                        "maxLength": 255,
+                    },
+                    "is_primary": {
+                        "type": "boolean",
+                        "description": "Whether this is the primary product image",
+                        "default": False,
+                    },
+                    "sort_order": {
+                        "type": "integer",
+                        "description": "Display order of images",
+                        "default": 0,
+                    },
+                },
+                "required": ["image", "product"],
+            }
+        },
+        responses={201: ProductImageSerializer},
+    )
+    def create(self, request, *args, **kwargs):
+        """Create a new product image with file upload."""
+        return super().create(request, *args, **kwargs)
 
     @action(detail=True, methods=["post"])
     def set_primary(self, request, pk: int = None) -> Response:

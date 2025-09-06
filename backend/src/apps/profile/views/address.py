@@ -56,7 +56,6 @@ class AddressViewSet(viewsets.ModelViewSet):
         }
         return serializer_map.get(self.action, AddressSerializer)
 
-
     def perform_create(self, serializer) -> None:
         role = get_user_role(getattr(self.request, "user", None))
         if role == Profile.Role.ADMIN:

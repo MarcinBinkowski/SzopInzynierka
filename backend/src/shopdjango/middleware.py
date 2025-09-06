@@ -1,6 +1,5 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.contrib.auth import authenticate
-from django.conf import settings
 from apps.profile.models import Profile
 import json
 
@@ -8,7 +7,7 @@ import json
 def _json_or_empty(request: HttpRequest) -> dict:
     """Parse JSON request body, return empty dict if invalid."""
     try:
-        return json.loads(request.body.decode('utf-8'))
+        return json.loads(request.body.decode("utf-8"))
     except (json.JSONDecodeError, UnicodeDecodeError, AttributeError):
         return {}
 
@@ -17,16 +16,16 @@ def _forbidden_response() -> JsonResponse:
     """Return 403 Forbidden response for role-based dashboard access denial."""
     return JsonResponse(
         {
-            'status': 403,
-            'errors': [
+            "status": 403,
+            "errors": [
                 {
-                    'message': 'Access denied. Users cannot access the dashboard.',
-                    'code': 'insufficient_permissions',
-                    'param': 'client'
+                    "message": "Access denied. Users cannot access the dashboard.",
+                    "code": "insufficient_permissions",
+                    "param": "client",
                 }
-            ]
-        }, 
-        status=403
+            ],
+        },
+        status=403,
     )
 
 
@@ -56,7 +55,10 @@ class BrowserLoginRoleMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        if request.method == "POST" and request.path == "/_allauth/browser/v1/auth/login":
+        if (
+            request.method == "POST"
+            and request.path == "/_allauth/browser/v1/auth/login"
+        ):
             body = _json_or_empty(request)
             if body.get("client") == "browser":
                 email = (body.get("email") or "").strip().lower()

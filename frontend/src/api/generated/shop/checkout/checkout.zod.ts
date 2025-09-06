@@ -2869,8 +2869,9 @@ export const checkoutOrdersRetrieveResponse = zod.object({
   "is_available": zod.boolean().describe('Check if product is available for purchase.'),
   "images": zod.array(zod.object({
   "id": zod.number(),
+  "product": zod.number().describe('Associated product'),
   "image": zod.string().url().describe('Product image'),
-  "image_url": zod.string().nullable().describe('Get full URL of the image.'),
+  "image_url": zod.string().nullable().describe('Get browser-accessible pre-signed URL for the image.'),
   "alt_text": zod.string().max(checkoutOrdersRetrieveResponseItemsItemProductImagesItemAltTextMax).optional().describe('Alternative text for the image'),
   "is_primary": zod.boolean().optional().describe('Whether this is the primary product image'),
   "sort_order": zod.number().min(checkoutOrdersRetrieveResponseItemsItemProductImagesItemSortOrderMin).max(checkoutOrdersRetrieveResponseItemsItemProductImagesItemSortOrderMax).optional().describe('Display order of images'),

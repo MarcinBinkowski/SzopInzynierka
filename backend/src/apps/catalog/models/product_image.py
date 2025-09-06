@@ -13,7 +13,7 @@ class ProductImage(TimestampedModel):
         related_name="images",
         help_text="Associated product",
     )
-    image = models.ImageField(upload_to="products/images/", help_text="Product image")
+    image = models.ImageField(upload_to="", help_text="Product image")
     alt_text = models.CharField(
         max_length=255, blank=True, help_text="Alternative text for the image"
     )
